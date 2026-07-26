@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>nl.live - Radio 538 Studio Cam</title>
+  <title>nl.live - Autoplay Stream</title>
   <style>
     * {
       box-sizing: border-box;
@@ -23,29 +23,6 @@
       padding: 20px;
     }
 
-    header {
-      text-align: center;
-      margin-bottom: 25px;
-    }
-
-    .logo {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: #ffffff;
-      text-decoration: none;
-    }
-
-    .logo span {
-      color: #ef4444;
-    }
-
-    .tagline {
-      color: #94a3b8;
-      font-size: 0.95rem;
-      margin-top: 5px;
-    }
-
-    /* Stream Card Container */
     .stream-card {
       background: #1e293b;
       border-radius: 16px;
@@ -54,6 +31,7 @@
       max-width: 800px;
       box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
       border: 1px solid #334155;
+      position: relative;
     }
 
     .stream-header {
@@ -61,16 +39,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #1e293b;
-      border-bottom: 1px solid #334155;
-    }
-
-    .station-title {
-      font-size: 1.2rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
 
     .live-badge {
@@ -80,23 +48,12 @@
       font-weight: bold;
       padding: 4px 8px;
       border-radius: 6px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      animation: pulse 2s infinite;
     }
 
-    .live-dot {
-      width: 8px;
-      height: 8px;
-      background-color: white;
-      border-radius: 50%;
-    }
-
-    /* Video Player Wrapper (16:9 Responsive) */
+    /* Video Player Wrapper */
     .video-container {
       position: relative;
-      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+      padding-bottom: 56.25%;
       height: 0;
       overflow: hidden;
       background: #000;
@@ -111,54 +68,91 @@
       border: 0;
     }
 
-    .stream-footer {
+    /* Sound Toggle Control Bar */
+    .controls-bar {
       padding: 15px 20px;
-      color: #94a3b8;
-      font-size: 0.85rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background: #0f172a;
     }
 
-    @keyframes pulse {
-      0% { opacity: 1; }
-      50% { opacity: 0.5; }
-      100% { opacity: 1; }
+    .sound-btn {
+      background-color: #ef4444;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sound-btn:hover {
+      background-color: #dc2626;
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <a href="#" class="logo">nl<span>.live</span></a>
-    <p class="tagline">Live uit de studio in Nederland</p>
-  </header>
-
   <div class="stream-card">
     <div class="stream-header">
-      <div class="station-title">
-        📻 Radio 538 Studio Cam
-      </div>
-      <div class="live-badge">
-        <span class="live-dot"></span> LIVE
-      </div>
+      <h3 style="font-size: 1.1rem;">📻 Radio Live</h3>
+      <span class="live-badge">🔴 LIVE</span>
     </div>
 
-    <!-- Embedded Studio Live Stream -->
+    <!-- YouTube API Target -->
     <div class="video-container">
-      <iframe 
-  src="https://www.youtube.com/embed/_wYENnYaboM?autoplay=1" 
-  title="Live Radio Stream" 
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-  allowfullscreen>
-</iframe>
+      <div id="youtube-player"></div>
     </div>
 
-    <div class="stream-footer">
-      <span>📍 Hilversum, Nederland</span>
-      <span>🔊 Klik op de video voor geluid</span>
+    <div class="controls-bar">
+      <span style="color: #94a3b8; font-size: 0.85rem;">الفيديو يعمل تلقائياً وبشكل حي</span>
+      <button class="sound-btn" id="audioToggleBtn" onclick="toggleAudio()">
+        🔇 اضغط لتشغيل الصوت
+      </button>
     </div>
   </div>
+
+  <!-- Load YouTube IFrame API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+    let player;
+
+    // 1. Initialize Player automatically
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('youtube-player', {
+        videoId: '_wYENnYaboM',
+        playerVars: {
+          'autoplay': 1,
+          'mute': 1,          // 👈 السر هنا: مكتوم الصوت ليقبل المتصفح التشغيل التلقائي
+          'controls': 1,
+          'playsinline': 1
+        },
+        events: {
+          'onReady': (event) => event.target.playVideo()
+        }
+      });
+    }
+
+    // 2. Toggle Sound Function (Unmute / Mute)
+    function toggleAudio() {
+      const btn = document.getElementById('audioToggleBtn');
+      if (player.isMuted()) {
+        player.unMute();
+        btn.innerHTML = '🔊 إيقاف الصوت';
+        btn.style.backgroundColor = '#22c55e'; // يتحول للأخضر عند تشغيل الصوت
+      } else {
+        player.mute();
+        btn.innerHTML = '🔇 اضغط لتشغيل الصوت';
+        btn.style.backgroundColor = '#ef4444';
+      }
+    }
+  </script>
 
 </body>
 </html>
