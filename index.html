@@ -1,155 +1,87 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="ar">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>nl.live - Autoplay Stream</title>
+  <title>nl.live - Background Audio</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
     body {
       background-color: #0f172a;
-      color: #ffffff;
+      color: white;
+      font-family: system-ui, -apple-system, sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
+      margin: 0;
+      text-align: center;
       padding: 20px;
     }
 
-    .stream-card {
+    .card {
       background: #1e293b;
+      padding: 30px;
       border-radius: 16px;
-      overflow: hidden;
-      width: 100%;
-      max-width: 800px;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
       border: 1px solid #334155;
-      position: relative;
-    }
-
-    .stream-header {
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .live-badge {
-      background-color: #ef4444;
-      color: white;
-      font-size: 0.75rem;
-      font-weight: bold;
-      padding: 4px 8px;
-      border-radius: 6px;
-    }
-
-    /* Video Player Wrapper */
-    .video-container {
-      position: relative;
-      padding-bottom: 56.25%;
-      height: 0;
-      overflow: hidden;
-      background: #000;
-    }
-
-    .video-container iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
+      max-width: 400px;
       width: 100%;
-      height: 100%;
-      border: 0;
     }
 
-    /* Sound Toggle Control Bar */
-    .controls-bar {
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #0f172a;
-    }
-
-    .sound-btn {
-      background-color: #ef4444;
+    .btn {
+      background: #ef4444;
       color: white;
       border: none;
-      padding: 10px 18px;
-      border-radius: 8px;
+      padding: 14px 28px;
+      font-size: 1.1rem;
       font-weight: bold;
+      border-radius: 10px;
       cursor: pointer;
-      font-size: 0.9rem;
-      transition: background 0.2s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .sound-btn:hover {
-      background-color: #dc2626;
+      margin-top: 20px;
+      width: 100%;
+      transition: 0.2s;
     }
   </style>
 </head>
 <body>
 
-  <div class="stream-card">
-    <div class="stream-header">
-      <h3 style="font-size: 1.1rem;">📻 Radio Live</h3>
-      <span class="live-badge">🔴 LIVE</span>
-    </div>
+  <div class="card">
+    <h2>📻 Radio 538 Live</h2>
+    <p style="color: #94a3b8; margin-top: 10px; font-size: 0.9rem;">
+      اضغط تشغيل، ثم اخرج من المتصفح أو اقفل الشاشة للتحقق من استمرار الصوت!
+    </p>
 
-    <!-- YouTube API Target -->
-    <div class="video-container">
-      <div id="youtube-player"></div>
-    </div>
-
-    <div class="controls-bar">
-      <span style="color: #94a3b8; font-size: 0.85rem;">الفيديو يعمل تلقائياً وبشكل حي</span>
-      <button class="sound-btn" id="audioToggleBtn" onclick="toggleAudio()">
-        🔇 اضغط لتشغيل الصوت
-      </button>
-    </div>
+    <button class="btn" id="playBtn" onclick="togglePlay()">▶️ تشغيل الإذاعة</button>
   </div>
 
-  <!-- Load YouTube IFrame API -->
-  <script src="https://www.youtube.com/iframe_api"></script>
   <script>
-    let player;
+    // 🔴 رابط حقيقي ومباشر لإذاعة Radio 538
+    const streamUrl = 'https://stream.radio538.nl/radio538/mp3';
+    const radio = new Audio(streamUrl);
+    let isPlaying = false;
 
-    // 1. Initialize Player automatically
-    function onYouTubeIframeAPIReady() {
-      player = new YT.Player('youtube-player', {
-        videoId: '_wYENnYaboM',
-        playerVars: {
-          'autoplay': 1,
-          'mute': 1,          // 👈 السر هنا: مكتوم الصوت ليقبل المتصفح التشغيل التلقائي
-          'controls': 1,
-          'playsinline': 1
-        },
-        events: {
-          'onReady': (event) => event.target.playVideo()
+    function togglePlay() {
+      const btn = document.getElementById('playBtn');
+
+      if (!isPlaying) {
+        radio.play();
+        btn.innerHTML = '⏸️ إيقاف مؤقت';
+        btn.style.background = '#22c55e';
+        isPlaying = true;
+
+        // 👈 دعم التحكم عبر شاشة القفل في الآيفون (Lock Screen)
+        if ('mediaSession' in navigator) {
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: 'Radio 538 Direct',
+            artist: 'nl.live',
+            album: 'البث المباشر'
+          });
         }
-      });
-    }
-
-    // 2. Toggle Sound Function (Unmute / Mute)
-    function toggleAudio() {
-      const btn = document.getElementById('audioToggleBtn');
-      if (player.isMuted()) {
-        player.unMute();
-        btn.innerHTML = '🔊 إيقاف الصوت';
-        btn.style.backgroundColor = '#22c55e'; // يتحول للأخضر عند تشغيل الصوت
       } else {
-        player.mute();
-        btn.innerHTML = '🔇 اضغط لتشغيل الصوت';
-        btn.style.backgroundColor = '#ef4444';
+        radio.pause();
+        btn.innerHTML = '▶️ تشغيل الإذاعة';
+        btn.style.background = '#ef4444';
+        isPlaying = false;
       }
     }
   </script>
