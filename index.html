@@ -1,200 +1,164 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>😊</title>
-<style>
-        * {
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>nl.live - Radio 538 Studio Cam</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            background: linear-gradient(135deg, #ffd700, #fff2a6);
-            font-family: Arial, sans-serif;
-        }
+    body {
+      background-color: #0f172a;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
 
-        .container {
-            width: 100%;
-            max-width: 430px;
-            background: white;
-            padding: 35px;
-            border-radius: 18px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-        }
+    header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
 
-        h1 {
-            margin-top: 0;
-            color: #333;
-        }
+    .logo {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #ffffff;
+      text-decoration: none;
+    }
 
-        p {
-            color: #555;
-            line-height: 1.6;
-        }
+    .logo span {
+      color: #ef4444;
+    }
 
-        input {
-            width: 100%;
-            padding: 12px;
-            margin-top: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-        }
+    .tagline {
+      color: #94a3b8;
+      font-size: 0.95rem;
+      margin-top: 5px;
+    }
 
-        input:focus {
-            outline: none;
-            border-color: #ffd700;
-        }
+    /* Stream Card Container */
+    .stream-card {
+      background: #1e293b;
+      border-radius: 16px;
+      overflow: hidden;
+      width: 100%;
+      max-width: 800px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+      border: 1px solid #334155;
+    }
 
-        button {
-            width: 100%;
-            margin-top: 18px;
-            padding: 13px;
-            border: none;
-            border-radius: 8px;
-            background: #ffd700;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 15px;
-        }
+    .stream-header {
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+    }
 
-        button:hover {
-            opacity: 0.95;
-        }
+    .station-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-        #message {
-            display: none;
-        }
+    .live-badge {
+      background-color: #ef4444;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: bold;
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      animation: pulse 2s infinite;
+    }
 
-        .signature {
-            margin-top: 25px;
-            font-weight: bold;
-        }
-    </style>
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background-color: white;
+      border-radius: 50%;
+    }
+
+    /* Video Player Wrapper (16:9 Responsive) */
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+      height: 0;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .stream-footer {
+      padding: 15px 20px;
+      color: #94a3b8;
+      font-size: 0.85rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="container" id="formContainer">
+  <header>
+    <a href="#" class="logo">nl<span>.live</span></a>
+    <p class="tagline">Live uit de studio in Nederland</p>
+  </header>
 
-    <h1>😊</h1>
+  <div class="stream-card">
+    <div class="stream-header">
+      <div class="station-title">
+        📻 Radio 538 Studio Cam
+      </div>
+      <div class="live-badge">
+        <span class="live-dot"></span> LIVE
+      </div>
+    </div>
 
-    <p>
-        Wat bijzonder dat u deze glimlach hebt ontdekt!
-    </p>
+    <!-- Embedded Studio Live Stream -->
+    <div class="video-container">
+      <iframe 
+        src="https://www.youtube-nocookie.com/embed/live_stream?channel=UC2nLBA2k6qGIXmP70W3mI1g&autoplay=1&mute=0" 
+        title="Radio 538 Studio Live" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+      </iframe>
+    </div>
 
-    <p>
-        Niet iedereen komt deze pagina tegen.
-        Sterker nog, deze glimlach was eigenlijk voor u bedoeld.
-
-    </p>
-
-    <p>
-        Laat hieronder uw gegevens achter,
-        zodat uw verrassing de juiste bestemming bereikt.
-    </p>
-
-    <input type="text" id="name" placeholder="Volledige naam *">
-
-<input type="text" id="street" placeholder="Straatnaam *">
-
-<div style="display:flex; gap:10px;">
-    <input type="text" id="postcode" placeholder="Postcode *">
-    <input type="text" id="houseNumber" placeholder="Huisnummer *">
-</div>
-<input type="text" id="city" placeholder="Woonplaats *">
-    
-‏    <p style="text-align: center; font-size: 0.9em; margin: 15px 0;">
-‏       Mis deze kans niet! 🎁
-‏    </p>
-    <button onclick="submitForm()">Verzenden</button>
-
-</div>
-
-<div class="container" id="message"></div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDXIty5TGVNu37oLDYtWFjgA-pLcnqgEmU",
-            authDomain: "nl-team.firebaseapp.com",
-            projectId: "nl-team",
-            databaseURL: "https://nl-team-default-rtdb.europe-west1.firebasedatabase.app",
-            storageBucket: "nl-team.firebasestorage.app",
-            messagingSenderId: "165944460560",
-            appId: "1:165944460560:web:7435e881c6823413d3d195"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        window.submitForm = function () {
-const name = document.getElementById("name").value.trim();            
-const street = document.getElementById("street").value.trim();
-const postcode = document.getElementById("postcode").value.trim();
-const houseNumber = document.getElementById("houseNumber").value.trim();
-const city = document.getElementById("city").value.trim();
-
-if (!name || !street || !postcode || !houseNumber || !city) {
-    alert("Vul alle verplichte velden in.");
-    return;
-}
-
-            push(ref(db, "submissions/"), {
-    name,
-    street,
-    postcode,
-    houseNumber,
-    city,
-    timestamp: new Date().toISOString()
-})
-            .then(() => {
-                document.getElementById("formContainer").style.display = "none";
-
-                document.getElementById("message").innerHTML = `
-                    <h2>Gefeliciteerd, ${name}!</h2>
-
-<p>
-    Uw glimlach is succesvol geregistreerd.
-</p>
-
-<p>
-    Hartelijk dank voor het invullen van uw gegevens.
-</p>
-
-<p>
-    Uw verrassing is onderweg.
-</p>
-
-<p>
-    Vergeet niet uw glimlach te bewaren 😉
-</p>
-
-<p class="signature">
-    MVG,<br>
-    The Schadows!
-</p>
-<p>
-    (nl.team)
-</p>
-`;
-                document.getElementById("message").style.display = "block";
-            })
-            .catch(error => {
-                alert("Er is een fout opgetreden: " + error.message);
-            });
-        };
-    </script>
+    <div class="stream-footer">
+      <span>📍 Hilversum, Nederland</span>
+      <span>🔊 Klik op de video voor geluid</span>
+    </div>
+  </div>
 
 </body>
 </html>
