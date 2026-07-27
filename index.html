@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>nl.live - Live Streams & Radio Grid</title>
+  <title>nl.live - Live Streams & Radio</title>
   <style>
     * {
       box-sizing: border-box;
@@ -16,22 +16,22 @@
       background-color: #0f172a;
       color: #ffffff;
       min-height: 100vh;
-      padding: 30px 20px;
+      padding: 20px;
     }
 
-    /* Header Navigation Bar */
+    /* Header */
     header {
       max-width: 1200px;
-      margin: 0 auto 30px auto;
+      margin: 0 auto 20px auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid #334155;
-      padding-bottom: 20px;
+      padding-bottom: 15px;
     }
 
     .logo {
-      font-size: 2rem;
+      font-size: 1.8rem;
       font-weight: 800;
       color: #ffffff;
       text-decoration: none;
@@ -43,19 +43,94 @@
 
     .subtitle {
       color: #94a3b8;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
     }
 
-    /* Main Grid Layout */
+    /* 🔴 Radio Top Section - Smalle horizontale balk bovenaan */
+    .radio-section {
+      max-width: 1200px;
+      margin: 0 auto 25px auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #94a3b8;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .radio-bar {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+    }
+
+    .radio-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .radio-icon {
+      font-size: 1.5rem;
+    }
+
+    .radio-details h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .radio-details p {
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    .audio-badge {
+      background-color: #22c55e;
+      color: white;
+      font-size: 0.65rem;
+      font-weight: bold;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .radio-play-btn {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 8px 18px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s ease, transform 0.1s ease;
+    }
+
+    .radio-play-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* 🎥 Video Streams Grid Section - Grid onder de radio */
     .grid-container {
       max-width: 1200px;
       margin: 0 auto;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 25px;
+      gap: 20px;
     }
 
-    /* Stream Card Style */
     .card {
       background: #1e293b;
       border-radius: 16px;
@@ -73,7 +148,7 @@
     }
 
     .card-header {
-      padding: 15px 18px;
+      padding: 12px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -81,7 +156,7 @@
     }
 
     .card-title {
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 600;
       display: flex;
       align-items: center;
@@ -91,14 +166,12 @@
     .live-badge {
       background-color: #ef4444;
       color: white;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: bold;
-      padding: 3px 8px;
-      border-radius: 6px;
-      letter-spacing: 0.5px;
+      padding: 2px 6px;
+      border-radius: 4px;
     }
 
-    /* Responsive 16:9 Video Container */
     .video-container {
       position: relative;
       width: 100%;
@@ -116,49 +189,20 @@
     }
 
     .card-footer {
-      padding: 12px 18px;
+      padding: 10px 16px;
       color: #94a3b8;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       background: #0f172a;
-      margin-top: auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    /* Radio Specific Custom Card */
-    .radio-card-body {
-      padding: 30px 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-      flex-grow: 1;
-      text-align: center;
-    }
-
-    .radio-icon {
-      font-size: 3.5rem;
-      margin-bottom: 15px;
-    }
-
-    .play-btn {
-      background: #ef4444;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      font-size: 1rem;
-      font-weight: bold;
-      border-radius: 10px;
-      cursor: pointer;
-      width: 100%;
-      max-width: 220px;
-      transition: background 0.2s ease, transform 0.1s ease;
-    }
-
-    .play-btn:active {
-      transform: scale(0.98);
+    /* Responsive voor kleine mobiele schermen */
+    @media (max-width: 480px) {
+      .radio-details p {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -168,14 +212,29 @@
   <header>
     <div>
       <a href="#" class="logo">nl<span>.live</span></a>
-      <p class="subtitle">Live Webcams & Radio Streams in Nederland</p>
+      <p class="subtitle">Live webcams en radiostreams in Nederland</p>
     </div>
   </header>
 
-  <!-- Grid Container -->
+  <!-- 📻 TOP SECTION: Radio Audio Balk -->
+  <div class="radio-section">
+    <div class="section-label">🎧 Live Radio (blijft afspelen op vergrendelscherm)</div>
+    <div class="radio-bar">
+      <div class="radio-info">
+        <div class="radio-icon">📻</div>
+        <div class="radio-details">
+          <h4>NPO 3FM Direct <span class="audio-badge">LIVE AUDIO</span></h4>
+          <p>Directe audiostream – blijft afspelen in de achtergrond en op je vergrendelscherm</p>
+        </div>
+      </div>
+      <button class="radio-play-btn" id="radioBtn" onclick="toggleRadio()">▶️ Radio afspelen</button>
+    </div>
+  </div>
+
+  <!-- 🎥 BOTTOM SECTION: Video Streams Grid -->
   <div class="grid-container">
 
-    <!-- Card 1: Webcam Stream 1 -->
+    <!-- Card 1: Live Stream 1 -->
     <div class="card">
       <div class="card-header">
         <div class="card-title">🎥 Live Stream #1</div>
@@ -184,18 +243,18 @@
       <div class="video-container">
         <iframe 
           src="https://www.youtube-nocookie.com/embed/DaG5JReOYEw?autoplay=1&mute=1" 
-          title="Live Webcam 1"
+          title="Live Stream 1"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
           allowfullscreen>
         </iframe>
       </div>
       <div class="card-footer">
         <span>📍 Nederland</span>
-        <span>🔊 انقر لتشغيل الصوت</span>
+        <span>🔊 Klik voor geluid</span>
       </div>
     </div>
 
-    <!-- Card 2: Webcam Stream 2 -->
+    <!-- Card 2: Live Stream 2 -->
     <div class="card">
       <div class="card-header">
         <div class="card-title">🎥 Live Stream #2</div>
@@ -204,41 +263,21 @@
       <div class="video-container">
         <iframe 
           src="https://www.youtube-nocookie.com/embed/Gd9d4q6WvUY?autoplay=1&mute=1" 
-          title="Live Webcam 2"
+          title="Live Stream 2"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
           allowfullscreen>
         </iframe>
       </div>
       <div class="card-footer">
         <span>📍 Nederland</span>
-        <span>🔊 انقر لتشغيل الصوت</span>
-      </div>
-    </div>
-
-    <!-- Card 3: Background Audio Radio -->
-    <div class="card">
-      <div class="card-header">
-        <div class="card-title">📻 Radio 3FM Live</div>
-        <span class="live-badge" style="background-color: #22c55e;">🎧 AUDIO</span>
-      </div>
-      <div class="radio-card-body">
-        <div class="radio-icon">📻</div>
-        <h4 style="margin-bottom: 8px;">NPO 3FM Direct Stream</h4>
-        <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 20px;">
-          بث صوتي حي يعمل في الخلفية وعلى شاشة القفل عند الخروج.
-        </p>
-        <button class="play-btn" id="radioBtn" onclick="toggleRadio()">▶️ تشغيل الإذاعة</button>
-      </div>
-      <div class="card-footer">
-        <span>📍 Hilversum</span>
-        <span>📲 يعمل مع قفل الشاشة</span>
+        <span>🔊 Klik voor geluid</span>
       </div>
     </div>
 
   </div>
 
   <script>
-    // Audio Radio Logic with MediaSession for Lock Screen Controls
+    // Radio Audio Player Logic
     const audioUrl = 'https://icecast.omroep.nl/3fm-bb-mp3';
     const radio = new Audio(audioUrl);
     let isPlaying = false;
@@ -248,7 +287,7 @@
 
       if (!isPlaying) {
         radio.play();
-        btn.innerHTML = '⏸️ إيقاف مؤقت';
+        btn.innerHTML = '⏸️ Pauzeren';
         btn.style.background = '#22c55e';
         isPlaying = true;
 
@@ -256,12 +295,12 @@
           navigator.mediaSession.metadata = new MediaMetadata({
             title: 'NPO 3FM Live',
             artist: 'nl.live',
-            album: 'Radio Stream'
+            album: 'Live Radio'
           });
         }
       } else {
         radio.pause();
-        btn.innerHTML = '▶️ تشغيل الإذاعة';
+        btn.innerHTML = '▶️ Radio afspelen';
         btn.style.background = '#ef4444';
         isPlaying = false;
       }
