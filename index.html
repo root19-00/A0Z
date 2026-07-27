@@ -283,35 +283,20 @@
       display: flex;
       align-items: center;
     }
+.news-ticker-track {
+  display: flex;
+  white-space: nowrap;
+  will-change: transform;
+  transform: translate3d(0,0,0);
+}
 
-    .news-ticker-track {
-      display: flex;
-      width: max-content; /* PREVENTS TEXT SQUASHING ON PORTRAIT */
-      white-space: nowrap;
-      will-change: transform;
-      animation: tickerLoop 45s linear infinite;
-    }
-
-    .news-ticker-track.paused {
-      animation-play-state: paused;
-    }
-
-    .news-ticker-track.reset-anim {
-      animation: none !important;
-    }
-
-    .news-ticker-text {
-      display: inline-block;
-      white-space: nowrap;
-      padding-right: 50px;
-      flex-shrink: 0;
-    }
-
-    @keyframes tickerLoop {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
+.news-ticker-text {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  padding-right: 80px;
+  flex-shrink: 0;
+}
     @media (max-width: 480px) {
       .radio-details p {
         display: none;
@@ -540,33 +525,15 @@
 
         tickerText1.innerHTML = finalText;
         tickerText2.innerHTML = finalText;
+        position = window.innerWidth;
 
       } catch (error) {
         console.error('Error fetching combined news:', error);
         tickerText1.innerHTML = `<span>${defaultText}</span>`;
         tickerText2.innerHTML = `<span>${defaultText}</span>`;
+        position = window.innerWidth;
       }
     }
-
-    // 📱 MOBILE ANIMATION RECOVERY
-    function refreshTickerAnimation() {
-      const track = document.getElementById('newsTickerTrack');
-      if (!track) return;
-
-      track.classList.add('reset-anim');
-      void track.offsetWidth; 
-      track.classList.remove('reset-anim');
-    }
-
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) refreshTickerAnimation();
-    });
-
-    window.addEventListener('orientationchange', () => {
-      setTimeout(refreshTickerAnimation, 200);
-    });
-
-    window.addEventListener('resize', refreshTickerAnimation);
 
     // Initializations
     loadLiveWeather();
@@ -574,7 +541,28 @@
 
     setInterval(loadLiveWeather, 600000); 
     setInterval(fetchLatestNews, 900000);  
-  </script>
+const track = document.getElementById("newsTickerTrack");
+const text1 = document.getElementById("newsTickerText1");
 
+let position = window.innerWidth;
+const speed = 0.6;
+
+function animateTicker() {
+
+    const width = text1.offsetWidth;
+
+    position -= speed;
+
+   if (position <= -width) {
+    position = window.innerWidth;
+}
+
+    track.style.transform = `translate3d(${position}px,0,0)`;
+
+    requestAnimationFrame(animateTicker);
+}
+
+requestAnimationFrame(animateTicker);
+  </script>
 </body>
 </html>
