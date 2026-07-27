@@ -240,7 +240,7 @@
       font-weight: 600;
     }
 
-    /* 🚨 FIXED RED BREAKING NEWS TICKER */
+    /* 🚨 FIXED SEAMLESS CONTINUOUS NEWS TICKER */
     .news-ticker-bar {
       position: fixed;
       bottom: 0;
@@ -280,19 +280,25 @@
       position: relative;
     }
 
-    .news-ticker-text {
-      display: inline-block;
+    .news-ticker-track {
+      display: inline-flex;
       white-space: nowrap;
-      animation: ticker 45s linear infinite;
+      will-change: transform;
+      animation: tickerLoop 90s linear infinite;
     }
 
-    .news-ticker-text:hover {
+    .news-ticker-track:hover {
       animation-play-state: paused;
     }
 
-    @keyframes ticker {
-      0% { transform: translateX(100vw); }
-      100% { transform: translateX(-100%); }
+    .news-ticker-text {
+      display: inline-block;
+      padding-right: 50px;
+    }
+
+    @keyframes tickerLoop {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-50%, 0, 0); }
     }
 
     @media (max-width: 480px) {
@@ -401,12 +407,17 @@
 
   </div>
 
-  <!-- 🚨 LIVE RSS NEWS TICKER BAR (NOS & NU.NL) -->
+  <!-- 🚨 SEAMLESS CONTINUOUS NEWS TICKER BAR (NOS & NU.NL) -->
   <div class="news-ticker-bar">
     <div class="news-badge">🚨 NIEUWS (NOS & NU.NL)</div>
     <div class="news-ticker-content">
-      <div class="news-ticker-text" id="newsTickerText">
-        <span>+++ Welkom op nl.live +++ Het laatste nieuws uit Nederland wordt geladen... +++</span>
+      <div class="news-ticker-track">
+        <div class="news-ticker-text" id="newsTickerText1">
+          <span>+++ Welkom op nl.live +++ Het laatste nieuws uit Nederland wordt geladen... +++</span>
+        </div>
+        <div class="news-ticker-text" id="newsTickerText2">
+          <span>+++ Welkom op nl.live +++ Het laatste nieuws uit Nederland wordt geladen... +++</span>
+        </div>
       </div>
     </div>
   </div>
@@ -481,7 +492,8 @@
 
     // 📰 Live Combined News Feed Fetcher (NOS + NU.nl)
     async function fetchLatestNews() {
-      const tickerText = document.getElementById('newsTickerText');
+      const tickerText1 = document.getElementById('newsTickerText1');
+      const tickerText2 = document.getElementById('newsTickerText2');
       const defaultText = "+++ [NOS] Welkom op nl.live +++ [NU.nl] Live webcams en radiostreams in Nederland +++ [NOS] Actuele temperaturen live bijgewerkt +++";
 
       try {
@@ -511,14 +523,17 @@
           if (nuItems[i]) combined.push(nuItems[i]);
         }
 
-        if (combined.length > 0) {
-          tickerText.innerHTML = `<span>+++ ${combined.join(' +++ ')} +++</span>`;
-        } else {
-          tickerText.innerHTML = `<span>${defaultText}</span>`;
-        }
+        const finalText = combined.length > 0 
+          ? `<span>+++ ${combined.join(' +++ ')} +++</span>` 
+          : `<span>${defaultText}</span>`;
+
+        tickerText1.innerHTML = finalText;
+        tickerText2.innerHTML = finalText;
+
       } catch (error) {
         console.error('Error fetching combined news:', error);
-        tickerText.innerHTML = `<span>${defaultText}</span>`;
+        tickerText1.innerHTML = `<span>${defaultText}</span>`;
+        tickerText2.innerHTML = `<span>${defaultText}</span>`;
       }
     }
 
