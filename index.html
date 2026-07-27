@@ -46,7 +46,7 @@
       font-size: 0.85rem;
     }
 
-    /* 🔴 Radio Top Section - Smalle horizontale balk bovenaan */
+    /* 📻 TOP SECTION: Radio Audio Balk */
     .radio-section {
       max-width: 1200px;
       margin: 0 auto 25px auto;
@@ -122,7 +122,7 @@
       transform: scale(0.96);
     }
 
-    /* 🎥 Video Streams Grid Section - Grid onder de radio */
+    /* 🎥 BOTTOM SECTION: Video Streams Grid */
     .grid-container {
       max-width: 1200px;
       margin: 0 auto;
@@ -198,7 +198,6 @@
       align-items: center;
     }
 
-    /* Responsive voor kleine mobiele schermen */
     @media (max-width: 480px) {
       .radio-details p {
         display: none;
@@ -234,41 +233,60 @@
   <!-- 🎥 BOTTOM SECTION: Video Streams Grid -->
   <div class="grid-container">
 
-    <!-- Card 1: Live Stream 1 -->
+    <!-- Card 1: Scheveningen #1 -->
     <div class="card">
       <div class="card-header">
-        <div class="card-title">🎥 Live Stream #1</div>
+        <div class="card-title">🎥 Live Scheveningen#1</div>
         <span class="live-badge">🔴 LIVE</span>
       </div>
       <div class="video-container">
         <iframe 
           src="https://www.youtube-nocookie.com/embed/DaG5JReOYEw?autoplay=1&mute=1" 
-          title="Live Stream 1"
+          title="Live Scheveningen #1"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
           allowfullscreen>
         </iframe>
       </div>
       <div class="card-footer">
-        <span>📍 Nederland</span>
+        <span>📍 Scheveningen</span>
       </div>
     </div>
 
-    <!-- Card 2: Live Stream 2 -->
+    <!-- Card 2: Amsterdam #2 -->
     <div class="card">
       <div class="card-header">
-        <div class="card-title">🎥 Live Stream #2</div>
+        <div class="card-title">🎥 Live Amsterdam #2</div>
         <span class="live-badge">🔴 LIVE</span>
       </div>
       <div class="video-container">
         <iframe 
           src="https://www.youtube-nocookie.com/embed/Gd9d4q6WvUY?autoplay=1&mute=1" 
-          title="Live Stream 2"
+          title="Live Amsterdam #2"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
           allowfullscreen>
         </iframe>
       </div>
       <div class="card-footer">
-        <span>📍 Nederland</span>
+        <span>📍 Amsterdam</span>
+      </div>
+    </div>
+
+    <!-- Card 3: Rotterdam -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">🎥 Live Rotterdam</div>
+        <span class="live-badge">🔴 LIVE</span>
+      </div>
+      <div class="video-container">
+        <iframe 
+          src="https://www.youtube-nocookie.com/embed/nFozEhYTEMo?autoplay=1&mute=1" 
+          title="Live Rotterdam"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>
+      </div>
+      <div class="card-footer">
+        <span>📍 Rotterdam</span>
       </div>
     </div>
 
