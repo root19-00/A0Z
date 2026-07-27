@@ -1,67 +1,250 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="nl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>nl.live - Background Audio</title>
+  <title>nl.live - Live Streams & Radio Grid</title>
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
     body {
       background-color: #0f172a;
+      color: #ffffff;
+      min-height: 100vh;
+      padding: 30px 20px;
+    }
+
+    /* Header Navigation Bar */
+    header {
+      max-width: 1200px;
+      margin: 0 auto 30px auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 20px;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .logo span {
+      color: #ef4444;
+    }
+
+    .subtitle {
+      color: #94a3b8;
+      font-size: 0.95rem;
+    }
+
+    /* Main Grid Layout */
+    .grid-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 25px;
+    }
+
+    /* Stream Card Style */
+    .card {
+      background: #1e293b;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #334155;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: #475569;
+    }
+
+    .card-header {
+      padding: 15px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #1e293b;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .live-badge {
+      background-color: #ef4444;
       color: white;
-      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.7rem;
+      font-weight: bold;
+      padding: 3px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    /* Responsive 16:9 Video Container */
+    .video-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .card-footer {
+      padding: 12px 18px;
+      color: #94a3b8;
+      font-size: 0.85rem;
+      background: #0f172a;
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Radio Specific Custom Card */
+    .radio-card-body {
+      padding: 30px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      margin: 0;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      flex-grow: 1;
       text-align: center;
-      padding: 20px;
     }
 
-    .card {
-      background: #1e293b;
-      padding: 30px;
-      border-radius: 16px;
-      border: 1px solid #334155;
-      max-width: 400px;
-      width: 100%;
+    .radio-icon {
+      font-size: 3.5rem;
+      margin-bottom: 15px;
     }
 
-    .btn {
+    .play-btn {
       background: #ef4444;
       color: white;
       border: none;
-      padding: 14px 28px;
-      font-size: 1.1rem;
+      padding: 12px 24px;
+      font-size: 1rem;
       font-weight: bold;
       border-radius: 10px;
       cursor: pointer;
-      margin-top: 20px;
       width: 100%;
-      transition: 0.2s;
+      max-width: 220px;
+      transition: background 0.2s ease, transform 0.1s ease;
+    }
+
+    .play-btn:active {
+      transform: scale(0.98);
     }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <h2>📻 Radio 538 Live</h2>
-    <p style="color: #94a3b8; margin-top: 10px; font-size: 0.9rem;">
-      اضغط تشغيل، ثم اخرج من المتصفح أو اقفل الشاشة للتحقق من استمرار الصوت!
-    </p>
+  <!-- Header -->
+  <header>
+    <div>
+      <a href="#" class="logo">nl<span>.live</span></a>
+      <p class="subtitle">Live Webcams & Radio Streams in Nederland</p>
+    </div>
+  </header>
 
-    <button class="btn" id="playBtn" onclick="togglePlay()">▶️ تشغيل الإذاعة</button>
+  <!-- Grid Container -->
+  <div class="grid-container">
+
+    <!-- Card 1: Webcam Stream 1 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">🎥 Live Stream #1</div>
+        <span class="live-badge">🔴 LIVE</span>
+      </div>
+      <div class="video-container">
+        <iframe 
+          src="https://www.youtube-nocookie.com/embed/DaG5JReOYEw?autoplay=1&mute=1" 
+          title="Live Webcam 1"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>
+      </div>
+      <div class="card-footer">
+        <span>📍 Nederland</span>
+        <span>🔊 انقر لتشغيل الصوت</span>
+      </div>
+    </div>
+
+    <!-- Card 2: Webcam Stream 2 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">🎥 Live Stream #2</div>
+        <span class="live-badge">🔴 LIVE</span>
+      </div>
+      <div class="video-container">
+        <iframe 
+          src="https://www.youtube-nocookie.com/embed/Gd9d4q6WvUY?autoplay=1&mute=1" 
+          title="Live Webcam 2"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>
+      </div>
+      <div class="card-footer">
+        <span>📍 Nederland</span>
+        <span>🔊 انقر لتشغيل الصوت</span>
+      </div>
+    </div>
+
+    <!-- Card 3: Background Audio Radio -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">📻 Radio 3FM Live</div>
+        <span class="live-badge" style="background-color: #22c55e;">🎧 AUDIO</span>
+      </div>
+      <div class="radio-card-body">
+        <div class="radio-icon">📻</div>
+        <h4 style="margin-bottom: 8px;">NPO 3FM Direct Stream</h4>
+        <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 20px;">
+          بث صوتي حي يعمل في الخلفية وعلى شاشة القفل عند الخروج.
+        </p>
+        <button class="play-btn" id="radioBtn" onclick="toggleRadio()">▶️ تشغيل الإذاعة</button>
+      </div>
+      <div class="card-footer">
+        <span>📍 Hilversum</span>
+        <span>📲 يعمل مع قفل الشاشة</span>
+      </div>
+    </div>
+
   </div>
 
   <script>
-    // 🔴 رابط حقيقي ومباشر لإذاعة Radio 538
-    const streamUrl = 'https://22543.live.streamtheworld.com/RADIO538.mp3';
-    const radio = new Audio(streamUrl);
+    // Audio Radio Logic with MediaSession for Lock Screen Controls
+    const audioUrl = 'https://icecast.omroep.nl/3fm-bb-mp3';
+    const radio = new Audio(audioUrl);
     let isPlaying = false;
 
-    function togglePlay() {
-      const btn = document.getElementById('playBtn');
+    function toggleRadio() {
+      const btn = document.getElementById('radioBtn');
 
       if (!isPlaying) {
         radio.play();
@@ -69,12 +252,11 @@
         btn.style.background = '#22c55e';
         isPlaying = true;
 
-        // 👈 دعم التحكم عبر شاشة القفل في الآيفون (Lock Screen)
         if ('mediaSession' in navigator) {
           navigator.mediaSession.metadata = new MediaMetadata({
-            title: 'Radio 538 Direct',
+            title: 'NPO 3FM Live',
             artist: 'nl.live',
-            album: 'البث المباشر'
+            album: 'Radio Stream'
           });
         }
       } else {
