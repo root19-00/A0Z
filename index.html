@@ -283,13 +283,16 @@
     .news-ticker-text {
       display: inline-block;
       white-space: nowrap;
-      padding-left: 100%;
-      animation: ticker 40s linear infinite;
+      animation: ticker 45s linear infinite;
+    }
+
+    .news-ticker-text:hover {
+      animation-play-state: paused;
     }
 
     @keyframes ticker {
-      0% { transform: translate3d(0, 0, 0); }
-      100% { transform: translate3d(-100%, 0, 0); }
+      0% { transform: translateX(100vw); }
+      100% { transform: translateX(-100%); }
     }
 
     @media (max-width: 480px) {
@@ -403,7 +406,7 @@
     <div class="news-badge">🚨 NIEUWS (NOS & NU.NL)</div>
     <div class="news-ticker-content">
       <div class="news-ticker-text" id="newsTickerText">
-        <span>+++ Het laatste nieuws uit Nederland wordt geladen... +++</span>
+        <span>+++ Welkom op nl.live +++ Het laatste nieuws uit Nederland wordt geladen... +++</span>
       </div>
     </div>
   </div>
@@ -479,6 +482,8 @@
     // 📰 Live Combined News Feed Fetcher (NOS + NU.nl)
     async function fetchLatestNews() {
       const tickerText = document.getElementById('newsTickerText');
+      const defaultText = "+++ [NOS] Welkom op nl.live +++ [NU.nl] Live webcams en radiostreams in Nederland +++ [NOS] Actuele temperaturen live bijgewerkt +++";
+
       try {
         const nosUrl = 'https://api.rss2json.com/v1/api.json?rss_url=https://feeds.nos.nl/nosnieuwsalgemeen';
         const nuUrl = 'https://api.rss2json.com/v1/api.json?rss_url=https://www.nu.nl/rss/Algemeen';
@@ -491,11 +496,11 @@
         let nosItems = [];
         let nuItems = [];
 
-        if (nosRes.status === 'fulfilled' && nosRes.value.status === 'ok') {
+        if (nosRes.status === 'fulfilled' && nosRes.value && nosRes.value.status === 'ok') {
           nosItems = nosRes.value.items.slice(0, 5).map(item => `[NOS] ${item.title}`);
         }
 
-        if (nuRes.status === 'fulfilled' && nuRes.value.status === 'ok') {
+        if (nuRes.status === 'fulfilled' && nuRes.value && nuRes.value.status === 'ok') {
           nuItems = nuRes.value.items.slice(0, 5).map(item => `[NU.nl] ${item.title}`);
         }
 
@@ -507,11 +512,13 @@
         }
 
         if (combined.length > 0) {
-          const headlines = combined.map(item => `+++ ${item}`).join(' ');
-          tickerText.innerHTML = `<span>${headlines} +++</span>`;
+          tickerText.innerHTML = `<span>+++ ${combined.join(' +++ ')} +++</span>`;
+        } else {
+          tickerText.innerHTML = `<span>${defaultText}</span>`;
         }
       } catch (error) {
         console.error('Error fetching combined news:', error);
+        tickerText.innerHTML = `<span>${defaultText}</span>`;
       }
     }
 
