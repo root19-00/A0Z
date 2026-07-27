@@ -46,10 +46,46 @@
       font-size: 0.85rem;
     }
 
+    /* 🎯 Filter Buttons Bar Section */
+    .filter-section {
+      max-width: 1200px;
+      margin: 0 auto 20px auto;
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+
+    .filter-btn {
+      background: #1e293b;
+      color: #94a3b8;
+      border: 1px solid #334155;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      border-color: #ef4444;
+      color: #ffffff;
+    }
+
+    .filter-btn.active {
+      background: #ef4444;
+      color: #ffffff;
+      border-color: #ef4444;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
     /* 📻 TOP SECTION: Radio Audio Balk */
     .radio-section {
       max-width: 1200px;
       margin: 0 auto 25px auto;
+      transition: opacity 0.3s ease;
     }
 
     .section-label {
@@ -139,7 +175,7 @@
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
       display: flex;
       flex-direction: column;
-      transition: transform 0.2s ease, border-color 0.2s ease;
+      transition: transform 0.2s ease, border-color 0.2s ease, opacity 0.3s ease;
     }
 
     .card:hover {
@@ -220,8 +256,16 @@
     </div>
   </header>
 
-  <!-- 📻 TOP SECTION: Radio Audio Balk -->
-  <div class="radio-section">
+  <!-- 🎯 FILTER BUTTONS BAR -->
+  <div class="filter-section">
+    <button class="filter-btn active" onclick="filterCategory('all', this)">Alles 🌐</button>
+    <button class="filter-btn" onclick="filterCategory('steden', this)">Steden 🏙️</button>
+    <button class="filter-btn" onclick="filterCategory('stranden', this)">Stranden 🏖️</button>
+    <button class="filter-btn" onclick="filterCategory('radio', this)">Radio 📻</button>
+  </div>
+
+  <!-- 📻 TOP SECTION: Radio Audio Balk (Category: radio) -->
+  <div class="radio-section" data-category="radio">
     <div class="section-label">🎧 Live Radio (blijft afspelen op vergrendelscherm)</div>
     <div class="radio-bar">
       <div class="radio-info">
@@ -238,8 +282,8 @@
   <!-- 🎥 BOTTOM SECTION: Video Streams Grid -->
   <div class="grid-container">
 
-    <!-- Card 1: Scheveningen #1 -->
-    <div class="card">
+    <!-- Card 1: Scheveningen #1 (Category: stranden) -->
+    <div class="card" data-category="stranden">
       <div class="card-header">
         <div class="card-title">🎥 Live Scheveningen #1</div>
         <span class="live-badge">🔴 LIVE</span>
@@ -257,8 +301,8 @@
       </div>
     </div>
 
-    <!-- Card 2: Amsterdam #2 -->
-    <div class="card">
+    <!-- Card 2: Amsterdam #2 (Category: steden) -->
+    <div class="card" data-category="steden">
       <div class="card-header">
         <div class="card-title">🎥 Live Amsterdam #2</div>
         <span class="live-badge">🔴 LIVE</span>
@@ -276,8 +320,8 @@
       </div>
     </div>
 
-    <!-- Card 3: Rotterdam -->
-    <div class="card">
+    <!-- Card 3: Rotterdam (Category: steden) -->
+    <div class="card" data-category="steden">
       <div class="card-header">
         <div class="card-title">🎥 Live Rotterdam</div>
         <span class="live-badge">🔴 LIVE</span>
@@ -298,6 +342,23 @@
   </div>
 
   <script>
+    // 🎯 Filter Logic
+    function filterCategory(category, btnElement) {
+      // Toggle Active Button
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      btnElement.classList.add('active');
+
+      // Filter Cards & Radio Section
+      const filterableItems = document.querySelectorAll('[data-category]');
+      filterableItems.forEach(item => {
+        if (category === 'all' || item.getAttribute('data-category') === category) {
+          item.style.display = '';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+
     // 📻 Radio Audio Player Logic
     const audioUrl = 'https://icecast.omroep.nl/3fm-bb-mp3';
     const radio = new Audio(audioUrl);
@@ -352,8 +413,9 @@
 
     // Load weather on start
     loadLiveWeather();
-setInterval(loadLiveWeather, 600000);
 
+    // Refresh weather every 10 minutes
+    setInterval(loadLiveWeather, 600000);
   </script>
 
 </body>
