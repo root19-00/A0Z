@@ -88,6 +88,11 @@
       margin: 0 auto 25px auto;
       transition: opacity 0.3s ease;
     }
+    .radio-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
     .section-label {
       font-size: 0.75rem;
@@ -326,20 +331,61 @@
     <button class="filter-btn" onclick="filterCategory('radio', this)">Radio 📻</button>
   </div>
 
-  <!-- 📻 TOP SECTION: Radio Audio Balk -->
-  <div class="radio-section" data-category="radio">
-    <div class="section-label">🎧 Live Radio (blijft afspelen op vergrendelscherm)</div>
+  <!-- 📻 TOP SECTION: Radio Audio List -->
+<div class="radio-section" data-category="radio">
+  <div class="section-label">🎧 Live Radio Stations</div>
+  <div class="radio-grid">
+
+    <!-- NPO Radio 1 -->
     <div class="radio-bar">
       <div class="radio-info">
         <div class="radio-icon">📻</div>
         <div class="radio-details">
-          <h4>NPO 3FM Direct <span class="audio-badge">LIVE AUDIO</span></h4>
-          <p>Directe audiostream – blijft afspelen in de achtergrond en op je vergrendelscherm</p>
+          <h4>NPO Radio 1 <span class="audio-badge">NIEUWS</span></h4>
+          <p>Nieuws, sport en achtergronden</p>
         </div>
       </div>
-      <button class="radio-play-btn" id="radioBtn" onclick="toggleRadio()">▶️ Radio afspelen</button>
+      <button class="radio-play-btn" onclick="playRadio('https://icecast.omroep.nl/radio1-bb-mp3', 'NPO Radio 1', this)">▶️ Afspelen</button>
     </div>
+
+    <!-- NPO Radio 2 -->
+    <div class="radio-bar">
+      <div class="radio-info">
+        <div class="radio-icon">🎵</div>
+        <div class="radio-details">
+          <h4>NPO Radio 2 <span class="audio-badge">POP</span></h4>
+          <p>De beste popmuziek en klassiekers</p>
+        </div>
+      </div>
+      <button class="radio-play-btn" onclick="playRadio('https://icecast.omroep.nl/radio2-bb-mp3', 'NPO Radio 2', this)">▶️ Afspelen</button>
+    </div>
+
+    <!-- NPO 3FM -->
+    <div class="radio-bar">
+      <div class="radio-info">
+        <div class="radio-icon">🎸</div>
+        <div class="radio-details">
+          <h4>NPO 3FM <span class="audio-badge">POP & ROCK</span></h4>
+          <p>Nieuwe muziek en live optredens</p>
+        </div>
+      </div>
+      <button class="radio-play-btn" onclick="playRadio('https://icecast.omroep.nl/3fm-bb-mp3', 'NPO 3FM', this)">▶️ Afspelen</button>
+    </div>
+
+    <!-- BNR Nieuwsradio -->
+    <div class="radio-bar">
+      <div class="radio-info">
+        <div class="radio-icon">💼</div>
+        <div class="radio-details">
+          <h4>BNR Nieuwsradio <span class="audio-badge">BUSINESS</span></h4>
+          <p>Zakelijk nieuws en financiën</p>
+        </div>
+      </div>
+      <button class="radio-play-btn" onclick="playRadio('https://stream.bnr.nl/bnr_mp3_128_03', 'BNR Nieuwsradio', this)">▶️ Afspelen</button>
+    </div>
+
   </div>
+</div>
 
   <!-- 🎥 BOTTOM SECTION: Video Streams Grid -->
   <div class="grid-container">
@@ -434,34 +480,42 @@
       });
     }
 
-    // 📻 Radio Audio Player Logic
-    const audioUrl = 'https://icecast.omroep.nl/3fm-bb-mp3';
-    const radio = new Audio(audioUrl);
-    let isPlaying = false;
+// 📻 Dynamic Multi-Station Radio Player Logic
+let currentAudio = new Audio();
+let currentBtn = null;
+let currentStreamUrl = '';
 
-    function toggleRadio() {
-      const btn = document.getElementById('radioBtn');
+function playRadio(streamUrl, stationName, btnElement) {
 
-      if (!isPlaying) {
-        radio.play();
-        btn.innerHTML = '⏸️ Pauzeren';
-        btn.style.background = '#22c55e';
-        isPlaying = true;
+  if (currentStreamUrl === streamUrl && !currentAudio.paused) {
+    currentAudio.pause();
+    btnElement.innerHTML = '▶️ Afspelen';
+    btnElement.style.background = '#ef4444';
+    return;
+  }
 
-        if ('mediaSession' in navigator) {
-          navigator.mediaSession.metadata = new MediaMetadata({
-            title: 'NPO 3FM Live',
-            artist: 'nl.live',
-            album: 'Live Radio'
-          });
-        }
-      } else {
-        radio.pause();
-        btn.innerHTML = '▶️ Radio afspelen';
-        btn.style.background = '#ef4444';
-        isPlaying = false;
-      }
-    }
+  if (currentBtn && currentBtn !== btnElement) {
+    currentAudio.pause();
+    currentBtn.innerHTML = '▶️ Afspelen';
+    currentBtn.style.background = '#ef4444';
+  }
+
+  currentStreamUrl = streamUrl;
+  currentAudio.src = streamUrl;
+  currentAudio.play();
+
+  currentBtn = btnElement;
+  btnElement.innerHTML = '⏸️ Pauzeren';
+  btnElement.style.background = '#22c55e';
+
+  if ('mediaSession' in navigator) {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: stationName,
+      artist: 'nl.live',
+      album: 'Live Radio'
+    });
+  }
+}
 
     // 🌡️ Real-time Weather Logic
     async function loadLiveWeather() {
