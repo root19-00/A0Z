@@ -240,7 +240,7 @@
       font-weight: 600;
     }
 
-    /* 🚨 FIXED SEAMLESS CONTINUOUS NEWS TICKER */
+    /* 🚨 FIXED SEAMLESS TICKER FOR PORTRAIT & LANDSCAPE MOBILE */
     .news-ticker-bar {
       position: fixed;
       bottom: 0;
@@ -271,34 +271,45 @@
       white-space: nowrap;
       z-index: 2;
       box-shadow: 4px 0 10px rgba(0,0,0,0.2);
+      flex-shrink: 0;
     }
 
     .news-ticker-content {
-      flex-grow: 1;
+      flex: 1;
+      min-width: 0; /* CRITICAL FOR SAFARI PORTRAIT BUG */
+      height: 100%;
       overflow: hidden;
-      white-space: nowrap;
       position: relative;
+      display: flex;
+      align-items: center;
     }
 
     .news-ticker-track {
-      display: inline-flex;
+      display: flex;
+      width: max-content; /* PREVENTS TEXT SQUASHING ON PORTRAIT */
       white-space: nowrap;
       will-change: transform;
-      animation: tickerLoop 90s linear infinite;
+      animation: tickerLoop 45s linear infinite;
     }
 
-    .news-ticker-track:hover {
+    .news-ticker-track.paused {
       animation-play-state: paused;
+    }
+
+    .news-ticker-track.reset-anim {
+      animation: none !important;
     }
 
     .news-ticker-text {
       display: inline-block;
+      white-space: nowrap;
       padding-right: 50px;
+      flex-shrink: 0;
     }
 
     @keyframes tickerLoop {
-      0% { transform: translate3d(0, 0, 0); }
-      100% { transform: translate3d(-50%, 0, 0); }
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
     }
 
     @media (max-width: 480px) {
@@ -407,11 +418,11 @@
 
   </div>
 
-  <!-- 🚨 SEAMLESS CONTINUOUS NEWS TICKER BAR (NOS & NU.NL) -->
+  <!-- 🚨 SEAMLESS CONTINUOUS NEWS TICKER BAR -->
   <div class="news-ticker-bar">
     <div class="news-badge">🚨 NIEUWS (NOS & NU.NL)</div>
     <div class="news-ticker-content">
-      <div class="news-ticker-track">
+      <div class="news-ticker-track" id="newsTickerTrack">
         <div class="news-ticker-text" id="newsTickerText1">
           <span>+++ Welkom op nl.live +++ Het laatste nieuws uit Nederland wordt geladen... +++</span>
         </div>
@@ -467,7 +478,7 @@
       }
     }
 
-    // 🌡️ Real-time Weather Logic (Open-Meteo API)
+    // 🌡️ Real-time Weather Logic
     async function loadLiveWeather() {
       const tempElements = document.querySelectorAll('.city-temp');
       
@@ -490,7 +501,7 @@
       });
     }
 
-    // 📰 Live Combined News Feed Fetcher (NOS + NU.nl)
+    // 📰 Live Combined News Feed Fetcher
     async function fetchLatestNews() {
       const tickerText1 = document.getElementById('newsTickerText1');
       const tickerText2 = document.getElementById('newsTickerText2');
@@ -537,13 +548,32 @@
       }
     }
 
-    // Load weather and news on start
+    // 📱 MOBILE ANIMATION RECOVERY
+    function refreshTickerAnimation() {
+      const track = document.getElementById('newsTickerTrack');
+      if (!track) return;
+
+      track.classList.add('reset-anim');
+      void track.offsetWidth; 
+      track.classList.remove('reset-anim');
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) refreshTickerAnimation();
+    });
+
+    window.addEventListener('orientationchange', () => {
+      setTimeout(refreshTickerAnimation, 200);
+    });
+
+    window.addEventListener('resize', refreshTickerAnimation);
+
+    // Initializations
     loadLiveWeather();
     fetchLatestNews();
 
-    // Auto Refresh Intervals
-    setInterval(loadLiveWeather, 600000); // Weather: every 10 min
-    setInterval(fetchLatestNews, 900000);  // News: every 15 min
+    setInterval(loadLiveWeather, 600000); 
+    setInterval(fetchLatestNews, 900000);  
   </script>
 
 </body>
