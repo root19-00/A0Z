@@ -165,10 +165,34 @@
       transform: scale(0.96);
     }
 
-    /* Traffic / NS Box */
+    /* 🚆 Traffic / OV Status Box */
+    .traffic-section {
+      max-width: 1200px;
+      margin: 0 auto 25px auto;
+    }
+
+    .traffic-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+    }
+
+    .traffic-header {
+      padding: 12px 18px;
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
     .traffic-status-container {
       padding: 15px;
-      max-height: 330px;
+      max-height: 280px;
       overflow-y: auto;
       font-size: 0.85rem;
     }
@@ -201,7 +225,7 @@
     .traffic-loading {
       color: #94a3b8;
       text-align: center;
-      padding: 40px 0;
+      padding: 30px 0;
       font-size: 0.85rem;
     }
 
@@ -431,24 +455,24 @@
     </div>
   </div>
 
-      <!-- Widget 2: Live NS Train Disruptions & Traffic -->
-      <div class="widget-card">
-        <div class="widget-header">
-          <span>🚆 NS Treinstoringen & Verkeer</span>
-          <span class="audio-badge">ACTUEEL</span>
-        </div>
-        <div class="traffic-status-container" id="nsStatusBox">
-          <div class="traffic-loading">🔄 Live data ophalen van NS...</div>
-        </div>
+  <!-- 🚆 TRAFFIC SECTION: NS, Arriva, Breng & Regional OV Disruptions -->
+  <div class="traffic-section" data-category="verkeer">
+    <div class="section-label">🚆 Live OV Storingen (NS, Arriva & Breng)</div>
+    <div class="traffic-card">
+      <div class="traffic-header">
+        <span>⚠️ Actuele Trein & Bus Storingen</span>
+        <span class="audio-badge">LIVE UPDATES</span>
       </div>
-
+      <div class="traffic-status-container" id="nsStatusBox">
+        <div class="traffic-loading">🔄 Live data ophalen van NS, Arriva & Breng...</div>
+      </div>
     </div>
   </div>
 
   <!-- 🎥 BOTTOM SECTION: Video Streams Grid -->
   <div class="grid-container">
 
-    <!-- Card 1: Scheveningen #1 -->
+    <!-- Card 1: Scheveningen -->
     <div class="card" data-category="stranden">
       <div class="card-header">
         <div class="card-title">🎥 Live Scheveningen #1</div>
@@ -467,7 +491,7 @@
       </div>
     </div>
 
-    <!-- Card 2: Amsterdam #2 -->
+    <!-- Card 2: Amsterdam -->
     <div class="card" data-category="steden">
       <div class="card-header">
         <div class="card-title">🎥 Live Amsterdam #2</div>
@@ -504,8 +528,9 @@
         <span>📍 Rotterdam<span class="city-temp" data-lat="51.9244" data-lon="4.4777"></span></span>
       </div>
     </div>
-<!-- Card 4: Zandvoort-->
-    <div class="card" data-category="steden">
+
+    <!-- Card 4: Zandvoort -->
+    <div class="card" data-category="stranden">
       <div class="card-header">
         <div class="card-title">🎥 Live Zandvoort</div>
         <span class="live-badge">🔴 LIVE</span>
@@ -519,9 +544,10 @@
         </iframe>
       </div>
       <div class="card-footer">
-        <span>📍 Rotterdam<span class="city-temp" data-lat="51.9244" data-lon="4.4777"></span></span>
+        <span>📍 Zandvoort<span class="city-temp" data-lat="52.3718" data-lon="4.5323"></span></span>
       </div>
     </div>
+
   </div>
 
   <!-- 🚨 SEAMLESS CONTINUOUS NEWS TICKER BAR -->
@@ -591,22 +617,24 @@
       }
     }
 
-    // 🚆 Live NS Disruptions Fetcher
+    // 🚆 Live Multi-Operator OV Disruptions Fetcher (NS, Arriva, Breng, etc.)
     async function fetchNSDisruptions() {
       const container = document.getElementById('nsStatusBox');
-      const feedUrl = 'https://api.rss2json.com/v1/api.json?rss_url=https://www.ns.nl/rss/storingen.xml';
+      const feedUrl = 'https://api.rss2json.com/v1/api.json?rss_url=https://www.rijdendetreinen.nl/rss/storingen';
 
       try {
         const res = await fetch(feedUrl);
         const data = await res.json();
 
-        if (data && data.status === 'ok' && data.items.length > 0) {
+        if (data && data.status === 'ok' && data.items && data.items.length > 0) {
           let html = '';
           data.items.slice(0, 5).forEach(item => {
+            const title = item.title || 'Storing';
+            const desc = item.description ? item.description.replace(/<[^>]*>?/gm, '').substring(0, 120) : '';
             html += `
               <div class="traffic-item">
-                <h5>⚠️ ${item.title}</h5>
-                <p>${item.description.replace(/<[^>]*>?/gm, '').substring(0, 110)}...</p>
+                <h5>⚠️ ${title}</h5>
+                <p>${desc}...</p>
               </div>
             `;
           });
@@ -614,16 +642,16 @@
         } else {
           container.innerHTML = `
             <div class="traffic-item ok">
-              <h5>✅ Geen grote treinstoringen bekend</h5>
-              <p>Het treinverkeer in Nederland rijdt volgens de normale dienstregeling.</p>
+              <h5>✅ Geen grote storingen bekend</h5>
+              <p>Het trein- en busverkeer (NS, Arriva, Breng) rijdt momenteal volgens de normale dienstregeling.</p>
             </div>
           `;
         }
       } catch (error) {
         container.innerHTML = `
           <div class="traffic-item ok">
-            <h5>✅ Treinverkeer normaal</h5>
-            <p>Er zijn op dit moment geen grote gemelde NS storingen.</p>
+            <h5>✅ OV Verkeer Normaal</h5>
+            <p>Er zijn op dit moment geen grote gemelde storingen op het spoor.</p>
           </div>
         `;
       }
@@ -726,7 +754,7 @@
     fetchLatestNews();
     requestAnimationFrame(animateTicker);
 
-    // ⏱️ Auto-Refresh Every 5 Minutes (300,000 ms)
+    // ⏱️ Auto-Refresh Every 5 Minutes
     setInterval(fetchNSDisruptions, 300000);
     setInterval(loadLiveWeather, 300000); 
     setInterval(fetchLatestNews, 600000);  
