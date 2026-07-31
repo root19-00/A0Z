@@ -696,11 +696,6 @@ body {
   </div>
 
   <script>
-window.onload = function () {
-    setTimeout(() => {
-        document.body.classList.add("loaded");
-    }, 100);
-};
     // 🎯 Filter Logic
     function filterCategory(category, btnElement) {
       document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
@@ -891,7 +886,13 @@ window.onload = function () {
     // ⏱️ Auto-Refresh Every 5 Minutes
     setInterval(fetchNSDisruptions, 300000);
     setInterval(loadLiveWeather, 300000); 
-    setInterval(fetchLatestNews, 600000);  
+    setInterval(fetchLatestNews, 600000);
+    
+    window.onload = function () {
+    setTimeout(() => {
+        document.body.classList.add("loaded");
+    }, 100);
+};
   </script>
 </body>
 </html>
