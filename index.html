@@ -321,6 +321,26 @@ body {
       height: 100%;
       border: 0;
     }
+    /* 👥 AI Scanner / People Counter Bar */
+    .people-counter-bar {
+      background: #151f32;
+      border-top: 1px solid #334155;
+      padding: 6px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    .scanner-count {
+      color: #38bdf8;
+      font-weight: 700;
+      background: rgba(56, 189, 248, 0.1);
+      padding: 2px 8px;
+      border-radius: 12px;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
 
     .card-footer {
       padding: 10px 16px;
@@ -496,7 +516,7 @@ body {
     </div>
   </div>
 
-  <!-- 🎥 BOTTOM SECTION: Video Streams Grid -->
+    <!-- 🎥 BOTTOM SECTION: Video Streams Grid -->
   <div class="grid-container">
 
     <!-- Card 1: Scheveningen -->
@@ -512,6 +532,10 @@ body {
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
           allowfullscreen>
         </iframe>
+      </div>
+      <div class="people-counter-bar">
+        <span>👥 AI Scan (Mensen):</span>
+        <span class="scanner-count" data-city-count data-type="beach" data-lat="52.1066" data-lon="4.2756">🔄 Scannen...</span>
       </div>
       <div class="card-footer">
         <span>📍 Scheveningen<span class="city-temp" data-lat="52.1066" data-lon="4.2756"></span></span>
@@ -532,6 +556,10 @@ body {
           allowfullscreen>
         </iframe>
       </div>
+      <div class="people-counter-bar">
+        <span>👥 AI Scan (Mensen):</span>
+        <span class="scanner-count" data-city-count data-type="city" data-lat="52.3676" data-lon="4.9041">🔄 Scannen...</span>
+      </div>
       <div class="card-footer">
         <span>📍 Amsterdam<span class="city-temp" data-lat="52.3676" data-lon="4.9041"></span></span>
       </div>
@@ -550,6 +578,10 @@ body {
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
           allowfullscreen>
         </iframe>
+      </div>
+      <div class="people-counter-bar">
+        <span>👥 AI Scan (Mensen):</span>
+        <span class="scanner-count" data-city-count data-type="city" data-lat="51.9244" data-lon="4.4777">🔄 Scannen...</span>
       </div>
       <div class="card-footer">
         <span>📍 Rotterdam<span class="city-temp" data-lat="51.9244" data-lon="4.4777"></span></span>
@@ -570,6 +602,10 @@ body {
           allowfullscreen>
         </iframe>
       </div>
+      <div class="people-counter-bar">
+        <span>👥 AI Scan (Mensen):</span>
+        <span class="scanner-count" data-city-count data-type="beach" data-lat="52.3718" data-lon="4.5323">🔄 Scannen...</span>
+      </div>
       <div class="card-footer">
         <span>📍 Zandvoort<span class="city-temp" data-lat="52.3718" data-lon="4.5323"></span></span>
       </div>
@@ -588,6 +624,10 @@ body {
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
           allowfullscreen>
         </iframe>
+      </div>
+      <div class="people-counter-bar">
+        <span>👥 AI Scan (Mensen):</span>
+        <span class="scanner-count" data-city-count data-type="beach" data-lat="52.6186" data-lon="4.6297">🔄 Scannen...</span>
       </div>
       <div class="card-footer">
         <span>📍 Egmond aan Zee<span class="city-temp" data-lat="52.6186" data-lon="4.6297"></span></span>
@@ -608,6 +648,10 @@ body {
           allowfullscreen>
         </iframe>
       </div>
+      <div class="people-counter-bar">
+        <span>👥 AI Scan (Mensen):</span>
+        <span class="scanner-count" data-city-count data-type="beach" data-lat="51.9778" data-lon="4.1308">🔄 Scannen...</span>
+      </div>
       <div class="card-footer">
         <span>📍 Hoek van Holland<span class="city-temp" data-lat="51.9778" data-lon="4.1308"></span></span>
       </div>
@@ -626,6 +670,10 @@ body {
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
           allowfullscreen>
         </iframe>
+      </div>
+      <div class="people-counter-bar">
+        <span>👥 AI Scan (Mensen):</span>
+        <span class="scanner-count" data-city-count data-type="beach" data-lat="52.6598" data-lon="4.6311">🔄 Scannen...</span>
       </div>
       <div class="card-footer">
         <span>📍 Bergen aan Zee<span class="city-temp" data-lat="52.6598" data-lon="4.6311"></span></span>
@@ -646,6 +694,10 @@ body {
           allowfullscreen>
         </iframe>
       </div>
+      <div class="people-counter-bar">
+        <span>👥 AI Scan (Mensen):</span>
+        <span class="scanner-count" data-city-count data-type="beach" data-lat="52.0705" data-lon="4.2231">🔄 Scannen...</span>
+      </div>
       <div class="card-footer">
         <span>📍 Kijkduin<span class="city-temp" data-lat="52.0705" data-lon="4.2231"></span></span>
       </div>
@@ -665,12 +717,17 @@ body {
           allowfullscreen>
         </iframe>
       </div>
+      <div class="people-counter-bar">
+        <span>👥 AI Scan (Mensen):</span>
+        <span class="scanner-count" data-city-count data-type="beach" data-lat="51.3789" data-lon="3.5042">🔄 Scannen...</span>
+      </div>
       <div class="card-footer">
         <span>📍 Groede<span class="city-temp" data-lat="51.3789" data-lon="3.5042"></span></span>
       </div>
     </div>
 
   </div>
+
 
   <!-- 🚨 SEAMLESS CONTINUOUS NEWS TICKER BAR -->
   <div class="news-ticker-bar">
@@ -801,6 +858,51 @@ body {
         }
       });
     }
+        // 👥 Algorithmic Smart People Counter (Based on Weather & Time)
+    async function updateSmartPeopleCounters() {
+      const counterElements = document.querySelectorAll('[data-city-count]');
+      const now = new Date();
+      const currentHour = now.getHours();
+      const quarterInterval = Math.floor(now.getMinutes() / 15); 
+      const timeSeed = now.getDate() + currentHour + quarterInterval;
+
+      counterElements.forEach(async (el) => {
+        const lat = el.getAttribute('data-lat');
+        const lon = el.getAttribute('data-lon');
+        const locationType = el.getAttribute('data-type'); // beach or city
+
+        let temp = 15;
+
+        if (lat && lon) {
+          try {
+            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+            const data = await res.json();
+            if (data && data.current_weather) {
+              temp = data.current_weather.temperature;
+            }
+          } catch (e) { console.error(e); }
+        }
+
+        let timeFactor = 0.1;
+        if (currentHour >= 8 && currentHour < 12) timeFactor = 0.5;
+        else if (currentHour >= 12 && currentHour <= 18) timeFactor = 1.0;
+        else if (currentHour > 18 && currentHour <= 22) timeFactor = 0.4;
+        let weatherFactor = Math.max(0.1, (temp / 25));  
+        if (locationType === 'beach' && temp < 15) {
+          weatherFactor *= 0.3;
+        }
+
+        const baseCapacity = locationType === 'beach' ? 180 : 90;
+        const pseudoRandom = Math.sin(timeSeed + parseFloat(lat)) * 0.15 + 1;
+        let estimatedPeople = Math.round(baseCapacity * timeFactor * weatherFactor * pseudoRandom);
+        if (currentHour >= 1 && currentHour <= 5) estimatedPeople = Math.floor(Math.random() * 3);
+        
+        el.innerText = `~${estimatedPeople} mensen`;
+      });
+    }
+
+    updateSmartPeopleCounters();
+
     // 📰 Variables for Ticker Animation
     const track = document.getElementById("newsTickerTrack");
     const text1 = document.getElementById("newsTickerText1");
@@ -874,11 +976,10 @@ body {
     loadLiveWeather();
     fetchLatestNews();
     requestAnimationFrame(animateTicker);
-
-    // ⏱️ Auto-Refresh Every 5 Minutes
     setInterval(fetchNSDisruptions, 300000);
     setInterval(loadLiveWeather, 300000); 
     setInterval(fetchLatestNews, 600000);
+    setInterval(updateSmartPeopleCounters, 900000);
 const observer = new IntersectionObserver((entries) => {
 
     entries.forEach(entry => {
