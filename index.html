@@ -12,12 +12,26 @@
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
 
+    /* 🌟 Animation: Page Entrance */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     body {
       background-color: #0f172a;
       color: #ffffff;
       min-height: 100vh;
       padding: 20px;
       padding-bottom: 65px;
+      /* تطبيق تأثير دخول الصفحة */
+      animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     /* Header */
@@ -82,17 +96,11 @@
       box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
     }
 
-    /* 📻 TOP SECTION: Radio Audio Balk */
+    /* 📻 TOP SECTION: Radio Audio Balk (Slim & Ultra Organized) */
     .radio-section {
       max-width: 1200px;
       margin: 0 auto 25px auto;
       transition: opacity 0.3s ease;
-    }
-
-    .radio-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
     }
 
     .section-label {
@@ -101,68 +109,97 @@
       letter-spacing: 1px;
       color: #94a3b8;
       font-weight: 700;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+    }
+
+    .radio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 10px;
     }
 
     .radio-bar {
       background: #1e293b;
       border: 1px solid #334155;
-      border-radius: 12px;
-      padding: 10px 18px;
+      border-radius: 10px;
+      padding: 6px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 15px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+      gap: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .radio-bar:hover {
+      border-color: #475569;
+      transform: translateY(-2px);
     }
 
     .radio-info {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      min-width: 0;
     }
 
     .radio-icon {
-      font-size: 1.5rem;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .radio-details {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
     }
 
     .radio-details h4 {
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       font-weight: 600;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .radio-details p {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: #94a3b8;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .audio-badge {
-      background-color: #22c55e;
-      color: white;
-      font-size: 0.65rem;
+      background-color: rgba(34, 197, 94, 0.15);
+      color: #4ade80;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      font-size: 0.6rem;
       font-weight: bold;
-      padding: 2px 6px;
+      padding: 1px 5px;
       border-radius: 4px;
+      letter-spacing: 0.5px;
     }
 
     .radio-play-btn {
       background: #ef4444;
       color: white;
       border: none;
-      padding: 8px 18px;
-      font-size: 0.85rem;
+      padding: 5px 12px;
+      font-size: 0.75rem;
       font-weight: bold;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       white-space: nowrap;
       transition: background 0.2s ease, transform 0.1s ease;
+      flex-shrink: 0;
     }
 
     .radio-play-btn:active {
-      transform: scale(0.96);
+      transform: scale(0.95);
     }
 
     /* 🚆 Traffic / OV Status Box */
@@ -399,7 +436,7 @@
     <button class="filter-btn" onclick="filterCategory('verkeer', this)">Verkeer 🚆</button>
   </div>
 
-  <!-- 📻 TOP SECTION: Radio Audio List -->
+  <!-- 📻 TOP SECTION: Radio Audio List (Slim Grid) -->
   <div class="radio-section" data-category="radio">
     <div class="section-label">🎧 Live Radio Stations</div>
     <div class="radio-grid">
@@ -461,7 +498,7 @@
     <div class="traffic-card">
       <div class="traffic-header">
         <span>⚠️ Actuele Trein & Bus Storingen</span>
-        <span class="audio-badge">LIVE UPDATES</span>
+        <span class="audio-badge" style="color: #22c55e; border-color: rgba(34, 197, 94, 0.4);">LIVE UPDATES</span>
       </div>
       <div class="traffic-status-container" id="nsStatusBox">
         <div class="traffic-loading">🔄 Live data ophalen van NS, Arriva & Breng...</div>
@@ -547,7 +584,8 @@
         <span>📍 Zandvoort<span class="city-temp" data-lat="52.3718" data-lon="4.5323"></span></span>
       </div>
     </div>
-        <!-- Card 5: Egmond aan Zee -->
+
+    <!-- Card 5: Egmond aan Zee -->
     <div class="card" data-category="stranden">
       <div class="card-header">
         <div class="card-title">🎥 Live Egmond aan Zee</div>
@@ -565,6 +603,7 @@
         <span>📍 Egmond aan Zee<span class="city-temp" data-lat="52.6186" data-lon="4.6297"></span></span>
       </div>
     </div>
+
     <!-- Card 6: Hoek van Holland -->
     <div class="card" data-category="stranden">
       <div class="card-header">
@@ -583,6 +622,7 @@
         <span>📍 Hoek van Holland<span class="city-temp" data-lat="51.9778" data-lon="4.1308"></span></span>
       </div>
     </div>
+
     <!-- Card 7: Bergen aan Zee -->
     <div class="card" data-category="stranden">
       <div class="card-header">
@@ -601,6 +641,7 @@
         <span>📍 Bergen aan Zee<span class="city-temp" data-lat="52.6598" data-lon="4.6311"></span></span>
       </div>
     </div>
+
     <!-- Card 8: Kijkduin Boulevard -->
     <div class="card" data-category="stranden">
       <div class="card-header">
@@ -619,6 +660,7 @@
         <span>📍 Kijkduin<span class="city-temp" data-lat="52.0705" data-lon="4.2231"></span></span>
       </div>
     </div>
+
     <!-- Card 9: Groede Strand -->
     <div class="card" data-category="stranden">
       <div class="card-header">
@@ -733,7 +775,7 @@
           container.innerHTML = `
             <div class="traffic-item ok">
               <h5>✅ Geen grote storingen bekend</h5>
-              <p>Het trein- en busverkeer (NS, Arriva, Breng) rijdt momenteal volgens de normale dienstregeling.</p>
+              <p>Het trein- en busverkeer (NS, Arriva, Breng) rijdt momenteel volgens de normale dienstregeling.</p>
             </div>
           `;
         }
