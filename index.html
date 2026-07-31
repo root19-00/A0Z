@@ -365,8 +365,6 @@
       font-weight: 600;
     }
 
-
-
 .news-ticker-bar {
   position: fixed;
   bottom: 0;
@@ -382,7 +380,7 @@
   font-size: 0.85rem;
   font-weight: 600;
   overflow: visible;
-  cursor: pointer;
+  cursor: default;
 }
 
 .mini-anchor-box {
@@ -401,6 +399,7 @@
   justify-content: center;
   box-shadow: 0 -6px 15px rgba(0, 0, 0, 0.35);
   z-index: 1001;
+  pointer-events: none;
 }
 
 .mini-anchor-video {
@@ -451,6 +450,7 @@
   align-items: center;
   gap: 4px;
   transition: transform 0.2s ease, background 0.2s ease;
+  pointer-events: auto;
 }
 
 .news-voice-btn:hover {
@@ -501,7 +501,6 @@
     font-size: 0.65rem;
   }
 }
-
   </style>
 </head>
 <body>
@@ -793,8 +792,7 @@
       </div>
     </div>
   </div>
-
-<div class="news-ticker-bar" id="newsTickerBar" onclick="toggleNewsVoice()">
+<div class="news-ticker-bar" id="newsTickerBar">
   <div class="mini-anchor-box">
     <video autoplay loop muted playsinline class="mini-anchor-video">
       <source src="NIEUWS.mp4" type="video/mp4">
@@ -804,7 +802,7 @@
 
   <div class="news-badge">
     🚨 NIEUWS
-    <button class="news-voice-btn" id="voiceToggleBtn" onclick="toggleNewsVoice(event)">🗣️ AI Voice</button>
+    <button class="news-voice-btn" id="voiceToggleBtn" onclick="toggleNewsVoice()">🗣️ AI Voice</button>
   </div>
 
   <div class="news-ticker-content">
