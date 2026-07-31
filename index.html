@@ -18,19 +18,7 @@ body {
   min-height: 100vh;
   padding: 20px;
   padding-bottom: 65px;
-
-  opacity: 0;
-  transform: translateY(30px);
-
-  transition: all .8s ease;
-  will-change: opacity, transform;
 }
-
-.loaded {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-}
-
 
     /* Header */
     header {
@@ -281,11 +269,15 @@ body {
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
       display: flex;
       flex-direction: column;
-      transition: transform 0.2s ease, border-color 0.2s ease, opacity 0.3s ease;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity .7s ease, transform .7s ease, border-color .2s ease;
     }
-
+.card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
     .card:hover {
-      transform: translateY(-4px);
       border-color: #475569;
     }
 
@@ -887,12 +879,24 @@ body {
     setInterval(fetchNSDisruptions, 300000);
     setInterval(loadLiveWeather, 300000); 
     setInterval(fetchLatestNews, 600000);
-    
-    window.onload = function () {
-    setTimeout(() => {
-        document.body.classList.add("loaded");
-    }, 100);
-};
+const observer = new IntersectionObserver((entries) => {
+
+    entries.forEach(entry => {
+
+        if(entry.isIntersecting){
+            entry.target.classList.add("show");
+            observer.unobserve(entry.target); // يشغل الأنيميشن مرة واحدة
+        }
+
+    });
+
+},{
+    threshold:0.15
+});
+
+document.querySelectorAll(".card").forEach(card=>{
+    observer.observe(card);
+});
   </script>
 </body>
 </html>
