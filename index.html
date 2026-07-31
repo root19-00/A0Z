@@ -228,10 +228,6 @@
       margin-bottom: 10px;
     }
 
-    .traffic-item.ok {
-      border-left-color: #22c55e;
-    }
-
     .traffic-item h5 {
       font-size: 0.85rem;
       font-weight: 700;
@@ -369,7 +365,7 @@
       font-weight: 600;
     }
 
-    /* 🚨 FIXED SEAMLESS TICKER WITH VOICE BUTTON */
+    /* 🚨 FIXED TICKER BAR */
     .news-ticker-bar {
       position: fixed;
       bottom: 0;
@@ -403,7 +399,6 @@
       flex-shrink: 0;
     }
 
-    /* 🗣️ AI Voice Button */
     .news-voice-btn {
       background: #ffffff;
       color: #ef4444;
@@ -554,22 +549,17 @@
     </div>
   </div>
 
-  <!-- 🎥 BOTTOM SECTION: Video Streams Grid -->
+  <!-- 🎥 BOTTOM SECTION: All Video Streams Grid -->
   <div class="grid-container">
 
-    <!-- Card 1: Scheveningen (Beach - HAS SCANNER) -->
+    <!-- Card 1: Scheveningen #1 -->
     <div class="card" data-category="stranden">
       <div class="card-header">
-        <div class="card-title">🎥 Live Scheveningen <span class="popular-badge">🔥 TOP STRAND</span></div>
+        <div class="card-title">🎥 Live Scheveningen #1 <span class="popular-badge">🔥 TOP STRAND</span></div>
         <span class="live-badge">🔴 LIVE</span>
       </div>
       <div class="video-container">
-        <iframe 
-          src="https://www.youtube-nocookie.com/embed/DaG5JReOYEw?autoplay=1&mute=1" 
-          title="Live Scheveningen #1"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
+        <iframe src="https://www.youtube-nocookie.com/embed/DaG5JReOYEw?autoplay=1&mute=1" title="Live Scheveningen #1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
       <div class="people-counter-bar">
         <span>👥 AI Scan (Mensen):</span>
@@ -580,57 +570,56 @@
       </div>
     </div>
 
-    <!-- Card 2: Amsterdam (City - NO SCANNER) -->
-    <div class="card" data-category="steden">
+    <!-- Card 2: Scheveningen #2 -->
+    <div class="card" data-category="stranden">
       <div class="card-header">
-        <div class="card-title">🎥 Live Amsterdam</div>
+        <div class="card-title">🎥 Live Scheveningen #2</div>
         <span class="live-badge">🔴 LIVE</span>
       </div>
       <div class="video-container">
-        <iframe 
-          src="https://www.youtube-nocookie.com/embed/Gd9d4q6WvUY?autoplay=1&mute=1" 
-          title="Live Amsterdam #2"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
+        <iframe src="https://www.youtube-nocookie.com/embed/6_3Wn-Ovwl0?autoplay=1&mute=1" title="Live Scheveningen #2" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <div class="card-footer">
+        <span>📍 Scheveningen<span class="city-temp" data-lat="52.1066" data-lon="4.2756"></span></span>
+      </div>
+    </div>
+
+    <!-- Card 3: Amsterdam Centrum -->
+    <div class="card" data-category="steden">
+      <div class="card-header">
+        <div class="card-title">🎥 Live Amsterdam Centrum</div>
+        <span class="live-badge">🔴 LIVE</span>
+      </div>
+      <div class="video-container">
+        <iframe src="https://www.youtube-nocookie.com/embed/Gd9d4q6WvUY?autoplay=1&mute=1" title="Live Amsterdam" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
       <div class="card-footer">
         <span>📍 Amsterdam<span class="city-temp" data-lat="52.3676" data-lon="4.9041"></span></span>
       </div>
     </div>
 
-    <!-- Card 3: Rotterdam (City - NO SCANNER) -->
+    <!-- Card 4: Rotterdam -->
     <div class="card" data-category="steden">
       <div class="card-header">
-        <div class="card-title">🎥 Live Rotterdam</div>
+        <div class="card-title">🎥 Live Rotterdam Center</div>
         <span class="live-badge">🔴 LIVE</span>
       </div>
       <div class="video-container">
-        <iframe 
-          src="https://www.youtube-nocookie.com/embed/nFozEhYTEMo?autoplay=1&mute=1" 
-          title="Live Rotterdam"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
+        <iframe src="https://www.youtube-nocookie.com/embed/nFozEhYTEMo?autoplay=1&mute=1" title="Live Rotterdam" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
       <div class="card-footer">
         <span>📍 Rotterdam<span class="city-temp" data-lat="51.9244" data-lon="4.4777"></span></span>
       </div>
     </div>
 
-    <!-- Card 4: Zandvoort (Beach - HAS SCANNER) -->
+    <!-- Card 5: Zandvoort -->
     <div class="card" data-category="stranden">
       <div class="card-header">
-        <div class="card-title">🎥 Live Zandvoort <span class="popular-badge">🔥 TOP STRAND</span></div>
+        <div class="card-title">🎥 Live Zandvoort Beach <span class="popular-badge">🔥 TOP STRAND</span></div>
         <span class="live-badge">🔴 LIVE</span>
       </div>
       <div class="video-container">
-        <iframe 
-          src="https://www.youtube-nocookie.com/embed/q0-DDh1zdY4?autoplay=1&mute=1"
-          title="Live Zandvoort"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
+        <iframe src="https://www.youtube-nocookie.com/embed/q0-DDh1zdY4?autoplay=1&mute=1" title="Live Zandvoort" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
       <div class="people-counter-bar">
         <span>👥 AI Scan (Mensen):</span>
@@ -641,118 +630,87 @@
       </div>
     </div>
 
-    <!-- Card 5: Egmond aan Zee (Beach - HAS SCANNER) -->
-    <div class="card" data-category="stranden">
+    <!-- Card 6: Volendam -->
+    <div class="card" data-category="steden">
       <div class="card-header">
-        <div class="card-title">🎥 Live Egmond aan Zee</div>
+        <div class="card-title">🎥 Live Volendam Haven</div>
         <span class="live-badge">🔴 LIVE</span>
       </div>
       <div class="video-container">
-        <iframe 
-          src="https://www.youtube-nocookie.com/embed/9xa5IvsIMoE?autoplay=1&mute=1"
-          title="Live Egmond aan Zee"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
-      </div>
-      <div class="people-counter-bar">
-        <span>👥 AI Scan (Mensen):</span>
-        <span class="scanner-count" data-city-count data-capacity="160" data-lat="52.6186" data-lon="4.6297">🔄 Scannen...</span>
+        <iframe src="https://www.youtube-nocookie.com/embed/x4PqWb4pD_A?autoplay=1&mute=1" title="Live Volendam" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
       <div class="card-footer">
-        <span>📍 Egmond aan Zee<span class="city-temp" data-lat="52.6186" data-lon="4.6297"></span></span>
+        <span>📍 Volendam<span class="city-temp" data-lat="52.4953" data-lon="5.0717"></span></span>
       </div>
     </div>
 
-    <!-- Card 6: Hoek van Holland (Beach - HAS SCANNER) -->
-    <div class="card" data-category="stranden">
+    <!-- Card 7: Utrecht -->
+    <div class="card" data-category="steden">
       <div class="card-header">
-        <div class="card-title">🎥 Live Hoek van Holland</div>
+        <div class="card-title">🎥 Live Utrecht Oudegracht</div>
         <span class="live-badge">🔴 LIVE</span>
       </div>
       <div class="video-container">
-        <iframe 
-          src="https://www.youtube-nocookie.com/embed/jDF264Bg1_c?autoplay=1&mute=1"
-          title="Live Hoek van Holland"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
-      </div>
-      <div class="people-counter-bar">
-        <span>👥 AI Scan (Mensen):</span>
-        <span class="scanner-count" data-city-count data-capacity="220" data-lat="51.9778" data-lon="4.1308">🔄 Scannen...</span>
+        <iframe src="https://www.youtube-nocookie.com/embed/5_J9Wc9tHNo?autoplay=1&mute=1" title="Live Utrecht" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
       <div class="card-footer">
-        <span>📍 Hoek van Holland<span class="city-temp" data-lat="51.9778" data-lon="4.1308"></span></span>
+        <span>📍 Utrecht<span class="city-temp" data-lat="52.0907" data-lon="5.1214"></span></span>
       </div>
     </div>
 
-    <!-- Card 7: Bergen aan Zee (Beach - HAS SCANNER) -->
-    <div class="card" data-category="stranden">
+    <!-- Card 8: Den Haag -->
+    <div class="card" data-category="steden">
       <div class="card-header">
-        <div class="card-title">🎥 Live Bergen aan Zee</div>
+        <div class="card-title">🎥 Live Den Haag Hofvijver</div>
         <span class="live-badge">🔴 LIVE</span>
       </div>
       <div class="video-container">
-        <iframe 
-          src="https://www.youtube-nocookie.com/embed/Z2SiE-MSfVY?autoplay=1&mute=1"
-          title="Live Bergen aan Zee"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
-      </div>
-      <div class="people-counter-bar">
-        <span>👥 AI Scan (Mensen):</span>
-        <span class="scanner-count" data-city-count data-capacity="140" data-lat="52.6598" data-lon="4.6311">🔄 Scannen...</span>
+        <iframe src="https://www.youtube-nocookie.com/embed/1pLqC4t_t-c?autoplay=1&mute=1" title="Live Den Haag" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
       <div class="card-footer">
-        <span>📍 Bergen aan Zee<span class="city-temp" data-lat="52.6598" data-lon="4.6311"></span></span>
+        <span>📍 Den Haag<span class="city-temp" data-lat="52.0705" data-lon="4.3007"></span></span>
       </div>
     </div>
 
-    <!-- Card 8: Kijkduin Boulevard (Beach - HAS SCANNER) -->
-    <div class="card" data-category="stranden">
+    <!-- Card 9: Valkenburg -->
+    <div class="card" data-category="steden">
       <div class="card-header">
-        <div class="card-title">🎥 Live Kijkduin Boulevard</div>
+        <div class="card-title">🎥 Live Valkenburg Centrum</div>
         <span class="live-badge">🔴 LIVE</span>
       </div>
       <div class="video-container">
-        <iframe 
-          src="https://www.youtube-nocookie.com/embed/mnxV4iit7S4?autoplay=1&mute=1"
-          title="Live Kijkduin Boulevard"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
-      </div>
-      <div class="people-counter-bar">
-        <span>👥 AI Scan (Mensen):</span>
-        <span class="scanner-count" data-city-count data-capacity="180" data-lat="52.0705" data-lon="4.2231">🔄 Scannen...</span>
+        <iframe src="https://www.youtube-nocookie.com/embed/3vW9Xk5Zl90?autoplay=1&mute=1" title="Live Valkenburg" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
       <div class="card-footer">
-        <span>📍 Kijkduin<span class="city-temp" data-lat="52.0705" data-lon="4.2231"></span></span>
+        <span>📍 Valkenburg<span class="city-temp" data-lat="50.8653" data-lon="5.8317"></span></span>
       </div>
     </div>
 
-    <!-- Card 9: Groede Strand (Beach - HAS SCANNER) -->
-    <div class="card" data-category="stranden">
+    <!-- Card 10: Groningen -->
+    <div class="card" data-category="steden">
       <div class="card-header">
-        <div class="card-title">🎥 Live Groede Strand</div>
+        <div class="card-title">🎥 Live Groningen Grote Markt</div>
         <span class="live-badge">🔴 LIVE</span>
       </div>
       <div class="video-container">
-        <iframe 
-          src="https://www.youtube-nocookie.com/embed/bE546Hg7Ij0?autoplay=1&mute=1"
-          title="Live Groede Strand"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
-      </div>
-      <div class="people-counter-bar">
-        <span>👥 AI Scan (Mensen):</span>
-        <span class="scanner-count" data-city-count data-capacity="110" data-lat="51.3789" data-lon="3.5042">🔄 Scannen...</span>
+        <iframe src="https://www.youtube-nocookie.com/embed/Rk9K9XyM-aE?autoplay=1&mute=1" title="Live Groningen" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
       <div class="card-footer">
-        <span>📍 Groede<span class="city-temp" data-lat="51.3789" data-lon="3.5042"></span></span>
+        <span>📍 Groningen<span class="city-temp" data-lat="53.2194" data-lon="6.5665"></span></span>
+      </div>
+    </div>
+
+    <!-- Card 11: Eindhoven -->
+    <div class="card" data-category="steden">
+      <div class="card-header">
+        <div class="card-title">🎥 Live Eindhoven Markt</div>
+        <span class="live-badge">🔴 LIVE</span>
+      </div>
+      <div class="video-container">
+        <iframe src="https://www.youtube-nocookie.com/embed/6_Z_kGZ3W_8?autoplay=1&mute=1" title="Live Eindhoven" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <div class="card-footer">
+        <span>📍 Eindhoven<span class="city-temp" data-lat="51.4416" data-lon="5.4697"></span></span>
       </div>
     </div>
 
@@ -792,7 +750,7 @@
       });
     }
 
-    // 📻 Dynamic Radio Player
+    // 📻 RADIO PLAYER (HTTPS)
     let currentAudio = new Audio();
     let currentBtn = null;
     let currentStreamUrl = '';
@@ -811,16 +769,21 @@
         currentBtn.style.background = '#ef4444';
       }
 
-      // Stop AI voice if radio starts
       stopNewsVoice();
 
       currentStreamUrl = streamUrl;
       currentAudio.src = streamUrl;
-      currentAudio.play();
-
-      currentBtn = btnElement;
-      btnElement.innerHTML = '⏸️ Pauzeren';
-      btnElement.style.background = '#22c55e';
+      btnElement.innerHTML = '⏳ Laden...';
+      
+      currentAudio.play().then(() => {
+        currentBtn = btnElement;
+        btnElement.innerHTML = '⏸️ Pauzeren';
+        btnElement.style.background = '#22c55e';
+      }).catch(err => {
+        console.error("Audio playback error:", err);
+        btnElement.innerHTML = '⚠️ Fout';
+        btnElement.style.background = '#64748b';
+      });
 
       if ('mediaSession' in navigator) {
         navigator.mediaSession.metadata = new MediaMetadata({
@@ -856,29 +819,25 @@
         } else {
           container.innerHTML = `
           <div class="traffic-item">
-          <h5>⚠️ Live OV gegevens tijdelijk niet beschikbaar</h5>
-          <p>De storingen kunnen momenteel niet worden opgehaald.</p>
-          </div>
-          `;
+            <h5>⚠️ Live OV gegevens tijdelijk niet beschikbaar</h5>
+            <p>Geen actuele storingen bekend.</p>
+          </div>`;
         }
       } catch (error) {
         container.innerHTML = `
           <div class="traffic-item">
-          <h5>⚠️ Live OV gegevens tijdelijk niet beschikbaar</h5>
-          <p>De storingen kunnen momenteel niet worden opgehaald.</p>
-          </div>
-        `;
+            <h5>⚠️ Live OV gegevens tijdelijk niet beschikbaar</h5>
+            <p>De storingen kunnen momenteel niet worden opgehaald.</p>
+          </div>`;
       }
     }
 
     // 🌡️ Weather Fetcher
     async function loadLiveWeather() {
       const tempElements = document.querySelectorAll('.city-temp');
-      
       tempElements.forEach(async (el) => {
         const lat = el.getAttribute('data-lat');
         const lon = el.getAttribute('data-lon');
-        
         if (lat && lon) {
           try {
             const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
@@ -906,16 +865,13 @@
         const lat = el.getAttribute('data-lat');
         const lon = el.getAttribute('data-lon');
         const customCapacity = parseInt(el.getAttribute('data-capacity')) || 150;
-
         let temp = 15;
 
         if (lat && lon) {
           try {
             const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
             const data = await res.json();
-            if (data && data.current_weather) {
-              temp = data.current_weather.temperature;
-            }
+            if (data && data.current_weather) temp = data.current_weather.temperature;
           } catch (e) { console.error(e); }
         }
 
@@ -925,13 +881,10 @@
         else if (currentHour > 18 && currentHour <= 22) timeFactor = 0.5;
 
         let weatherFactor = Math.max(0.1, (temp / 25));  
-        if (temp < 15) {
-          weatherFactor *= 0.3;
-        }
+        if (temp < 15) weatherFactor *= 0.3;
 
         const pseudoRandom = Math.sin(timeSeed + parseFloat(lat)) * 0.15 + 1;
         let estimatedPeople = Math.round(customCapacity * timeFactor * weatherFactor * pseudoRandom);
-        
         if (currentHour >= 1 && currentHour <= 5) estimatedPeople = Math.floor(Math.random() * 2);
         
         el.innerText = `~${estimatedPeople} mensen`;
@@ -965,7 +918,6 @@
         if (nosRes.status === 'fulfilled' && nosRes.value && nosRes.value.status === 'ok') {
           nosItems = nosRes.value.items.slice(0, 5).map(item => item.title);
         }
-
         if (nuRes.status === 'fulfilled' && nuRes.value && nuRes.value.status === 'ok') {
           nuItems = nuRes.value.items.slice(0, 5).map(item => item.title);
         }
@@ -978,7 +930,6 @@
         }
 
         latestNewsTitles = combined.length > 0 ? combined : [defaultText];
-
         const finalText = combined.length > 0 
           ? `<span>+++ ${combined.join(' +++ ')} +++</span>` 
           : `<span>+++ ${defaultText} +++</span>`;
@@ -996,7 +947,7 @@
       }
     }
 
-    // 🗣️ IMPROVED HUMAN-LIKE NEWS BROADCAST ENGINE WITH PAUSES
+    // 🗣️ AI VOICE ENGINE
     let isVoiceBroadcasting = false;
     let currentNewsIndex = 0;
     let speechTimeout = null;
@@ -1004,8 +955,6 @@
     function getBestDutchVoice() {
       if (!('speechSynthesis' in window)) return null;
       const voices = window.speechSynthesis.getVoices();
-      
-      // Prioritize natural/neural human-like Dutch voices
       return voices.find(v => v.lang.includes('nl') && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Enhanced') || v.name.includes('Premium')))
           || voices.find(v => v.lang.includes('nl-NL'))
           || voices.find(v => v.lang.includes('nl'));
@@ -1040,7 +989,6 @@
         return;
       }
 
-      // Stop radio if playing
       if (currentAudio && !currentAudio.paused) {
         currentAudio.pause();
         if (currentBtn) {
@@ -1057,7 +1005,6 @@
       btn.style.background = '#22c55e';
       btn.style.color = '#ffffff';
 
-      // Read introduction first, then queue titles
       speakItem("Hier is het overzicht van het laatste nieuws.", () => {
         playNextNewsItem();
       });
@@ -1067,7 +1014,6 @@
       if (!isVoiceBroadcasting) return;
 
       if (currentNewsIndex >= latestNewsTitles.length) {
-        // Broadcast finished
         stopNewsVoice();
         return;
       }
@@ -1077,7 +1023,6 @@
 
       speakItem(headline, () => {
         if (!isVoiceBroadcasting) return;
-        // ⏱️ 1.5 Seconds pause between each news headline for realistic broadcast rhythm
         speechTimeout = setTimeout(() => {
           playNextNewsItem();
         }, 1500); 
@@ -1087,45 +1032,29 @@
     function speakItem(text, onComplete) {
       if (!isVoiceBroadcasting) return;
 
-      window.speechSynthesis.cancel(); // Clear remaining queue
+      window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
-      
       utterance.lang = 'nl-NL';
-      utterance.rate = 0.85;  // 🐢 Reduced speed for news anchor pacing
-      utterance.pitch = 1.0;  // Standard warm human pitch
+      utterance.rate = 0.85;
+      utterance.pitch = 1.0;
 
       const bestVoice = getBestDutchVoice();
-      if (bestVoice) {
-        utterance.voice = bestVoice;
-      }
+      if (bestVoice) utterance.voice = bestVoice;
 
-      utterance.onend = () => {
-        if (onComplete) onComplete();
-      };
-
-      utterance.onerror = (e) => {
-        console.error("Speech error:", e);
-        if (onComplete) onComplete();
-      };
+      utterance.onend = () => { if (onComplete) onComplete(); };
+      utterance.onerror = () => { if (onComplete) onComplete(); };
 
       window.speechSynthesis.speak(utterance);
     }
 
-    // Ensure voices are loaded (Chrome compatibility)
     if ('speechSynthesis' in window) {
-      window.speechSynthesis.onvoiceschanged = () => {
-        getBestDutchVoice();
-      };
+      window.speechSynthesis.onvoiceschanged = () => { getBestDutchVoice(); };
     }
 
     function animateTicker() {
       const width = text1.offsetWidth;
       position -= speed;
-
-      if (position <= -width) {
-        position = window.innerWidth;
-      }
-
+      if (position <= -width) position = window.innerWidth;
       track.style.transform = `translate3d(${position}px,0,0)`;
       requestAnimationFrame(animateTicker);
     }
@@ -1149,9 +1078,7 @@
           observer.unobserve(entry.target);
         }
       });
-    },{
-      threshold:0.15
-    });
+    },{ threshold:0.15 });
 
     document.querySelectorAll(".card").forEach(card=>{
       observer.observe(card);
