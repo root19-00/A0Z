@@ -812,10 +812,7 @@
       }
 
       // Stop AI voice if radio starts
-      if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
-        window.speechSynthesis.cancel();
-        document.getElementById('voiceToggleBtn').innerText = '🗣️ AI Voice';
-      }
+      stopNewsVoice();
 
       currentStreamUrl = streamUrl;
       currentAudio.src = streamUrl;
@@ -941,7 +938,7 @@
       });
     }
 
-    // 📰 News Ticker & AI Speech Engine
+    // 📰 News Ticker Engine
     const track = document.getElementById("newsTickerTrack");
     const text1 = document.getElementById("newsTickerText1");
     let position = window.innerWidth;
@@ -951,7 +948,7 @@
     async function fetchLatestNews() {
       const tickerText1 = document.getElementById('newsTickerText1');
       const tickerText2 = document.getElementById('newsTickerText2');
-      const defaultText = "+++ Welkom op nl.live +++ Het laatste nieuws uit Nederland +++";
+      const defaultText = "Welkom op nl.live. Het laatste nieuws uit Nederland";
 
       try {
         const nosUrl = 'https://api.rss2json.com/v1/api.json?rss_url=https://feeds.nos.nl/nosnieuwsalgemeen';
@@ -976,42 +973,65 @@
         let combined = [];
         const maxLength = Math.max(nosItems.length, nuItems.length);
         for (let i = 0; i < maxLength; i++) {
-          if (nosItems[i]) combined.push(`[NOS] ${nosItems[i]}`);
-          if (nuItems[i]) combined.push(`[NU.nl] ${nuItems[i]}`);
+          if (nosItems[i]) combined.push(nosItems[i]);
+          if (nuItems[i]) combined.push(nuItems[i]);
         }
 
-        latestNewsTitles = combined;
+        latestNewsTitles = combined.length > 0 ? combined : [defaultText];
 
         const finalText = combined.length > 0 
           ? `<span>+++ ${combined.join(' +++ ')} +++</span>` 
-          : `<span>${defaultText}</span>`;
+          : `<span>+++ ${defaultText} +++</span>`;
 
         tickerText1.innerHTML = finalText;
         tickerText2.innerHTML = finalText;
         position = window.innerWidth;
 
       } catch (error) {
-        console.error('Error fetching combined news:', error);
-        tickerText1.innerHTML = `<span>${defaultText}</span>`;
-        tickerText2.innerHTML = `<span>${defaultText}</span>`;
+        console.error('Error fetching news:', error);
+        latestNewsTitles = [defaultText];
+        tickerText1.innerHTML = `<span>+++ ${defaultText} +++</span>`;
+        tickerText2.innerHTML = `<span>+++ ${defaultText} +++</span>`;
         position = window.innerWidth;
       }
     }
 
-    // 🗣️ AI Voice Speech Logic
-    function toggleNewsVoice() {
+    // 🗣️ IMPROVED HUMAN-LIKE NEWS BROADCAST ENGINE WITH PAUSES
+    let isVoiceBroadcasting = false;
+    let currentNewsIndex = 0;
+    let speechTimeout = null;
+
+    function getBestDutchVoice() {
+      if (!('speechSynthesis' in window)) return null;
+      const voices = window.speechSynthesis.getVoices();
+      
+      // Prioritize natural/neural human-like Dutch voices
+      return voices.find(v => v.lang.includes('nl') && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Enhanced') || v.name.includes('Premium')))
+          || voices.find(v => v.lang.includes('nl-NL'))
+          || voices.find(v => v.lang.includes('nl'));
+    }
+
+    function stopNewsVoice() {
+      isVoiceBroadcasting = false;
+      if (speechTimeout) clearTimeout(speechTimeout);
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      
       const btn = document.getElementById('voiceToggleBtn');
-
-      if (!('speechSynthesis' in window)) {
-        alert('Spraakuitvoer wordt niet ondersteund in deze browser.');
-        return;
-      }
-
-      if (window.speechSynthesis.speaking) {
-        window.speechSynthesis.cancel();
+      if (btn) {
         btn.innerText = '🗣️ AI Voice';
         btn.style.background = '#ffffff';
         btn.style.color = '#ef4444';
+      }
+    }
+
+    function toggleNewsVoice() {
+      if (isVoiceBroadcasting) {
+        stopNewsVoice();
+        return;
+      }
+
+      if (!('speechSynthesis' in window)) {
+        alert('Spraakuitvoer wordt niet ondersteund in deze browser.');
         return;
       }
 
@@ -1020,33 +1040,82 @@
         return;
       }
 
-      const speechText = "Hier is het laatste nieuws van nl.live: " + latestNewsTitles.join('. ');
-      const utterance = new SpeechSynthesisUtterance(speechText);
-      
-      utterance.lang = 'nl-NL'; // Voice language Dutch
-      utterance.rate = 0.95;    // Natural human reading speed
-      utterance.pitch = 1.0;
-
-      // Select Dutch voice if available
-      const voices = window.speechSynthesis.getVoices();
-      const dutchVoice = voices.find(v => v.lang.includes('nl'));
-      if (dutchVoice) {
-        utterance.voice = dutchVoice;
+      // Stop radio if playing
+      if (currentAudio && !currentAudio.paused) {
+        currentAudio.pause();
+        if (currentBtn) {
+          currentBtn.innerHTML = '▶️ Afspelen';
+          currentBtn.style.background = '#ef4444';
+        }
       }
 
-      utterance.onstart = () => {
-        btn.innerText = '⏹️ Stop';
-        btn.style.background = '#22c55e';
-        btn.style.color = '#ffffff';
-      };
+      isVoiceBroadcasting = true;
+      currentNewsIndex = 0;
+      
+      const btn = document.getElementById('voiceToggleBtn');
+      btn.innerText = '⏹️ Stop';
+      btn.style.background = '#22c55e';
+      btn.style.color = '#ffffff';
+
+      // Read introduction first, then queue titles
+      speakItem("Hier is het overzicht van het laatste nieuws.", () => {
+        playNextNewsItem();
+      });
+    }
+
+    function playNextNewsItem() {
+      if (!isVoiceBroadcasting) return;
+
+      if (currentNewsIndex >= latestNewsTitles.length) {
+        // Broadcast finished
+        stopNewsVoice();
+        return;
+      }
+
+      const headline = latestNewsTitles[currentNewsIndex];
+      currentNewsIndex++;
+
+      speakItem(headline, () => {
+        if (!isVoiceBroadcasting) return;
+        // ⏱️ 1.5 Seconds pause between each news headline for realistic broadcast rhythm
+        speechTimeout = setTimeout(() => {
+          playNextNewsItem();
+        }, 1500); 
+      });
+    }
+
+    function speakItem(text, onComplete) {
+      if (!isVoiceBroadcasting) return;
+
+      window.speechSynthesis.cancel(); // Clear remaining queue
+      const utterance = new SpeechSynthesisUtterance(text);
+      
+      utterance.lang = 'nl-NL';
+      utterance.rate = 0.85;  // 🐢 Reduced speed for news anchor pacing
+      utterance.pitch = 1.0;  // Standard warm human pitch
+
+      const bestVoice = getBestDutchVoice();
+      if (bestVoice) {
+        utterance.voice = bestVoice;
+      }
 
       utterance.onend = () => {
-        btn.innerText = '🗣️ AI Voice';
-        btn.style.background = '#ffffff';
-        btn.style.color = '#ef4444';
+        if (onComplete) onComplete();
+      };
+
+      utterance.onerror = (e) => {
+        console.error("Speech error:", e);
+        if (onComplete) onComplete();
       };
 
       window.speechSynthesis.speak(utterance);
+    }
+
+    // Ensure voices are loaded (Chrome compatibility)
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => {
+        getBestDutchVoice();
+      };
     }
 
     function animateTicker() {
