@@ -12,13 +12,13 @@
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
 
-body {
-  background-color: #0f172a;
-  color: #fff;
-  min-height: 100vh;
-  padding: 20px;
-  padding-bottom: 65px;
-}
+    body {
+      background-color: #0f172a;
+      color: #fff;
+      min-height: 100vh;
+      padding: 20px;
+      padding-bottom: 65px;
+    }
 
     /* Header */
     header {
@@ -82,7 +82,7 @@ body {
       box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
     }
 
-    /* 📻 TOP SECTION: Radio Audio Balk (Slim & Ultra Organized) */
+    /* 📻 TOP SECTION: Radio Audio Balk */
     .radio-section {
       max-width: 1200px;
       margin: 0 auto 25px auto;
@@ -273,10 +273,12 @@ body {
       transform: translateY(40px);
       transition: opacity .7s ease, transform .7s ease, border-color .2s ease;
     }
-.card.show {
-  opacity: 1;
-  transform: translateY(0);
-}
+
+    .card.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     .card:hover {
       border-color: #475569;
     }
@@ -295,6 +297,15 @@ body {
       display: flex;
       align-items: center;
       gap: 8px;
+    }
+
+    .popular-badge {
+      background-color: #f59e0b;
+      color: #000;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
     }
 
     .live-badge {
@@ -321,6 +332,7 @@ body {
       height: 100%;
       border: 0;
     }
+
     /* 👥 AI Scanner / People Counter Bar */
     .people-counter-bar {
       background: #151f32;
@@ -446,7 +458,7 @@ body {
     <button class="filter-btn" onclick="filterCategory('verkeer', this)">Verkeer 🚆</button>
   </div>
 
-  <!-- 📻 TOP SECTION: Radio Audio List (Slim Grid) -->
+  <!-- 📻 TOP SECTION: Radio Audio List -->
   <div class="radio-section" data-category="radio">
     <div class="section-label">🎧 Live Radio Stations</div>
     <div class="radio-grid">
@@ -502,7 +514,7 @@ body {
     </div>
   </div>
 
-  <!-- 🚆 TRAFFIC SECTION: NS, Arriva, Breng & Regional OV Disruptions -->
+  <!-- 🚆 TRAFFIC SECTION -->
   <div class="traffic-section" data-category="verkeer">
     <div class="section-label">🚆 Live OV Storingen (NS, Arriva & Breng)</div>
     <div class="traffic-card">
@@ -516,13 +528,13 @@ body {
     </div>
   </div>
 
-    <!-- 🎥 BOTTOM SECTION: Video Streams Grid -->
+  <!-- 🎥 BOTTOM SECTION: Video Streams Grid -->
   <div class="grid-container">
 
-    <!-- Card 1: Scheveningen -->
+    <!-- Card 1: Scheveningen (Beach - HAS SCANNER) -->
     <div class="card" data-category="stranden">
       <div class="card-header">
-        <div class="card-title">🎥 Live Scheveningen #1</div>
+        <div class="card-title">🎥 Live Scheveningen <span class="popular-badge">🔥 TOP STRAND</span></div>
         <span class="live-badge">🔴 LIVE</span>
       </div>
       <div class="video-container">
@@ -535,17 +547,17 @@ body {
       </div>
       <div class="people-counter-bar">
         <span>👥 AI Scan (Mensen):</span>
-        <span class="scanner-count" data-city-count data-type="beach" data-lat="52.1066" data-lon="4.2756">🔄 Scannen...</span>
+        <span class="scanner-count" data-city-count data-capacity="350" data-lat="52.1066" data-lon="4.2756">🔄 Scannen...</span>
       </div>
       <div class="card-footer">
         <span>📍 Scheveningen<span class="city-temp" data-lat="52.1066" data-lon="4.2756"></span></span>
       </div>
     </div>
 
-    <!-- Card 2: Amsterdam -->
+    <!-- Card 2: Amsterdam (City - NO SCANNER) -->
     <div class="card" data-category="steden">
       <div class="card-header">
-        <div class="card-title">🎥 Live Amsterdam #2</div>
+        <div class="card-title">🎥 Live Amsterdam</div>
         <span class="live-badge">🔴 LIVE</span>
       </div>
       <div class="video-container">
@@ -556,16 +568,12 @@ body {
           allowfullscreen>
         </iframe>
       </div>
-      <div class="people-counter-bar">
-        <span>👥 AI Scan (Mensen):</span>
-        <span class="scanner-count" data-city-count data-type="city" data-lat="52.3676" data-lon="4.9041">🔄 Scannen...</span>
-      </div>
       <div class="card-footer">
         <span>📍 Amsterdam<span class="city-temp" data-lat="52.3676" data-lon="4.9041"></span></span>
       </div>
     </div>
 
-    <!-- Card 3: Rotterdam -->
+    <!-- Card 3: Rotterdam (City - NO SCANNER) -->
     <div class="card" data-category="steden">
       <div class="card-header">
         <div class="card-title">🎥 Live Rotterdam</div>
@@ -579,19 +587,15 @@ body {
           allowfullscreen>
         </iframe>
       </div>
-      <div class="people-counter-bar">
-        <span>👥 AI Scan (Mensen):</span>
-        <span class="scanner-count" data-city-count data-type="city" data-lat="51.9244" data-lon="4.4777">🔄 Scannen...</span>
-      </div>
       <div class="card-footer">
         <span>📍 Rotterdam<span class="city-temp" data-lat="51.9244" data-lon="4.4777"></span></span>
       </div>
     </div>
 
-    <!-- Card 4: Zandvoort -->
+    <!-- Card 4: Zandvoort (Beach - HAS SCANNER) -->
     <div class="card" data-category="stranden">
       <div class="card-header">
-        <div class="card-title">🎥 Live Zandvoort</div>
+        <div class="card-title">🎥 Live Zandvoort <span class="popular-badge">🔥 TOP STRAND</span></div>
         <span class="live-badge">🔴 LIVE</span>
       </div>
       <div class="video-container">
@@ -604,14 +608,14 @@ body {
       </div>
       <div class="people-counter-bar">
         <span>👥 AI Scan (Mensen):</span>
-        <span class="scanner-count" data-city-count data-type="beach" data-lat="52.3718" data-lon="4.5323">🔄 Scannen...</span>
+        <span class="scanner-count" data-city-count data-capacity="280" data-lat="52.3718" data-lon="4.5323">🔄 Scannen...</span>
       </div>
       <div class="card-footer">
         <span>📍 Zandvoort<span class="city-temp" data-lat="52.3718" data-lon="4.5323"></span></span>
       </div>
     </div>
 
-    <!-- Card 5: Egmond aan Zee -->
+    <!-- Card 5: Egmond aan Zee (Beach - HAS SCANNER) -->
     <div class="card" data-category="stranden">
       <div class="card-header">
         <div class="card-title">🎥 Live Egmond aan Zee</div>
@@ -627,14 +631,14 @@ body {
       </div>
       <div class="people-counter-bar">
         <span>👥 AI Scan (Mensen):</span>
-        <span class="scanner-count" data-city-count data-type="beach" data-lat="52.6186" data-lon="4.6297">🔄 Scannen...</span>
+        <span class="scanner-count" data-city-count data-capacity="160" data-lat="52.6186" data-lon="4.6297">🔄 Scannen...</span>
       </div>
       <div class="card-footer">
         <span>📍 Egmond aan Zee<span class="city-temp" data-lat="52.6186" data-lon="4.6297"></span></span>
       </div>
     </div>
 
-    <!-- Card 6: Hoek van Holland -->
+    <!-- Card 6: Hoek van Holland (Beach - HAS SCANNER) -->
     <div class="card" data-category="stranden">
       <div class="card-header">
         <div class="card-title">🎥 Live Hoek van Holland</div>
@@ -650,14 +654,14 @@ body {
       </div>
       <div class="people-counter-bar">
         <span>👥 AI Scan (Mensen):</span>
-        <span class="scanner-count" data-city-count data-type="beach" data-lat="51.9778" data-lon="4.1308">🔄 Scannen...</span>
+        <span class="scanner-count" data-city-count data-capacity="220" data-lat="51.9778" data-lon="4.1308">🔄 Scannen...</span>
       </div>
       <div class="card-footer">
         <span>📍 Hoek van Holland<span class="city-temp" data-lat="51.9778" data-lon="4.1308"></span></span>
       </div>
     </div>
 
-    <!-- Card 7: Bergen aan Zee -->
+    <!-- Card 7: Bergen aan Zee (Beach - HAS SCANNER) -->
     <div class="card" data-category="stranden">
       <div class="card-header">
         <div class="card-title">🎥 Live Bergen aan Zee</div>
@@ -673,14 +677,14 @@ body {
       </div>
       <div class="people-counter-bar">
         <span>👥 AI Scan (Mensen):</span>
-        <span class="scanner-count" data-city-count data-type="beach" data-lat="52.6598" data-lon="4.6311">🔄 Scannen...</span>
+        <span class="scanner-count" data-city-count data-capacity="140" data-lat="52.6598" data-lon="4.6311">🔄 Scannen...</span>
       </div>
       <div class="card-footer">
         <span>📍 Bergen aan Zee<span class="city-temp" data-lat="52.6598" data-lon="4.6311"></span></span>
       </div>
     </div>
 
-    <!-- Card 8: Kijkduin Boulevard -->
+    <!-- Card 8: Kijkduin Boulevard (Beach - HAS SCANNER) -->
     <div class="card" data-category="stranden">
       <div class="card-header">
         <div class="card-title">🎥 Live Kijkduin Boulevard</div>
@@ -696,14 +700,14 @@ body {
       </div>
       <div class="people-counter-bar">
         <span>👥 AI Scan (Mensen):</span>
-        <span class="scanner-count" data-city-count data-type="beach" data-lat="52.0705" data-lon="4.2231">🔄 Scannen...</span>
+        <span class="scanner-count" data-city-count data-capacity="180" data-lat="52.0705" data-lon="4.2231">🔄 Scannen...</span>
       </div>
       <div class="card-footer">
         <span>📍 Kijkduin<span class="city-temp" data-lat="52.0705" data-lon="4.2231"></span></span>
       </div>
     </div>
 
-    <!-- Card 9: Groede Strand -->
+    <!-- Card 9: Groede Strand (Beach - HAS SCANNER) -->
     <div class="card" data-category="stranden">
       <div class="card-header">
         <div class="card-title">🎥 Live Groede Strand</div>
@@ -719,7 +723,7 @@ body {
       </div>
       <div class="people-counter-bar">
         <span>👥 AI Scan (Mensen):</span>
-        <span class="scanner-count" data-city-count data-type="beach" data-lat="51.3789" data-lon="3.5042">🔄 Scannen...</span>
+        <span class="scanner-count" data-city-count data-capacity="110" data-lat="51.3789" data-lon="3.5042">🔄 Scannen...</span>
       </div>
       <div class="card-footer">
         <span>📍 Groede<span class="city-temp" data-lat="51.3789" data-lon="3.5042"></span></span>
@@ -728,8 +732,7 @@ body {
 
   </div>
 
-
-  <!-- 🚨 SEAMLESS CONTINUOUS NEWS TICKER BAR -->
+  <!-- 🚨 NEWS TICKER BAR -->
   <div class="news-ticker-bar">
     <div class="news-badge">🚨 NIEUWS</div>
     <div class="news-ticker-content">
@@ -760,7 +763,7 @@ body {
       });
     }
 
-    // 📻 Dynamic Multi-Station Radio Player Logic
+    // 📻 Dynamic Radio Player
     let currentAudio = new Audio();
     let currentBtn = null;
     let currentStreamUrl = '';
@@ -796,7 +799,7 @@ body {
       }
     }
 
-    // 🚆 Live Multi-Operator OV Disruptions Fetcher (NS, Arriva, Breng, etc.)
+    // 🚆 Live OV Disruptions
     async function fetchNSDisruptions() {
       const container = document.getElementById('nsStatusBox');
       const feedUrl = 'https://api.rss2json.com/v1/api.json?rss_url=https://www.rijdendetreinen.nl/rss/storingen';
@@ -836,7 +839,7 @@ body {
       }
     }
 
-    // 🌡️ Real-time Weather Logic
+    // 🌡️ Weather Fetcher
     async function loadLiveWeather() {
       const tempElements = document.querySelectorAll('.city-temp');
       
@@ -858,7 +861,8 @@ body {
         }
       });
     }
-        // 👥 Algorithmic Smart People Counter (Based on Weather & Time)
+
+    // 👥 Dynamic Smart Counter (Only calculates for elements with [data-city-count])
     async function updateSmartPeopleCounters() {
       const counterElements = document.querySelectorAll('[data-city-count]');
       const now = new Date();
@@ -869,7 +873,7 @@ body {
       counterElements.forEach(async (el) => {
         const lat = el.getAttribute('data-lat');
         const lon = el.getAttribute('data-lon');
-        const locationType = el.getAttribute('data-type'); // beach or city
+        const customCapacity = parseInt(el.getAttribute('data-capacity')) || 150;
 
         let temp = 15;
 
@@ -884,36 +888,34 @@ body {
         }
 
         let timeFactor = 0.1;
-        if (currentHour >= 8 && currentHour < 12) timeFactor = 0.5;
+        if (currentHour >= 8 && currentHour < 12) timeFactor = 0.4;
         else if (currentHour >= 12 && currentHour <= 18) timeFactor = 1.0;
-        else if (currentHour > 18 && currentHour <= 22) timeFactor = 0.4;
+        else if (currentHour > 18 && currentHour <= 22) timeFactor = 0.5;
+
         let weatherFactor = Math.max(0.1, (temp / 25));  
-        if (locationType === 'beach' && temp < 15) {
+        if (temp < 15) {
           weatherFactor *= 0.3;
         }
 
-        const baseCapacity = locationType === 'beach' ? 180 : 90;
         const pseudoRandom = Math.sin(timeSeed + parseFloat(lat)) * 0.15 + 1;
-        let estimatedPeople = Math.round(baseCapacity * timeFactor * weatherFactor * pseudoRandom);
-        if (currentHour >= 1 && currentHour <= 5) estimatedPeople = Math.floor(Math.random() * 3);
+        let estimatedPeople = Math.round(customCapacity * timeFactor * weatherFactor * pseudoRandom);
+        
+        if (currentHour >= 1 && currentHour <= 5) estimatedPeople = Math.floor(Math.random() * 2);
         
         el.innerText = `~${estimatedPeople} mensen`;
       });
     }
 
-    updateSmartPeopleCounters();
-
-    // 📰 Variables for Ticker Animation
+    // 📰 News Ticker
     const track = document.getElementById("newsTickerTrack");
     const text1 = document.getElementById("newsTickerText1");
     let position = window.innerWidth;
     const speed = 0.6;
 
-    // 📰 Live Combined News Feed Fetcher
     async function fetchLatestNews() {
       const tickerText1 = document.getElementById('newsTickerText1');
       const tickerText2 = document.getElementById('newsTickerText2');
-      const defaultText = "+++ [NOS] Welkom op nl.live +++ [NU.nl] Live webcams en radiostreams in Nederland +++ [NOS] Actuele temperaturen live bijgewerkt +++";
+      const defaultText = "+++ [NOS] Welkom op nl.live +++ [NU.nl] Live webcams en radiostreams in Nederland +++";
 
       try {
         const nosUrl = 'https://api.rss2json.com/v1/api.json?rss_url=https://feeds.nos.nl/nosnieuwsalgemeen';
@@ -958,7 +960,6 @@ body {
       }
     }
 
-    // 🎬 Ticker Animation Frame
     function animateTicker() {
       const width = text1.offsetWidth;
       position -= speed;
@@ -971,33 +972,32 @@ body {
       requestAnimationFrame(animateTicker);
     }
 
-    // 🚀 Initializations
+    // 🚀 Init
     fetchNSDisruptions();
     loadLiveWeather();
     fetchLatestNews();
+    updateSmartPeopleCounters();
     requestAnimationFrame(animateTicker);
+
     setInterval(fetchNSDisruptions, 300000);
     setInterval(loadLiveWeather, 300000); 
     setInterval(fetchLatestNews, 600000);
     setInterval(updateSmartPeopleCounters, 900000);
-const observer = new IntersectionObserver((entries) => {
 
-    entries.forEach(entry => {
-
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
         if(entry.isIntersecting){
-            entry.target.classList.add("show");
-            observer.unobserve(entry.target); // يشغل الأنيميشن مرة واحدة
+          entry.target.classList.add("show");
+          observer.unobserve(entry.target);
         }
-
+      });
+    },{
+      threshold:0.15
     });
 
-},{
-    threshold:0.15
-});
-
-document.querySelectorAll(".card").forEach(card=>{
-    observer.observe(card);
-});
+    document.querySelectorAll(".card").forEach(card=>{
+      observer.observe(card);
+    });
   </script>
 </body>
 </html>
