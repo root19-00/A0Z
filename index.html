@@ -369,7 +369,7 @@
       font-weight: 600;
     }
 
-    /* 🚨 FIXED SEAMLESS TICKER */
+    /* 🚨 FIXED SEAMLESS TICKER WITH VOICE BUTTON */
     .news-ticker-bar {
       position: fixed;
       bottom: 0;
@@ -403,6 +403,28 @@
       flex-shrink: 0;
     }
 
+    /* 🗣️ AI Voice Button */
+    .news-voice-btn {
+      background: #ffffff;
+      color: #ef4444;
+      border: none;
+      padding: 3px 10px;
+      margin-left: 8px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .news-voice-btn:hover {
+      transform: scale(1.05);
+      background: #f8fafc;
+    }
+
     .news-ticker-content {
       flex: 1;
       min-width: 0;
@@ -433,8 +455,12 @@
         display: none;
       }
       .news-badge {
-        padding: 0 10px;
-        font-size: 0.7rem;
+        padding: 0 8px;
+        font-size: 0.65rem;
+      }
+      .news-voice-btn {
+        padding: 2px 6px;
+        font-size: 0.65rem;
       }
     }
   </style>
@@ -732,9 +758,12 @@
 
   </div>
 
-  <!-- 🚨 NEWS TICKER BAR -->
+  <!-- 🚨 NEWS TICKER BAR WITH AI VOICE BUTTON -->
   <div class="news-ticker-bar">
-    <div class="news-badge">🚨 NIEUWS</div>
+    <div class="news-badge">
+      🚨 NIEUWS
+      <button class="news-voice-btn" id="voiceToggleBtn" onclick="toggleNewsVoice()">🗣️ AI Voice</button>
+    </div>
     <div class="news-ticker-content">
       <div class="news-ticker-track" id="newsTickerTrack">
         <div class="news-ticker-text" id="newsTickerText1">
@@ -780,6 +809,12 @@
         currentAudio.pause();
         currentBtn.innerHTML = '▶️ Afspelen';
         currentBtn.style.background = '#ef4444';
+      }
+
+      // Stop AI voice if radio starts
+      if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+        document.getElementById('voiceToggleBtn').innerText = '🗣️ AI Voice';
       }
 
       currentStreamUrl = streamUrl;
@@ -862,7 +897,7 @@
       });
     }
 
-    // 👥 Dynamic Smart Counter (Only calculates for elements with [data-city-count])
+    // 👥 Dynamic Smart Counter
     async function updateSmartPeopleCounters() {
       const counterElements = document.querySelectorAll('[data-city-count]');
       const now = new Date();
@@ -906,16 +941,17 @@
       });
     }
 
-    // 📰 News Ticker
+    // 📰 News Ticker & AI Speech Engine
     const track = document.getElementById("newsTickerTrack");
     const text1 = document.getElementById("newsTickerText1");
     let position = window.innerWidth;
     const speed = 0.6;
+    let latestNewsTitles = [];
 
     async function fetchLatestNews() {
       const tickerText1 = document.getElementById('newsTickerText1');
       const tickerText2 = document.getElementById('newsTickerText2');
-      const defaultText = "+++ [NOS] Welkom op nl.live +++ [NU.nl] Live webcams en radiostreams in Nederland +++";
+      const defaultText = "+++ Welkom op nl.live +++ Het laatste nieuws uit Nederland +++";
 
       try {
         const nosUrl = 'https://api.rss2json.com/v1/api.json?rss_url=https://feeds.nos.nl/nosnieuwsalgemeen';
@@ -930,19 +966,21 @@
         let nuItems = [];
 
         if (nosRes.status === 'fulfilled' && nosRes.value && nosRes.value.status === 'ok') {
-          nosItems = nosRes.value.items.slice(0, 5).map(item => `[NOS] ${item.title}`);
+          nosItems = nosRes.value.items.slice(0, 5).map(item => item.title);
         }
 
         if (nuRes.status === 'fulfilled' && nuRes.value && nuRes.value.status === 'ok') {
-          nuItems = nuRes.value.items.slice(0, 5).map(item => `[NU.nl] ${item.title}`);
+          nuItems = nuRes.value.items.slice(0, 5).map(item => item.title);
         }
 
         let combined = [];
         const maxLength = Math.max(nosItems.length, nuItems.length);
         for (let i = 0; i < maxLength; i++) {
-          if (nosItems[i]) combined.push(nosItems[i]);
-          if (nuItems[i]) combined.push(nuItems[i]);
+          if (nosItems[i]) combined.push(`[NOS] ${nosItems[i]}`);
+          if (nuItems[i]) combined.push(`[NU.nl] ${nuItems[i]}`);
         }
+
+        latestNewsTitles = combined;
 
         const finalText = combined.length > 0 
           ? `<span>+++ ${combined.join(' +++ ')} +++</span>` 
@@ -958,6 +996,57 @@
         tickerText2.innerHTML = `<span>${defaultText}</span>`;
         position = window.innerWidth;
       }
+    }
+
+    // 🗣️ AI Voice Speech Logic
+    function toggleNewsVoice() {
+      const btn = document.getElementById('voiceToggleBtn');
+
+      if (!('speechSynthesis' in window)) {
+        alert('Spraakuitvoer wordt niet ondersteund in deze browser.');
+        return;
+      }
+
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+        btn.innerText = '🗣️ AI Voice';
+        btn.style.background = '#ffffff';
+        btn.style.color = '#ef4444';
+        return;
+      }
+
+      if (latestNewsTitles.length === 0) {
+        alert('Nieuws is nog bezig met laden...');
+        return;
+      }
+
+      const speechText = "Hier is het laatste nieuws van nl.live: " + latestNewsTitles.join('. ');
+      const utterance = new SpeechSynthesisUtterance(speechText);
+      
+      utterance.lang = 'nl-NL'; // Voice language Dutch
+      utterance.rate = 0.95;    // Natural human reading speed
+      utterance.pitch = 1.0;
+
+      // Select Dutch voice if available
+      const voices = window.speechSynthesis.getVoices();
+      const dutchVoice = voices.find(v => v.lang.includes('nl'));
+      if (dutchVoice) {
+        utterance.voice = dutchVoice;
+      }
+
+      utterance.onstart = () => {
+        btn.innerText = '⏹️ Stop';
+        btn.style.background = '#22c55e';
+        btn.style.color = '#ffffff';
+      };
+
+      utterance.onend = () => {
+        btn.innerText = '🗣️ AI Voice';
+        btn.style.background = '#ffffff';
+        btn.style.color = '#ef4444';
+      };
+
+      window.speechSynthesis.speak(utterance);
     }
 
     function animateTicker() {
