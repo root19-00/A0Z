@@ -763,10 +763,10 @@ body {
           container.innerHTML = html;
         } else {
           container.innerHTML = `
-            <div class="traffic-item ok">
-              <h5>✅ Geen grote storingen bekend</h5>
-              <p>Het trein- en busverkeer (NS, Arriva, Breng) rijdt momenteel volgens de normale dienstregeling.</p>
-            </div>
+          <div class="traffic-item">
+          <h5>⚠️ Live OV gegevens tijdelijk niet beschikbaar</h5>
+          <p>De storingen kunnen momenteel niet worden opgehaald.</p>
+          </div>
           `;
         }
       } catch (error) {
