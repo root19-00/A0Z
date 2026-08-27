@@ -2,175 +2,198 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Quantum Pong // Arena</title>
+<title>Quantum Cinematic Feed // Live</title>
 <style>
   body, html {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background: #05050f;
+    background: #020205;
     font-family: monospace;
-    color: #00f2fe;
-    text-align: center;
   }
   canvas {
     display: block;
-    background: #08081a;
-    box-shadow: 0 0 40px rgba(0, 242, 254, 0.2);
-    margin: 20px auto;
-    border: 1px solid #2a2a50;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
   }
-  .score {
-    font-size: 24px;
-    letter-spacing: 4px;
-    margin-top: 10px;
-    text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+  /* Cinematic Vignette & Scanlines Effect */
+  .cinematic-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+    background: 
+      radial-gradient(circle, rgba(0,0,0,0) 50%, rgba(0,0,0,0.85) 100%),
+      linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+    background-size: 100% 100%, 100% 4px;
+    box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
   }
-  .hint {
+  /* HUD UI Elements */
+  .hud {
+    position: absolute;
+    z-index: 3;
+    top: 30px;
+    left: 40px;
+    color: rgba(0, 242, 254, 0.8);
+    font-size: 14px;
+    letter-spacing: 3px;
+    pointer-events: none;
+    text-shadow: 0 0 8px rgba(0, 242, 254, 0.6);
+  }
+  .hud-bottom {
+    position: absolute;
+    z-index: 3;
+    bottom: 30px;
+    right: 40px;
+    color: rgba(255, 100, 130, 0.8);
     font-size: 12px;
-    color: #7928ca;
-    margin-top: 5px;
     letter-spacing: 2px;
+    pointer-events: none;
+  }
+  /* Glitch Transition Flash */
+  .glitch-flash {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+    background: #fff;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.1s ease;
   }
 </style>
 </head>
 <body>
 
-<div class="score" id="scoreboard">PLAYER: 0 // QUANTUM AI: 0</div>
-<div class="hint">USE MOUSE TO MOVE PADDLE // 1+1=3 MODE ACTIVE</div>
-<canvas id="gameCanvas" width="800" height="450"></canvas>
+<div class="cinematic-overlay"></div>
+<div class="hud" id="hudText">REC [●] CAM_01 // SCENE: QUANTUM CORE</div>
+<div class="hud-bottom" id="hudTime">TIME: 00:00:00:00</div>
+<div class="glitch-flash" id="flash"></div>
+
+<canvas id="cinematicCanvas"></canvas>
 
 <script>
-const canvas = document.getElementById('gameCanvas');
+const canvas = document.getElementById('cinematicCanvas');
 const ctx = canvas.getContext('2d');
-const scoreboard = document.getElementById('scoreboard');
+const hudText = document.getElementById('hudText');
+const flash = document.getElementById('flash');
 
-let playerScore = 0;
-let aiScore = 0;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-// Game Objects
-const player = { x: 20, y: 175, width: 12, height: 80, dy: 0 };
-const ai = { x: 768, y: 175, width: 12, height: 80, speed: 4.5 };
-const ball = { x: 400, y: 225, radius: 8, speedX: 5, speedY: 3, color: '#00f2fe' };
+let time = 0;
+let sceneMode = 0; // Changes over time to act like video cuts
+let sceneTimer = 0;
 
-// Mouse tracking for player
-window.addEventListener('mousemove', (e) => {
-  const rect = canvas.getBoundingClientRect();
-  const rootPos = e.clientY - rect.top;
-  player.y = rootPos - player.height / 2;
-  // Boundaries
-  if (player.y < 0) player.y = 0;
-  if (player.y > canvas.height - player.height) player.y = canvas.height - player.height;
-});
+const scenes = [
+  { name: "REC [●] CAM_01 // QUANTUM SINGULARITY", color1: "#00f2fe", color2: "#7928ca" },
+  { name: "REC [●] CAM_02 // NEURONAL MATRIX", color1: "#ff6482", color2: "#00f2fe" },
+  { name: "REC [●] CAM_03 // EVENT HORIZON VORTEX", color1: "#7928ca", color2: "#00ffcc" },
+  { name: "REC [●] CAM_04 // SUPERPOSITION PULSE", color1: "#ffb86c", color2: "#ff79c6" }
+];
 
-function resetBall() {
-  ball.x = canvas.width / 2;
-  ball.y = canvas.height / 2;
-  ball.speedX = -ball.speedX;
-  ball.speedY = (Math.random() - 0.5) * 6;
-}
+// Trigger a cinematic camera "Cut" every 7 seconds
+setInterval(() => {
+  // Flash effect
+  flash.style.opacity = '0.4';
+  setTimeout(() => { flash.style.opacity = '0'; }, 100);
 
-function update() {
-  // Move Ball
-  ball.x += ball.speedX;
-  ball.y += ball.speedY;
+  sceneMode = (sceneMode + 1) % scenes.length;
+  hudText.textContent = scenes[sceneMode].name;
+}, 7000);
 
-  // Wall collision (Top / Bottom)
-  if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
-    ball.speedY = -ball.speedY;
-  }
-
-  // AI Movement (Simple tracking with slight lag)
-  if (ai.y + ai.height / 2 < ball.y - 10) {
-    ai.y += ai.speed;
-  } else if (ai.y + ai.height / 2 > ball.y + 10) {
-    ai.y -= ai.speed;
-  }
-  if (ai.y < 0) ai.y = 0;
-  if (ai.y > canvas.height - ai.height) ai.y = canvas.height - ai.height;
-
-  // Player Paddle Collision
-  if (
-    ball.x - ball.radius < player.x + player.width &&
-    ball.y > player.y &&
-    ball.y < player.y + player.height
-  ) {
-    ball.speedX = -ball.speedX * 1.05; // Quantum acceleration
-    let deltaY = ball.y - (player.y + player.height / 2);
-    ball.speedY = deltaY * 0.2;
-    ball.color = '#00f2fe';
-  }
-
-  // AI Paddle Collision
-  if (
-    ball.x + ball.radius > ai.x &&
-    ball.y > ai.y &&
-    ball.y < ai.y + ai.height
-  ) {
-    ball.speedX = -ball.speedX * 1.05;
-    let deltaY = ball.y - (ai.y + ai.height / 2);
-    ball.speedY = deltaY * 0.2;
-    ball.color = '#ff6482';
-  }
-
-  // Scoring
-  if (ball.x < 0) {
-    aiScore++;
-    updateScoreboard();
-    resetBall();
-  } else if (ball.x > canvas.width) {
-    playerScore++;
-    updateScoreboard();
-    resetBall();
-  }
-}
-
-function updateScoreboard() {
-  scoreboard.textContent = `PLAYER: ${playerScore} // QUANTUM AI: ${aiScore}`;
-}
-
-function draw() {
-  // Clear screen with trailing effect
-  ctx.fillStyle = 'rgba(8, 8, 26, 0.3)';
+function animate() {
+  // Motion blur / trailing effect
+  ctx.fillStyle = 'rgba(2, 2, 5, 0.15)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Draw Center Line (Quantum split)
-  ctx.strokeStyle = 'rgba(121, 40, 202, 0.2)';
-  ctx.lineWidth = 2;
-  ctx.setLineDash([5, 15]);
-  ctx.beginPath();
-  ctx.moveTo(canvas.width / 2, 0);
-  ctx.lineTo(canvas.width / 2, canvas.height);
-  ctx.stroke();
-  ctx.setLineDash([]);
+  time += 0.025;
 
-  // Draw Player Paddle
-  ctx.shadowBlur = 15;
-  ctx.shadowColor = '#00f2fe';
-  ctx.fillStyle = '#00f2fe';
-  ctx.fillRect(player.x, player.y, player.width, player.height);
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+  const currentScene = scenes[sceneMode];
 
-  // Draw AI Paddle
-  ctx.shadowColor = '#ff6482';
-  ctx.fillStyle = '#ff6482';
-  ctx.fillRect(ai.x, ai.y, ai.width, ai.height);
+  // Draw dynamic procedural video background based on current scene mode
+  ctx.save();
+  ctx.translate(cx, cy);
 
-  // Draw Ball
-  ctx.shadowColor = ball.color;
-  ctx.beginPath();
-  ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-  ctx.fillStyle = '#ffffff';
-  ctx.fill();
-  ctx.shadowBlur = 0;
+  if (sceneMode === 0) {
+    // Scene 0: Expanding Quantum Rings
+    for (let i = 0; i < 12; i++) {
+      let radius = (time * 50 + i * 40) % 500;
+      let alpha = 1 - (radius / 500);
+      ctx.beginPath();
+      ctx.arc(Math.sin(time + i) * 30, Math.cos(time * 0.5 + i) * 30, radius, 0, Math.PI * 2);
+      ctx.strokeStyle = currentScene.color1;
+      ctx.globalAlpha = alpha * 0.4;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+  } else if (sceneMode === 1) {
+    // Scene 1: Rotating Cybernetic Grid Web
+    ctx.rotate(time * 0.3);
+    for (let i = 0; i < 8; i++) {
+      let angle = (i / 8) * Math.PI * 2;
+      let x = Math.cos(angle) * 180;
+      let y = Math.sin(angle) * 180;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(x * Math.sin(time), y * Math.cos(time));
+      ctx.strokeStyle = currentScene.color2;
+      ctx.globalAlpha = 0.5;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+  } else if (sceneMode === 2) {
+    // Scene 2: Spiraling Vortex Wormhole
+    ctx.rotate(-time * 0.5);
+    for (let i = 0; i < 20; i++) {
+      let dist = i * 20 + (Math.sin(time * 2) * 50);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, dist, dist * 0.6, i * 0.2, 0, Math.PI * 2);
+      ctx.strokeStyle = i % 2 === 0 ? currentScene.color1 : currentScene.color2;
+      ctx.globalAlpha = 0.3;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+  } else {
+    // Scene 3: Floating Quantum Particles Field
+    for (let i = 0; i < 15; i++) {
+      let px = Math.sin(time + i * 1.5) * (200 + i * 10);
+      let py = Math.cos(time * 0.8 + i) * (150 + i * 10);
+      ctx.beginPath();
+      ctx.arc(px, py, 4 + (i % 3), 0, Math.PI * 2);
+      ctx.fillStyle = currentScene.color1;
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = currentScene.color2;
+      ctx.globalAlpha = 0.7;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+  }
+
+  ctx.restore();
+
+  // Update fake live timestamp
+  const date = new Date();
+  document.getElementById('hudTime').textContent = `TIME: ${date.toTimeString().split(' ')[0]}:${Math.floor((date.getMilliseconds()/10))) < 10 ? '0' : ''}${Math.floor((date.getMilliseconds()/10))}`;
+
+  requestAnimationFrame(animate);
 }
 
-function loop() {
-  update();
-  draw();
-  requestAnimationFrame(loop);
-}
+animate();
 
-loop();
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
 </script>
 
 </body>
