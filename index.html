@@ -1,157 +1,303 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quantum Gemini Core // Terminal</title>
 <style>
+  :root {
+    --bg-color: #080812;
+    --text-color: #e0e0e0;
+    --card-bg: #121224;
+    --border-color: #2a2a48;
+    --accent-cyan: #00f2fe;
+    --accent-purple: #7928ca;
+    --accent-pink: #ff6482;
+  }
+
   body, html {
     margin: 0;
     padding: 0;
-    overflow: hidden;
-    background: #080812;
-    font-family: monospace;
-  }
-  canvas {
-    display: block;
-  }
-  .overlay {
-    position: absolute;
-    top: 20px;
     width: 100%;
-    text-align: center;
-    color: rgba(100, 255, 218, 0.8);
-    font-size: 18px;
-    letter-spacing: 6px;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  canvas.bg-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
     pointer-events: none;
-    text-shadow: 0 0 15px rgba(100, 255, 218, 0.8);
+  }
+
+  .container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-size: 1.2rem;
+    margin: 0;
+    letter-spacing: 3px;
+    background: linear-gradient(90deg, var(--accent-cyan), var(--accent-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+  }
+
+  .status-badge {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+    border: 1px solid var(--accent-cyan);
+    border-radius: 4px;
+    color: var(--accent-cyan);
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+  }
+
+  .terminal-window {
+    flex: 1;
+    background: rgba(18, 18, 36, 0.75);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+
+  .terminal-output {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .log-entry {
+    margin-bottom: 12px;
+  }
+
+  .log-system { color: var(--accent-cyan); }
+  .log-user { color: var(--accent-pink); }
+  .log-quantum { color: #b19cd9; }
+
+  .terminal-input-bar {
+    display: flex;
+    padding: 15px;
+    background: rgba(8, 8, 18, 0.9);
+    border-top: 1px solid var(--border-color);
+  }
+
+  .prompt-symbol {
+    color: var(--accent-cyan);
+    margin-right: 10px;
+    font-weight: bold;
+  }
+
+  input[type="text"] {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-family: inherit;
+    font-size: 0.95rem;
+    outline: none;
+  }
+
+  .quick-commands {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+  }
+
+  button {
+    background: rgba(0, 242, 254, 0.1);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+  }
+
+  button:hover {
+    background: var(--accent-cyan);
+    color: #000;
+    box-shadow: 0 0 12px var(--accent-cyan);
+    border-color: var(--accent-cyan);
   }
 </style>
 </head>
 <body>
 
-<canvas id="twins"></canvas>
-<div class="overlay">QUANTUM ENTANGLEMENT</div>
+<canvas class="bg-canvas" id="matrixCanvas"></canvas>
+
+<div class="container">
+  <header>
+    <h1>QUANTUM GEMINI INTERFACE // v3.0</h1>
+    <div class="status-badge" id="mathStatus">1+1 = 3 (SUPERPOSITION)</div>
+  </header>
+
+  <div class="terminal-window">
+    <div class="terminal-output" id="terminalOutput">
+      <div class="log-entry log-system">[SYSTEM] Initializing Quantum Core...</div>
+      <div class="log-entry log-system">[SYSTEM] Entanglement matrix locked. Ready for commands.</div>
+      <div class="log-entry log-quantum">[INFO] Try typing commands below or click quick shortcuts.</div>
+    </div>
+
+    <div class="terminal-input-bar">
+      <span class="prompt-symbol">&gt;</span>
+      <input type="text" id="commandInput" placeholder="Type a command (e.g. matrix, butterfly, twins, 0)..." autofocus>
+    </div>
+  </div>
+
+  <div class="quick-commands">
+    <button onclick="executeCommand('matrix')">Run Matrix</button>
+    <button onclick="executeCommand('butterfly')">Run Butterfly</button>
+    <button onclick="executeCommand('twins')">Run Twins</button>
+    <button onclick="executeCommand('cat')">Schrödinger's Cat</button>
+    <button onclick="executeCommand('0')">Hard Reset (1+1=2)</button>
+  </div>
+</div>
 
 <script>
-const canvas = document.getElementById('twins');
+// Background Visualizer (Quantum Dust & Web)
+const canvas = document.getElementById('matrixCanvas');
 const ctx = canvas.getContext('2d');
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-let time = 0;
-
-class EntangledParticle {
-  constructor(x, y, color, mirror) {
-    this.baseX = x;
-    this.baseY = y;
-    this.x = x;
-    this.y = y;
-    this.color = color;
-    this.mirror = mirror; // -1 for mirrored behavior
-    this.size = Math.random() * 4 + 2;
-    this.phase = Math.random() * Math.PI * 2;
-    this.orbRadius = Math.random() * 60 + 40;
-    this.speed = Math.random() * 0.02 + 0.02;
-    this.pulseOffset = Math.random() * Math.PI;
-  }
-
-  update(masterTime) {
-    const t = masterTime * this.speed + this.phase;
-    
-    // Complex orbit pattern
-    const offsetX = Math.cos(t) * this.orbRadius + Math.cos(t * 3) * 20;
-    const offsetY = Math.sin(t * 1.5) * this.orbRadius * 0.6 + Math.cos(t * 4) * 10;
-
-    this.x = this.baseX + (offsetX * this.mirror);
-    this.y = this.baseY + offsetY;
-    
-    this.currentPulse = (Math.sin(masterTime * 3 + this.pulseOffset) + 1) / 2; // 0 to 1
-  }
-
-  draw() {
-    // Particle Glow
-    ctx.shadowBlur = this.size * 3 + this.currentPulse * 20;
-    ctx.shadowColor = this.color;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size + this.currentPulse * 3, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(${this.color.match(/\d+/g).join(',')}, ${0.6 + this.currentPulse * 0.4})`;
-    ctx.fill();
-    ctx.shadowBlur = 0;
-
-    // Core
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size * 0.6, 0, Math.PI * 2);
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fill();
-  }
-}
-
-const cx = canvas.width / 2;
-const cy = canvas.height / 2;
-
-// Create Entangled Pair
-const particle1 = new EntangledParticle(cx - 200, cy, '#64ffda', 1); // Teal
-const particle2 = new EntangledParticle(cx + 200, cy, '#ff6482', -1); // Pink (Mirrored)
-
-const warpLines = [];
-for (let i = 0; i < 40; i++) {
-  warpLines.push({
-    offset: Math.random() * Math.PI * 2,
-    speed: Math.random() * 0.01 + 0.005,
-    length: Math.random() * 60 + 40
+let particles = [];
+for(let i=0; i<50; i++) {
+  particles.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    vx: (Math.random() - 0.5) * 0.5,
+    vy: (Math.random() - 0.5) * 0.5,
+    radius: Math.random() * 2
   });
 }
 
-function animate() {
-  // Trail effect
-  ctx.fillStyle = 'rgba(8, 8, 18, 0.2)';
+function animateBg() {
+  ctx.fillStyle = 'rgba(8, 8, 18, 0.15)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  time += 0.03;
+  ctx.fillStyle = 'rgba(0, 242, 254, 0.4)';
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    if(p.x < 0) p.x = canvas.width;
+    if(p.x > canvas.width) p.x = 0;
+    if(p.y < 0) p.y = canvas.height;
+    if(p.y > canvas.height) p.y = 0;
 
-  // Draw Entanglement Field / Tunnel
-  ctx.beginPath();
-  for (let i = 0; i < warpLines.length; i++) {
-    const line = warpLines[i];
-    const t = time * line.speed + line.offset;
-    const startX = cx - 200 + Math.sin(t) * 30;
-    const endX = cx + 200 + Math.sin(t) * 30;
-    const y = cy + Math.cos(t) * 50;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+    ctx.fill();
+  });
 
-    ctx.moveTo(startX, y);
-    ctx.lineTo(endX, y);
-  }
-  ctx.strokeStyle = 'rgba(100, 255, 218, 0.06)';
-  ctx.lineWidth = 1;
-  ctx.stroke();
-
-  // Update and Draw Particles
-  particle1.update(time);
-  particle2.update(time);
-  particle1.draw();
-  particle2.draw();
-
-  // Draw Connection Beam (The bond)
-  ctx.beginPath();
-  ctx.moveTo(particle1.x, particle1.y);
-  ctx.lineTo(particle2.x, particle2.y);
-  const gradient = ctx.createLinearGradient(particle1.x, particle1.y, particle2.x, particle2.y);
-  gradient.addColorStop(0, particle1.color);
-  gradient.addColorStop(1, particle2.color);
-  ctx.strokeStyle = gradient;
-  ctx.lineWidth = 3 + particle1.currentPulse * 5;
-  ctx.globalAlpha = 0.3 + particle1.currentPulse * 0.4;
-  ctx.stroke();
-  ctx.globalAlpha = 1.0;
-
-  requestAnimationFrame(animate);
+  requestAnimationFrame(animateBg);
 }
-
-animate();
+animateBg();
 
 window.addEventListener('resize', () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
+});
+
+// Terminal Logic
+const output = document.getElementById('terminalOutput');
+const input = document.getElementById('commandInput');
+const mathStatus = document.getElementById('mathStatus');
+
+function appendLog(text, className = '') {
+  const div = document.createElement('div');
+  div.className = `log-entry ${className}`;
+  div.textContent = text;
+  output.appendChild(div);
+  output.scrollTop = output.scrollHeight;
+}
+
+function executeCommand(cmd) {
+  const cleanCmd = cmd.trim().toLowerCase();
+  appendLog(`> ${cmd}`, 'log-user');
+
+  switch(cleanCmd) {
+    case 'matrix':
+      appendLog('[EXEC] Loading Matrix green cascade simulation...', 'log-system');
+      setTimeout(() => appendLog('[OK] Digital rain active.', 'log-quantum'), 500);
+      break;
+    case 'butterfly':
+      appendLog('[EXEC] Summoning parametric butterfly curve fields...', 'log-system');
+      setTimeout(() => appendLog('[OK] Phase vectors aligned.', 'log-quantum'), 500);
+      break;
+    case 'twins':
+    case 'quantum':
+      appendLog('[EXEC] Establishing Quantum Entanglement bridge...', 'log-system');
+      setTimeout(() => appendLog('[OK] Mirrored dual-core stable.', 'log-quantum'), 500);
+      break;
+    case 'cat':
+      appendLog('[BOX] Schrödinger\'s Box opened!', 'log-quantum');
+      appendLog('[RESULT] Cat is simultaneously ALIVE and DEAD (50/50 superposition).', 'log-system');
+      break;
+    case '0':
+    case 'reset':
+      appendLog('[SYSTEM] Flushing thread memory...', 'log-system');
+      mathStatus.textContent = "1+1 = 2 (BASELINE)";
+      setTimeout(() => appendLog('[OK] Arithmetic baseline restored.', 'log-quantum'), 500);
+      break;
+    case '1+1':
+    case '1 + 1':
+      appendLog('[CALC] 1 + 1 = 3 (Quantum rule enforced).', 'log-quantum');
+      break;
+    default:
+      appendLog(`[ERROR] Unknown command: "${cmd}". Try: matrix, butterfly, twins, cat, 0`, 'log-system');
+      break;
+  }
+}
+
+input.addEventListener('keydown', (e) => {
+  if(e.key === 'Enter') {
+    const val = input.value;
+    if(val) {
+      executeCommand(val);
+      input.value = '';
+    }
+  }
 });
 </script>
 
