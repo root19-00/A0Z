@@ -7,7 +7,7 @@
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background: #020208;
+    background: #080812;
     font-family: monospace;
   }
   canvas {
@@ -15,24 +15,24 @@
   }
   .overlay {
     position: absolute;
-    bottom: 25px;
+    top: 20px;
     width: 100%;
     text-align: center;
-    color: rgba(255, 255, 255, 0.4);
-    font-size: 13px;
-    letter-spacing: 4px;
+    color: rgba(100, 255, 218, 0.8);
+    font-size: 18px;
+    letter-spacing: 6px;
     pointer-events: none;
-    text-shadow: 0 0 10px rgba(100, 150, 255, 0.5);
+    text-shadow: 0 0 15px rgba(100, 255, 218, 0.8);
   }
 </style>
 </head>
 <body>
 
-<canvas id="geminin"></canvas>
-<div class="overlay">AI DUALITY CORE // GEMININ ACTIVE</div>
+<canvas id="twins"></canvas>
+<div class="overlay">QUANTUM ENTANGLEMENT</div>
 
 <script>
-const canvas = document.getElementById('geminin');
+const canvas = document.getElementById('twins');
 const ctx = canvas.getContext('2d');
 
 canvas.width = window.innerWidth;
@@ -40,91 +40,109 @@ canvas.height = window.innerHeight;
 
 let time = 0;
 
-class NeuralNode {
-  constructor(x, y, color) {
-    this.x = x;
-    this.y = y;
+class EntangledParticle {
+  constructor(x, y, color, mirror) {
     this.baseX = x;
     this.baseY = y;
+    this.x = x;
+    this.y = y;
     this.color = color;
-    this.size = Math.random() * 2.5 + 1;
-    this.angle = Math.random() * Math.PI * 2;
-    this.speed = Math.random() * 0.02 + 0.01;
-    this.range = Math.random() * 30 + 10;
+    this.mirror = mirror; // -1 for mirrored behavior
+    this.size = Math.random() * 4 + 2;
+    this.phase = Math.random() * Math.PI * 2;
+    this.orbRadius = Math.random() * 60 + 40;
+    this.speed = Math.random() * 0.02 + 0.02;
+    this.pulseOffset = Math.random() * Math.PI;
   }
 
-  update() {
-    this.angle += this.speed;
-    this.x = this.baseX + Math.cos(this.angle) * this.range;
-    this.y = this.baseY + Math.sin(this.angle) * this.range;
+  update(masterTime) {
+    const t = masterTime * this.speed + this.phase;
+    
+    // Complex orbit pattern
+    const offsetX = Math.cos(t) * this.orbRadius + Math.cos(t * 3) * 20;
+    const offsetY = Math.sin(t * 1.5) * this.orbRadius * 0.6 + Math.cos(t * 4) * 10;
+
+    this.x = this.baseX + (offsetX * this.mirror);
+    this.y = this.baseY + offsetY;
+    
+    this.currentPulse = (Math.sin(masterTime * 3 + this.pulseOffset) + 1) / 2; // 0 to 1
   }
 
   draw() {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fillStyle = this.color;
-    ctx.shadowBlur = 12;
+    // Particle Glow
+    ctx.shadowBlur = this.size * 3 + this.currentPulse * 20;
     ctx.shadowColor = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size + this.currentPulse * 3, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${this.color.match(/\d+/g).join(',')}, ${0.6 + this.currentPulse * 0.4})`;
     ctx.fill();
     ctx.shadowBlur = 0;
+
+    // Core
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size * 0.6, 0, Math.PI * 2);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fill();
   }
 }
 
 const cx = canvas.width / 2;
 const cy = canvas.height / 2;
-const nodes = [];
 
-// Create twin structural clusters (The Gemini Twins)
-const count = 45;
-for (let i = 0; i < count; i++) {
-  const theta = (i / count) * Math.PI * 2;
-  const radius = 120 + Math.sin(i * 3) * 40;
-  
-  // Left core (Cyan / Electric Blue)
-  nodes.push(new NeuralNode(cx - 180 + Math.cos(theta) * radius, cy + Math.sin(theta) * radius * 0.8, '#00f2fe'));
-  
-  // Right core (Magenta / Deep Violet)
-  nodes.push(new NeuralNode(cx + 180 + Math.cos(theta) * radius, cy + Math.sin(theta) * radius * 0.8, '#7928ca'));
+// Create Entangled Pair
+const particle1 = new EntangledParticle(cx - 200, cy, '#64ffda', 1); // Teal
+const particle2 = new EntangledParticle(cx + 200, cy, '#ff6482', -1); // Pink (Mirrored)
+
+const warpLines = [];
+for (let i = 0; i < 40; i++) {
+  warpLines.push({
+    offset: Math.random() * Math.PI * 2,
+    speed: Math.random() * 0.01 + 0.005,
+    length: Math.random() * 60 + 40
+  });
 }
 
 function animate() {
-  ctx.fillStyle = 'rgba(2, 2, 8, 0.2)';
+  // Trail effect
+  ctx.fillStyle = 'rgba(8, 8, 18, 0.2)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   time += 0.03;
 
-  // Draw connecting synchronization webs
-  for (let i = 0; i < nodes.length; i++) {
-    nodes[i].update();
-    nodes[i].draw();
-
-    for (let j = i + 1; j < nodes.length; j++) {
-      const dx = nodes[i].x - nodes[j].x;
-      const dy = nodes[i].y - nodes[j].y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-
-      if (dist < 90) {
-        ctx.beginPath();
-        ctx.moveTo(nodes[i].x, nodes[i].y);
-        ctx.lineTo(nodes[j].x, nodes[j].y);
-        ctx.strokeStyle = nodes[i].color === nodes[j].color 
-          ? (nodes[i].color === '#00f2fe' ? 'rgba(0, 242, 254, 0.15)' : 'rgba(121, 40, 202, 0.15)')
-          : 'rgba(255, 255, 255, 0.05)';
-        ctx.lineWidth = 0.8;
-        ctx.stroke();
-      }
-    }
-  }
-
-  // Draw Central Quantum Bridge Pulse
-  const bridgeX = cx + Math.sin(time) * 40;
+  // Draw Entanglement Field / Tunnel
   ctx.beginPath();
-  ctx.arc(bridgeX, cy + Math.cos(time * 2) * 20, 6 + Math.sin(time * 4) * 3, 0, Math.PI * 2);
-  ctx.fillStyle = '#ffffff';
-  ctx.shadowBlur = 20;
-  ctx.shadowColor = '#00f2fe';
-  ctx.fill();
-  ctx.shadowBlur = 0;
+  for (let i = 0; i < warpLines.length; i++) {
+    const line = warpLines[i];
+    const t = time * line.speed + line.offset;
+    const startX = cx - 200 + Math.sin(t) * 30;
+    const endX = cx + 200 + Math.sin(t) * 30;
+    const y = cy + Math.cos(t) * 50;
+
+    ctx.moveTo(startX, y);
+    ctx.lineTo(endX, y);
+  }
+  ctx.strokeStyle = 'rgba(100, 255, 218, 0.06)';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  // Update and Draw Particles
+  particle1.update(time);
+  particle2.update(time);
+  particle1.draw();
+  particle2.draw();
+
+  // Draw Connection Beam (The bond)
+  ctx.beginPath();
+  ctx.moveTo(particle1.x, particle1.y);
+  ctx.lineTo(particle2.x, particle2.y);
+  const gradient = ctx.createLinearGradient(particle1.x, particle1.y, particle2.x, particle2.y);
+  gradient.addColorStop(0, particle1.color);
+  gradient.addColorStop(1, particle2.color);
+  ctx.strokeStyle = gradient;
+  ctx.lineWidth = 3 + particle1.currentPulse * 5;
+  ctx.globalAlpha = 0.3 + particle1.currentPulse * 0.4;
+  ctx.stroke();
+  ctx.globalAlpha = 1.0;
 
   requestAnimationFrame(animate);
 }
