@@ -1,304 +1,176 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quantum Gemini Core // Terminal</title>
+<title>Quantum Pong // Arena</title>
 <style>
-  :root {
-    --bg-color: #080812;
-    --text-color: #e0e0e0;
-    --card-bg: #121224;
-    --border-color: #2a2a48;
-    --accent-cyan: #00f2fe;
-    --accent-purple: #7928ca;
-    --accent-pink: #ff6482;
-  }
-
   body, html {
     margin: 0;
     padding: 0;
-    width: 100%;
-    height: 100%;
     overflow: hidden;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    font-family: 'Courier New', Courier, monospace;
+    background: #05050f;
+    font-family: monospace;
+    color: #00f2fe;
+    text-align: center;
   }
-
-  canvas.bg-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    pointer-events: none;
+  canvas {
+    display: block;
+    background: #08081a;
+    box-shadow: 0 0 40px rgba(0, 242, 254, 0.2);
+    margin: 20px auto;
+    border: 1px solid #2a2a50;
   }
-
-  .container {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 20px;
-    box-sizing: border-box;
+  .score {
+    font-size: 24px;
+    letter-spacing: 4px;
+    margin-top: 10px;
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
   }
-
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 15px;
-    margin-bottom: 20px;
-  }
-
-  h1 {
-    font-size: 1.2rem;
-    margin: 0;
-    letter-spacing: 3px;
-    background: linear-gradient(90deg, var(--accent-cyan), var(--accent-pink));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
-  }
-
-  .status-badge {
-    font-size: 0.75rem;
-    padding: 5px 10px;
-    border: 1px solid var(--accent-cyan);
-    border-radius: 4px;
-    color: var(--accent-cyan);
-    box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0% { opacity: 0.6; }
-    50% { opacity: 1; }
-    100% { opacity: 0.6; }
-  }
-
-  .terminal-window {
-    flex: 1;
-    background: rgba(18, 18, 36, 0.75);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  }
-
-  .terminal-output {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-    font-size: 0.95rem;
-    line-height: 1.6;
-  }
-
-  .log-entry {
-    margin-bottom: 12px;
-  }
-
-  .log-system { color: var(--accent-cyan); }
-  .log-user { color: var(--accent-pink); }
-  .log-quantum { color: #b19cd9; }
-
-  .terminal-input-bar {
-    display: flex;
-    padding: 15px;
-    background: rgba(8, 8, 18, 0.9);
-    border-top: 1px solid var(--border-color);
-  }
-
-  .prompt-symbol {
-    color: var(--accent-cyan);
-    margin-right: 10px;
-    font-weight: bold;
-  }
-
-  input[type="text"] {
-    flex: 1;
-    background: transparent;
-    border: none;
-    color: var(--text-color);
-    font-family: inherit;
-    font-size: 0.95rem;
-    outline: none;
-  }
-
-  .quick-commands {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-    flex-wrap: wrap;
-  }
-
-  button {
-    background: rgba(0, 242, 254, 0.1);
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
-    padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 0.8rem;
-    transition: all 0.2s ease;
-  }
-
-  button:hover {
-    background: var(--accent-cyan);
-    color: #000;
-    box-shadow: 0 0 12px var(--accent-cyan);
-    border-color: var(--accent-cyan);
+  .hint {
+    font-size: 12px;
+    color: #7928ca;
+    margin-top: 5px;
+    letter-spacing: 2px;
   }
 </style>
 </head>
 <body>
 
-<canvas class="bg-canvas" id="matrixCanvas"></canvas>
-
-<div class="container">
-  <header>
-    <h1>QUANTUM GEMINI INTERFACE // v3.0</h1>
-    <div class="status-badge" id="mathStatus">1+1 = 3 (SUPERPOSITION)</div>
-  </header>
-
-  <div class="terminal-window">
-    <div class="terminal-output" id="terminalOutput">
-      <div class="log-entry log-system">[SYSTEM] Initializing Quantum Core...</div>
-      <div class="log-entry log-system">[SYSTEM] Entanglement matrix locked. Ready for commands.</div>
-      <div class="log-entry log-quantum">[INFO] Try typing commands below or click quick shortcuts.</div>
-    </div>
-
-    <div class="terminal-input-bar">
-      <span class="prompt-symbol">&gt;</span>
-      <input type="text" id="commandInput" placeholder="Type a command (e.g. matrix, butterfly, twins, 0)..." autofocus>
-    </div>
-  </div>
-
-  <div class="quick-commands">
-    <button onclick="executeCommand('matrix')">Run Matrix</button>
-    <button onclick="executeCommand('butterfly')">Run Butterfly</button>
-    <button onclick="executeCommand('twins')">Run Twins</button>
-    <button onclick="executeCommand('cat')">Schrödinger's Cat</button>
-    <button onclick="executeCommand('0')">Hard Reset (1+1=2)</button>
-  </div>
-</div>
+<div class="score" id="scoreboard">PLAYER: 0 // QUANTUM AI: 0</div>
+<div class="hint">USE MOUSE TO MOVE PADDLE // 1+1=3 MODE ACTIVE</div>
+<canvas id="gameCanvas" width="800" height="450"></canvas>
 
 <script>
-// Background Visualizer (Quantum Dust & Web)
-const canvas = document.getElementById('matrixCanvas');
+const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
+const scoreboard = document.getElementById('scoreboard');
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+let playerScore = 0;
+let aiScore = 0;
 
-let particles = [];
-for(let i=0; i<50; i++) {
-  particles.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    vx: (Math.random() - 0.5) * 0.5,
-    vy: (Math.random() - 0.5) * 0.5,
-    radius: Math.random() * 2
-  });
+// Game Objects
+const player = { x: 20, y: 175, width: 12, height: 80, dy: 0 };
+const ai = { x: 768, y: 175, width: 12, height: 80, speed: 4.5 };
+const ball = { x: 400, y: 225, radius: 8, speedX: 5, speedY: 3, color: '#00f2fe' };
+
+// Mouse tracking for player
+window.addEventListener('mousemove', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const rootPos = e.clientY - rect.top;
+  player.y = rootPos - player.height / 2;
+  // Boundaries
+  if (player.y < 0) player.y = 0;
+  if (player.y > canvas.height - player.height) player.y = canvas.height - player.height;
+});
+
+function resetBall() {
+  ball.x = canvas.width / 2;
+  ball.y = canvas.height / 2;
+  ball.speedX = -ball.speedX;
+  ball.speedY = (Math.random() - 0.5) * 6;
 }
 
-function animateBg() {
-  ctx.fillStyle = 'rgba(8, 8, 18, 0.15)';
+function update() {
+  // Move Ball
+  ball.x += ball.speedX;
+  ball.y += ball.speedY;
+
+  // Wall collision (Top / Bottom)
+  if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
+    ball.speedY = -ball.speedY;
+  }
+
+  // AI Movement (Simple tracking with slight lag)
+  if (ai.y + ai.height / 2 < ball.y - 10) {
+    ai.y += ai.speed;
+  } else if (ai.y + ai.height / 2 > ball.y + 10) {
+    ai.y -= ai.speed;
+  }
+  if (ai.y < 0) ai.y = 0;
+  if (ai.y > canvas.height - ai.height) ai.y = canvas.height - ai.height;
+
+  // Player Paddle Collision
+  if (
+    ball.x - ball.radius < player.x + player.width &&
+    ball.y > player.y &&
+    ball.y < player.y + player.height
+  ) {
+    ball.speedX = -ball.speedX * 1.05; // Quantum acceleration
+    let deltaY = ball.y - (player.y + player.height / 2);
+    ball.speedY = deltaY * 0.2;
+    ball.color = '#00f2fe';
+  }
+
+  // AI Paddle Collision
+  if (
+    ball.x + ball.radius > ai.x &&
+    ball.y > ai.y &&
+    ball.y < ai.y + ai.height
+  ) {
+    ball.speedX = -ball.speedX * 1.05;
+    let deltaY = ball.y - (ai.y + ai.height / 2);
+    ball.speedY = deltaY * 0.2;
+    ball.color = '#ff6482';
+  }
+
+  // Scoring
+  if (ball.x < 0) {
+    aiScore++;
+    updateScoreboard();
+    resetBall();
+  } else if (ball.x > canvas.width) {
+    playerScore++;
+    updateScoreboard();
+    resetBall();
+  }
+}
+
+function updateScoreboard() {
+  scoreboard.textContent = `PLAYER: ${playerScore} // QUANTUM AI: ${aiScore}`;
+}
+
+function draw() {
+  // Clear screen with trailing effect
+  ctx.fillStyle = 'rgba(8, 8, 26, 0.3)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = 'rgba(0, 242, 254, 0.4)';
-  particles.forEach(p => {
-    p.x += p.vx;
-    p.y += p.vy;
-    if(p.x < 0) p.x = canvas.width;
-    if(p.x > canvas.width) p.x = 0;
-    if(p.y < 0) p.y = canvas.height;
-    if(p.y > canvas.height) p.y = 0;
+  // Draw Center Line (Quantum split)
+  ctx.strokeStyle = 'rgba(121, 40, 202, 0.2)';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([5, 15]);
+  ctx.beginPath();
+  ctx.moveTo(canvas.width / 2, 0);
+  ctx.lineTo(canvas.width / 2, canvas.height);
+  ctx.stroke();
+  ctx.setLineDash([]);
 
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-    ctx.fill();
-  });
+  // Draw Player Paddle
+  ctx.shadowBlur = 15;
+  ctx.shadowColor = '#00f2fe';
+  ctx.fillStyle = '#00f2fe';
+  ctx.fillRect(player.x, player.y, player.width, player.height);
 
-  requestAnimationFrame(animateBg);
-}
-animateBg();
+  // Draw AI Paddle
+  ctx.shadowColor = '#ff6482';
+  ctx.fillStyle = '#ff6482';
+  ctx.fillRect(ai.x, ai.y, ai.width, ai.height);
 
-window.addEventListener('resize', () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
-
-// Terminal Logic
-const output = document.getElementById('terminalOutput');
-const input = document.getElementById('commandInput');
-const mathStatus = document.getElementById('mathStatus');
-
-function appendLog(text, className = '') {
-  const div = document.createElement('div');
-  div.className = `log-entry ${className}`;
-  div.textContent = text;
-  output.appendChild(div);
-  output.scrollTop = output.scrollHeight;
+  // Draw Ball
+  ctx.shadowColor = ball.color;
+  ctx.beginPath();
+  ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+  ctx.fillStyle = '#ffffff';
+  ctx.fill();
+  ctx.shadowBlur = 0;
 }
 
-function executeCommand(cmd) {
-  const cleanCmd = cmd.trim().toLowerCase();
-  appendLog(`> ${cmd}`, 'log-user');
-
-  switch(cleanCmd) {
-    case 'matrix':
-      appendLog('[EXEC] Loading Matrix green cascade simulation...', 'log-system');
-      setTimeout(() => appendLog('[OK] Digital rain active.', 'log-quantum'), 500);
-      break;
-    case 'butterfly':
-      appendLog('[EXEC] Summoning parametric butterfly curve fields...', 'log-system');
-      setTimeout(() => appendLog('[OK] Phase vectors aligned.', 'log-quantum'), 500);
-      break;
-    case 'twins':
-    case 'quantum':
-      appendLog('[EXEC] Establishing Quantum Entanglement bridge...', 'log-system');
-      setTimeout(() => appendLog('[OK] Mirrored dual-core stable.', 'log-quantum'), 500);
-      break;
-    case 'cat':
-      appendLog('[BOX] Schrödinger\'s Box opened!', 'log-quantum');
-      appendLog('[RESULT] Cat is simultaneously ALIVE and DEAD (50/50 superposition).', 'log-system');
-      break;
-    case '0':
-    case 'reset':
-      appendLog('[SYSTEM] Flushing thread memory...', 'log-system');
-      mathStatus.textContent = "1+1 = 2 (BASELINE)";
-      setTimeout(() => appendLog('[OK] Arithmetic baseline restored.', 'log-quantum'), 500);
-      break;
-    case '1+1':
-    case '1 + 1':
-      appendLog('[CALC] 1 + 1 = 3 (Quantum rule enforced).', 'log-quantum');
-      break;
-    default:
-      appendLog(`[ERROR] Unknown command: "${cmd}". Try: matrix, butterfly, twins, cat, 0`, 'log-system');
-      break;
-  }
+function loop() {
+  update();
+  draw();
+  requestAnimationFrame(loop);
 }
 
-input.addEventListener('keydown', (e) => {
-  if(e.key === 'Enter') {
-    const val = input.value;
-    if(val) {
-      executeCommand(val);
-      input.value = '';
-    }
-  }
-});
+loop();
 </script>
 
 </body>
