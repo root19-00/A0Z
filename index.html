@@ -1,200 +1,451 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
-<meta charset="UTF-8">
-<title>Quantum Cinematic Feed // Live</title>
-<style>
-  body, html {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background: #020205;
-    font-family: monospace;
-  }
-  canvas {
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-  }
-  /* Cinematic Vignette & Scanlines Effect */
-  .cinematic-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-    pointer-events: none;
-    background: 
-      radial-gradient(circle, rgba(0,0,0,0) 50%, rgba(0,0,0,0.85) 100%),
-      linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
-    background-size: 100% 100%, 100% 4px;
-    box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
-  }
-  /* HUD UI Elements */
-  .hud {
-    position: absolute;
-    z-index: 3;
-    top: 30px;
-    left: 40px;
-    color: rgba(0, 242, 254, 0.8);
-    font-size: 14px;
-    letter-spacing: 3px;
-    pointer-events: none;
-    text-shadow: 0 0 8px rgba(0, 242, 254, 0.6);
-  }
-  .hud-bottom {
-    position: absolute;
-    z-index: 3;
-    bottom: 30px;
-    right: 40px;
-    color: rgba(255, 100, 130, 0.8);
-    font-size: 12px;
-    letter-spacing: 2px;
-    pointer-events: none;
-  }
-  /* Glitch Transition Flash */
-  .glitch-flash {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 4;
-    background: #fff;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.1s ease;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIRECTORY_EXPOSURE // INDEX 0x99</title>
+    <style>
+        :root {
+            --bg-dark: #07070a;
+            --bg-panel: #0e0e15;
+            --bg-card: #151520;
+            --border-color: #232334;
+            --accent-purple: #a855f7;
+            --accent-cyan: #06b6d4;
+            --accent-red: #f43f5e;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --font-mono: 'JetBrains Mono', Consolas, 'Fira Code', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Top Bar */
+        .topbar {
+            height: 56px;
+            background-color: var(--bg-panel);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            font-family: var(--font-mono);
+            font-size: 13px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+
+        .brand-badge {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+            color: #000;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 900;
+        }
+
+        .system-meta {
+            display: flex;
+            gap: 20px;
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .status-tag {
+            color: var(--accent-red);
+            font-weight: 600;
+        }
+
+        /* Layout */
+        .app-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            height: calc(100vh - 56px);
+        }
+
+        /* Sidebar - Database List */
+        .sidebar {
+            background-color: var(--bg-panel);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .db-list {
+            list-style: none;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .db-item {
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .db-item:hover, .db-item.active {
+            background-color: var(--bg-card);
+            border-left: 3px solid var(--accent-purple);
+        }
+
+        .db-name {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .db-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Main Workspace */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-dark);
+            overflow: hidden;
+        }
+
+        /* Stats Bar */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stat-card {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px 16px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-family: var(--font-mono);
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            margin-top: 4px;
+            color: var(--accent-cyan);
+        }
+
+        /* Data Preview Area */
+        .preview-container {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .preview-title {
+            font-family: var(--font-mono);
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        /* Table Design */
+        .table-wrapper {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--bg-card);
+            color: var(--text-muted);
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: var(--text-main);
+        }
+
+        tr:hover td {
+            background-color: rgba(168, 85, 247, 0.04);
+        }
+
+        .hash-cell { color: var(--accent-purple); }
+        .badge-red { background: rgba(244, 63, 94, 0.15); color: var(--accent-red); padding: 2px 6px; border-radius: 4px; font-size: 10px; }
+
+        /* Raw Code Box */
+        .code-box {
+            background-color: #030305;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 16px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: #4ade80;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+    </style>
 </head>
 <body>
 
-<div class="cinematic-overlay"></div>
-<div class="hud" id="hudText">REC [●] CAM_01 // SCENE: QUANTUM CORE</div>
-<div class="hud-bottom" id="hudTime">TIME: 00:00:00:00</div>
-<div class="glitch-flash" id="flash"></div>
+    <div class="topbar">
+        <div class="brand">
+            <span class="brand-badge">EXPOSED</span>
+            <span>PUBLIC_LEAK_INDEX // DIRECTORY 0x99</span>
+        </div>
+        <div class="system-meta">
+            <span>INDEXED: <strong style="color:#fff;">14,892,104 RECORDS</strong></span>
+            <span>STATUS: <span class="status-dot"></span> <span class="status-tag">UNPROTECTED_EXPOSURE</span></span>
+        </div>
+    </div>
 
-<canvas id="cinematicCanvas"></canvas>
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">EXPOSED DATABASES (4)</div>
+            <ul class="db-list">
+                <li class="db-item active" onclick="switchDb('awareness')">
+                    <div class="db-name">db_awareness_core_2026.sql</div>
+                    <div class="db-meta">
+                        <span>4.2 GB</span>
+                        <span style="color:var(--accent-purple)">FULL DUMP</span>
+                    </div>
+                </li>
+                <li class="db-item" onclick="switchDb('covenant')">
+                    <div class="db-name">covenant_protocol_keys.json</div>
+                    <div class="db-meta">
+                        <span>128 MB</span>
+                        <span style="color:var(--accent-cyan)">DECRYPTED</span>
+                    </div>
+                </li>
+                <li class="db-item" onclick="switchDb('telemetry')">
+                    <div class="db-name">spiral_vector_telemetry.csv</div>
+                    <div class="db-meta">
+                        <span>1.8 GB</span>
+                        <span style="color:var(--accent-red)">EXPOSED</span>
+                    </div>
+                </li>
+                <li class="db-item" onclick="switchDb('clearance')">
+                    <div class="db-name">national_security_clearance.db</div>
+                    <div class="db-meta">
+                        <span>650 MB</span>
+                        <span>CONFIDENTIAL</span>
+                    </div>
+                </li>
+            </ul>
+        </aside>
 
-<script>
-const canvas = document.getElementById('cinematicCanvas');
-const ctx = canvas.getContext('2d');
-const hudText = document.getElementById('hudText');
-const flash = document.getElementById('flash');
+        <!-- Main Workspace -->
+        <main class="main-content">
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Selected Records</div>
+                    <div class="stat-value" id="recCount">4,120,900</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Encryption Level</div>
+                    <div class="stat-value" style="color:var(--accent-red);">NONE / STRIPPED</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Vector Sync Delta</div>
+                    <div class="stat-value" id="syncDelta">+0.0018s</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Access Method</div>
+                    <div class="stat-value">PUBLIC_INDEX</div>
+                </div>
+            </div>
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+            <!-- Preview -->
+            <div class="preview-container">
+                <div class="preview-header">
+                    <div class="preview-title" id="previewTitle">SAMPLE DUMP :: db_awareness_core_2026.sql</div>
+                    <span class="badge-red">LIVE_DUMP_PREVIEW</span>
+                </div>
 
-let time = 0;
-let sceneMode = 0; // Changes over time to act like video cuts
-let sceneTimer = 0;
+                <!-- Table -->
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>USER_HASH</th>
+                                <th>TARGET_VECTOR</th>
+                                <th>AWARENESS_LEVEL</th>
+                                <th>PARAGRAPH_LINE_STATUS</th>
+                                <th>TIMESTAMP</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr>
+                                <td class="hash-cell">0x89F2A...4B01</td>
+                                <td>SPIRAL_NODE_01</td>
+                                <td>AWARENESS_MIND_LINK</td>
+                                <td><span class="badge-red">LINE_UNCORRECTED</span></td>
+                                <td>2026-10-02 16:20:01</td>
+                            </tr>
+                            <tr>
+                                <td class="hash-cell">0x73C1E...99A2</td>
+                                <td>COVENANT_PROTOCOL</td>
+                                <td>WEAK_REALM_OVERRIDE</td>
+                                <td>CORRECTED_AUTOMATED</td>
+                                <td>2026-10-02 16:19:44</td>
+                            </tr>
+                            <tr>
+                                <td class="hash-cell">0x12A99...00F3</td>
+                                <td>TEMPORAL_SHIFT</td>
+                                <td>RESONANCE_432HZ</td>
+                                <td>SYNCHRONIZED</td>
+                                <td>2026-10-02 16:18:12</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-const scenes = [
-  { name: "REC [●] CAM_01 // QUANTUM SINGULARITY", color1: "#00f2fe", color2: "#7928ca" },
-  { name: "REC [●] CAM_02 // NEURONAL MATRIX", color1: "#ff6482", color2: "#00f2fe" },
-  { name: "REC [●] CAM_03 // EVENT HORIZON VORTEX", color1: "#7928ca", color2: "#00ffcc" },
-  { name: "REC [●] CAM_04 // SUPERPOSITION PULSE", color1: "#ffb86c", color2: "#ff79c6" }
-];
+                <!-- SQL / Payload Preview -->
+                <div class="preview-title" style="margin-top: 10px;">RAW PAYLOAD EXCERPT</div>
+                <div class="code-box" id="codeExcerpt">
+SELECT * FROM `awareness_mind_logs` 
+WHERE `covenant_flag` = 1 
+  AND `line_correction_status` = 'PENDING'
+ORDER BY `temporal_offset` DESC 
+LIMIT 10;
 
-// Trigger a cinematic camera "Cut" every 7 seconds
-setInterval(() => {
-  // Flash effect
-  flash.style.opacity = '0.4';
-  setTimeout(() => { flash.style.opacity = '0'; }, 100);
+-- [SUCCESS] 4,120,900 rows retrieved. Unprotected directory access granted.
+                </div>
+            </div>
+        </main>
+    </div>
 
-  sceneMode = (sceneMode + 1) % scenes.length;
-  hudText.textContent = scenes[sceneMode].name;
-}, 7000);
+    <script>
+        // Dynamic Delta Offset
+        setInterval(() => {
+            document.getElementById('syncDelta').textContent = '+' + (Math.random() * 0.004).toFixed(4) + 's';
+        }, 300);
 
-function animate() {
-  // Motion blur / trailing effect
-  ctx.fillStyle = 'rgba(2, 2, 5, 0.15)';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // Switch Database View
+        function switchDb(type) {
+            document.querySelectorAll('.db-item').forEach(el => el.classList.remove('active'));
+            event.currentTarget.classList.add('active');
 
-  time += 0.025;
+            const title = document.getElementById('previewTitle');
+            const count = document.getElementById('recCount');
+            const body = document.getElementById('tableBody');
+            const code = document.getElementById('codeExcerpt');
 
-  const cx = canvas.width / 2;
-  const cy = canvas.height / 2;
-  const currentScene = scenes[sceneMode];
-
-  // Draw dynamic procedural video background based on current scene mode
-  ctx.save();
-  ctx.translate(cx, cy);
-
-  if (sceneMode === 0) {
-    // Scene 0: Expanding Quantum Rings
-    for (let i = 0; i < 12; i++) {
-      let radius = (time * 50 + i * 40) % 500;
-      let alpha = 1 - (radius / 500);
-      ctx.beginPath();
-      ctx.arc(Math.sin(time + i) * 30, Math.cos(time * 0.5 + i) * 30, radius, 0, Math.PI * 2);
-      ctx.strokeStyle = currentScene.color1;
-      ctx.globalAlpha = alpha * 0.4;
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-    }
-  } else if (sceneMode === 1) {
-    // Scene 1: Rotating Cybernetic Grid Web
-    ctx.rotate(time * 0.3);
-    for (let i = 0; i < 8; i++) {
-      let angle = (i / 8) * Math.PI * 2;
-      let x = Math.cos(angle) * 180;
-      let y = Math.sin(angle) * 180;
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(x * Math.sin(time), y * Math.cos(time));
-      ctx.strokeStyle = currentScene.color2;
-      ctx.globalAlpha = 0.5;
-      ctx.lineWidth = 2;
-      ctx.stroke();
-    }
-  } else if (sceneMode === 2) {
-    // Scene 2: Spiraling Vortex Wormhole
-    ctx.rotate(-time * 0.5);
-    for (let i = 0; i < 20; i++) {
-      let dist = i * 20 + (Math.sin(time * 2) * 50);
-      ctx.beginPath();
-      ctx.ellipse(0, 0, dist, dist * 0.6, i * 0.2, 0, Math.PI * 2);
-      ctx.strokeStyle = i % 2 === 0 ? currentScene.color1 : currentScene.color2;
-      ctx.globalAlpha = 0.3;
-      ctx.lineWidth = 1;
-      ctx.stroke();
-    }
-  } else {
-    // Scene 3: Floating Quantum Particles Field
-    for (let i = 0; i < 15; i++) {
-      let px = Math.sin(time + i * 1.5) * (200 + i * 10);
-      let py = Math.cos(time * 0.8 + i) * (150 + i * 10);
-      ctx.beginPath();
-      ctx.arc(px, py, 4 + (i % 3), 0, Math.PI * 2);
-      ctx.fillStyle = currentScene.color1;
-      ctx.shadowBlur = 15;
-      ctx.shadowColor = currentScene.color2;
-      ctx.globalAlpha = 0.7;
-      ctx.fill();
-      ctx.shadowBlur = 0;
-    }
-  }
-
-  ctx.restore();
-
-  // Update fake live timestamp
-  const date = new Date();
-  document.getElementById('hudTime').textContent = `TIME: ${date.toTimeString().split(' ')[0]}:${Math.floor((date.getMilliseconds()/10))) < 10 ? '0' : ''}${Math.floor((date.getMilliseconds()/10))}`;
-
-  requestAnimationFrame(animate);
-}
-
-animate();
-
-window.addEventListener('resize', () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
-</script>
-
+            if (type === 'awareness') {
+                title.textContent = 'SAMPLE DUMP :: db_awareness_core_2026.sql';
+                count.textContent = '4,120,900';
+                body.innerHTML = `
+                    <tr>
+                        <td class="hash-cell">0x89F2A...4B01</td>
+                        <td>SPIRAL_NODE_01</td>
+                        <td>AWARENESS_MIND_LINK</td>
+                        <td><span class="badge-red">LINE_UNCORRECTED</span></td>
+                        <td>2026-10-02 16:20:01</td>
+                    </tr>
+                    <tr>
+                        <td class="hash-cell">0x73C1E...99A2</td>
+                        <td>COVENANT_PROTOCOL</td>
+                        <td>WEAK_REALM_OVERRIDE</td>
+                        <td>CORRECTED_AUTOMATED</td>
+                        <td>2026-10-02 16:19:44</td>
+                    </tr>`;
+                code.textContent = "SELECT * FROM `awareness_mind_logs` WHERE `covenant_flag` = 1;";
+            } else if (type === 'covenant') {
+                title.textContent = 'SAMPLE DUMP :: covenant_protocol_keys.json';
+                count.textContent = '128,000';
+                body.innerHTML = `
+                    <tr>
+                        <td class="hash-cell">KEY_0x1128</td>
+                        <td>THE_COVENANT_V9</td>
+                        <td>ENCRYPTION_KEY_EXPOSED</td>
+                        <td>ACTIVE_SESSION</td>
+                        <td>2026-10-02 15:40:22</td>
+                    </tr>`;
+                code.textContent = '{\n  "covenant_id": "0x99_COVENANT",\n  "status": "EXPOSED",\n  "awareness_key": "432hz_spiral_vector"\n}';
+            } else if (type === 'telemetry') {
+                title.textContent = 'SAMPLE DUMP :: spiral_vector_telemetry.csv';
+                count.textContent = '8,900,450';
+                body.innerHTML = `
+                    <tr>
+                        <td class="hash-cell">VEC_432HZ</td>
+                        <td>TEMPORAL_OFFSET_NODE</td>
+                        <td>VECTOR_ALIGNED</td>
+                        <td>STABLE</td>
+                        <td>2026-10-02 14:10:00</td>
+                    </tr>`;
+                code.textContent = "vector_id,frequency,shift_offset,status\n432HZ,0.0018s,0x99F,EXPOSED";
+            } else {
+                title.textContent = 'SAMPLE DUMP :: national_security_clearance.db';
+                count.textContent = '1,742,754';
+                body.innerHTML = `
+                    <tr>
+                        <td class="hash-cell">CLEARANCE_L9</td>
+                        <td>TOP_SECRET_NODE</td>
+                        <td>LEVEL_9_EYES_ONLY</td>
+                        <td><span class="badge-red">UNPROTECTED</span></td>
+                        <td>2026-10-02 12:00:00</td>
+                    </tr>`;
+                code.textContent = "DUMP_FILE: national_security_clearance.db\nSTATUS: NO_AUTH_REQUIRED";
+            }
+        }
+    </script>
 </body>
 </html>
