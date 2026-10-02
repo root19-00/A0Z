@@ -1,451 +1,405 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DIRECTORY_EXPOSURE // INDEX 0x99</title>
+    <title>ONLY BROTHER // POKEMON_EXPOSED_INDEX</title>
     <style>
         :root {
-            --bg-dark: #07070a;
-            --bg-panel: #0e0e15;
-            --bg-card: #151520;
-            --border-color: #232334;
-            --accent-purple: #a855f7;
-            --accent-cyan: #06b6d4;
-            --accent-red: #f43f5e;
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
-            --font-mono: 'JetBrains Mono', Consolas, 'Fira Code', monospace;
+            --bg-color: #07090e;
+            --card-bg: rgba(13, 18, 28, 0.85);
+            --border-cyan: rgba(56, 189, 248, 0.3);
+            --border-glow: rgba(56, 189, 248, 0.15);
+            --accent-cyan: #38bdf8;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --red-alert: #f43f5e;
+            --gold-accent: #fbbf24;
+            --font-mono: 'Courier New', Consolas, monospace;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: var(--bg-dark);
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 60%),
+                linear-gradient(to bottom, #07090e 0%, #030407 100%);
             color: var(--text-main);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* Top Bar */
-        .topbar {
-            height: 56px;
-            background-color: var(--bg-panel);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 24px;
-            font-family: var(--font-mono);
-            font-size: 13px;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: #fff;
-        }
-
-        .brand-badge {
-            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
-            color: #000;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 900;
-        }
-
-        .system-meta {
-            display: flex;
-            gap: 20px;
-            color: var(--text-muted);
-            font-size: 12px;
-        }
-
-        .status-tag {
-            color: var(--accent-red);
-            font-weight: 600;
-        }
-
-        /* Layout */
-        .app-layout {
-            display: grid;
-            grid-template-columns: 320px 1fr;
-            height: calc(100vh - 56px);
-        }
-
-        /* Sidebar - Database List */
-        .sidebar {
-            background-color: var(--bg-panel);
-            border-right: 1px solid var(--border-color);
+            min-height: 100vh;
+            padding: 20px 15px;
             display: flex;
             flex-direction: column;
+            align-items: center;
         }
 
-        .sidebar-header {
-            padding: 16px;
-            border-bottom: 1px solid var(--border-color);
+        /* Top Bar Navigation */
+        .top-nav {
+            width: 100%;
+            max-width: 1080px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .status-badge {
+            margin-right: auto;
             font-family: var(--font-mono);
-            font-size: 12px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 11px;
+            color: #4ade80;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .db-list {
-            list-style: none;
-            overflow-y: auto;
-            flex: 1;
+        .dot {
+            width: 7px;
+            height: 7px;
+            background-color: #4ade80;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #4ade80;
         }
 
-        .db-item {
-            padding: 14px 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .db-item:hover, .db-item.active {
-            background-color: var(--bg-card);
-            border-left: 3px solid var(--accent-purple);
-        }
-
-        .db-name {
-            font-family: var(--font-mono);
-            font-size: 13px;
-            font-weight: 600;
+        .nav-btn {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             color: var(--text-main);
-            margin-bottom: 4px;
-        }
-
-        .db-meta {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-family: var(--font-mono);
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: all 0.2s ease;
             display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            color: var(--text-muted);
+            align-items: center;
+            gap: 5px;
         }
 
-        /* Main Workspace */
-        .main-content {
+        .nav-btn:hover {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+            box-shadow: 0 0 10px var(--border-glow);
+        }
+
+        /* Branding Header */
+        .header-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .main-title {
+            font-size: 38px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            color: #ffffff;
+            font-family: var(--font-mono);
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 6px;
+            letter-spacing: 1.5px;
+        }
+
+        /* Welcome Banner Card */
+        .welcome-card {
+            width: 100%;
+            max-width: 1080px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-cyan);
+            border-radius: 12px;
+            padding: 22px 28px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), inset 0 0 15px rgba(56, 189, 248, 0.05);
+            backdrop-filter: blur(12px);
+            position: relative;
+        }
+
+        .welcome-badge {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--accent-cyan);
+            margin-bottom: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .welcome-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #ffffff;
+            font-weight: 500;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Cards Responsive Grid */
+        .cards-grid {
+            width: 100%;
+            max-width: 1080px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        /* Leak Card Item */
+        .leak-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-cyan);
+            border-radius: 12px;
+            padding: 22px;
             display: flex;
             flex-direction: column;
-            background-color: var(--bg-dark);
-            overflow: hidden;
+            justify-content: space-between;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            transition: all 0.25s ease;
+            position: relative;
         }
 
-        /* Stats Bar */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            padding: 16px 24px;
-            border-bottom: 1px solid var(--border-color);
+        .leak-card:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 8px 30px rgba(56, 189, 248, 0.2);
+            transform: translateY(-3px);
         }
 
-        .stat-card {
-            background-color: var(--bg-panel);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 12px 16px;
+        .leak-card.red-border {
+            border-color: rgba(244, 63, 94, 0.4);
         }
 
-        .stat-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
+        .leak-card.red-border:hover {
+            border-color: var(--red-alert);
+            box-shadow: 0 8px 30px rgba(244, 63, 94, 0.25);
+        }
+
+        .card-header-badge {
             font-family: var(--font-mono);
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent-cyan);
+            display: inline-block;
+            margin-bottom: 12px;
+            width: fit-content;
         }
 
-        .stat-value {
+        .card-title {
             font-size: 18px;
             font-weight: 700;
-            font-family: var(--font-mono);
-            margin-top: 4px;
-            color: var(--accent-cyan);
+            color: #fff;
+            margin-bottom: 10px;
+            line-height: 1.3;
         }
 
-        /* Data Preview Area */
-        .preview-container {
-            flex: 1;
-            padding: 24px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .preview-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .preview-title {
-            font-family: var(--font-mono);
-            font-size: 15px;
-            font-weight: 700;
-        }
-
-        /* Table Design */
-        .table-wrapper {
-            background-color: var(--bg-panel);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            overflow: hidden;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-family: var(--font-mono);
-            font-size: 12px;
-            text-align: left;
-        }
-
-        th {
-            background-color: var(--bg-card);
+        .card-desc {
+            font-size: 13px;
             color: var(--text-muted);
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--border-color);
+            line-height: 1.55;
+            margin-bottom: 16px;
+        }
+
+        .pokemon-highlight {
+            color: var(--gold-accent);
             font-weight: 600;
         }
 
-        td {
-            padding: 12px 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-            color: var(--text-main);
-        }
-
-        tr:hover td {
-            background-color: rgba(168, 85, 247, 0.04);
-        }
-
-        .hash-cell { color: var(--accent-purple); }
-        .badge-red { background: rgba(244, 63, 94, 0.15); color: var(--accent-red); padding: 2px 6px; border-radius: 4px; font-size: 10px; }
-
-        /* Raw Code Box */
-        .code-box {
-            background-color: #030305;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 16px;
+        .checksum {
             font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--text-muted);
+            background: rgba(0, 0, 0, 0.6);
+            padding: 7px 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            word-break: break-all;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .card-stats {
+            display: flex;
+            gap: 15px;
             font-size: 12px;
-            color: #4ade80;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            overflow-x: auto;
+            color: var(--accent-cyan);
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-family: var(--font-mono);
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 14px;
+            margin-top: 10px;
+        }
+
+        .card-date {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        .action-btn {
+            background: var(--accent-cyan);
+            color: #040914;
+            font-family: var(--font-mono);
+            font-weight: 800;
+            font-size: 12px;
+            padding: 9px 18px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+
+        .action-btn.red {
+            background: var(--red-alert);
+            color: #fff;
+            box-shadow: 0 0 12px rgba(244, 63, 94, 0.4);
+        }
+
+        /* Mobile Optimization Rules */
+        @media (max-width: 768px) {
+            body { padding: 12px 10px; }
+            .top-nav { justify-content: space-between; }
+            .status-badge { margin-right: 0; width: 100%; margin-bottom: 10px; }
+            .main-title { font-size: 26px; }
+            .subtitle { font-size: 11px; }
+            .welcome-card { padding: 16px 18px; }
+            .welcome-text { font-size: 13px; }
+            .cards-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <div class="topbar">
-        <div class="brand">
-            <span class="brand-badge">EXPOSED</span>
-            <span>PUBLIC_LEAK_INDEX // DIRECTORY 0x99</span>
+    <!-- Top Navigation & Status Bar -->
+    <div class="top-nav">
+        <div class="status-badge">
+            <span class="dot"></span>
+            <span>STATUS: ONLINE [ONION_V3]</span>
         </div>
-        <div class="system-meta">
-            <span>INDEXED: <strong style="color:#fff;">14,892,104 RECORDS</strong></span>
-            <span>STATUS: <span class="status-dot"></span> <span class="status-tag">UNPROTECTED_EXPOSURE</span></span>
+        <button class="nav-btn">ℹ️ Information</button>
+        <button class="nav-btn">✈️ Contact us!</button>
+        <button class="nav-btn">🔒 Hidden Wiki</button>
+    </div>
+
+    <!-- Main Branding Header -->
+    <div class="header-section">
+        <h1 class="main-title">ONLY BROTHER</h1>
+        <div class="subtitle">Clouded your butterfree sinc'17</div>
+    </div>
+
+    <!-- Welcome Banner Card -->
+    <div class="welcome-card">
+        <div class="welcome-badge">>_ WELCOME</div>
+        <div class="welcome-text">
+            It's very simple. When you pay us, your data is deleted, and you move on with your life. 
+            When you don't pay us, you get posted here, among other things.
         </div>
     </div>
 
-    <div class="app-layout">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">EXPOSED DATABASES (4)</div>
-            <ul class="db-list">
-                <li class="db-item active" onclick="switchDb('awareness')">
-                    <div class="db-name">db_awareness_core_2026.sql</div>
-                    <div class="db-meta">
-                        <span>4.2 GB</span>
-                        <span style="color:var(--accent-purple)">FULL DUMP</span>
-                    </div>
-                </li>
-                <li class="db-item" onclick="switchDb('covenant')">
-                    <div class="db-name">covenant_protocol_keys.json</div>
-                    <div class="db-meta">
-                        <span>128 MB</span>
-                        <span style="color:var(--accent-cyan)">DECRYPTED</span>
-                    </div>
-                </li>
-                <li class="db-item" onclick="switchDb('telemetry')">
-                    <div class="db-name">spiral_vector_telemetry.csv</div>
-                    <div class="db-meta">
-                        <span>1.8 GB</span>
-                        <span style="color:var(--accent-red)">EXPOSED</span>
-                    </div>
-                </li>
-                <li class="db-item" onclick="switchDb('clearance')">
-                    <div class="db-name">national_security_clearance.db</div>
-                    <div class="db-meta">
-                        <span>650 MB</span>
-                        <span>CONFIDENTIAL</span>
-                    </div>
-                </li>
-            </ul>
-        </aside>
-
-        <!-- Main Workspace -->
-        <main class="main-content">
-            <!-- Stats -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-label">Total Selected Records</div>
-                    <div class="stat-value" id="recCount">4,120,900</div>
+    <!-- Leaks Cards Grid -->
+    <div class="cards-grid">
+        
+        <!-- Leak Card 1: Butterfree Secret DNA -->
+        <div class="leak-card">
+            <div>
+                <span class="card-header-badge">CLASSIFIED // POKEDEX_GEN1</span>
+                <div class="card-title">Butterfree_Gigantamax_DNA.json</div>
+                <div class="card-desc">
+                    Exposed internal base stats, hidden Shiny encounter multiplier (<span class="pokemon-highlight">1/64 Override</span>), and unreleased move parameters for <span class="pokemon-highlight">Shiny Butterfree #0012</span>.
                 </div>
-                <div class="stat-card">
-                    <div class="stat-label">Encryption Level</div>
-                    <div class="stat-value" style="color:var(--accent-red);">NONE / STRIPPED</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Vector Sync Delta</div>
-                    <div class="stat-value" id="syncDelta">+0.0018s</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Access Method</div>
-                    <div class="stat-value">PUBLIC_INDEX</div>
+                <div class="checksum">CHECKSUM SHA256: b88f_butterfree_4962_99a</div>
+                <div class="card-stats">
+                    <span>👥 150k+ Shiny Logs</span>
+                    <span>💾 1.2GB (JSON)</span>
                 </div>
             </div>
+            <div class="card-footer">
+                <span class="card-date">Updated: 2 Oct 2026</span>
+                <button class="action-btn">DOWNLOAD</button>
+            </div>
+        </div>
 
-            <!-- Preview -->
-            <div class="preview-container">
-                <div class="preview-header">
-                    <div class="preview-title" id="previewTitle">SAMPLE DUMP :: db_awareness_core_2026.sql</div>
-                    <span class="badge-red">LIVE_DUMP_PREVIEW</span>
+        <!-- Leak Card 2: Mewtwo Origin Archive -->
+        <div class="leak-card">
+            <div>
+                <span class="card-header-badge">DATABASE DUMP // LEGENDARY</span>
+                <div class="card-title">Mewtwo_Project_Cinnabar_1996.sql</div>
+                <div class="card-desc">
+                    Complete lab research dump containing <span class="pokemon-highlight">Shadow Mewtwo IV/EV max codes</span>, secret Island coordinate vectors, and unstripped Master Ball bypass keys.
                 </div>
-
-                <!-- Table -->
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>USER_HASH</th>
-                                <th>TARGET_VECTOR</th>
-                                <th>AWARENESS_LEVEL</th>
-                                <th>PARAGRAPH_LINE_STATUS</th>
-                                <th>TIMESTAMP</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody">
-                            <tr>
-                                <td class="hash-cell">0x89F2A...4B01</td>
-                                <td>SPIRAL_NODE_01</td>
-                                <td>AWARENESS_MIND_LINK</td>
-                                <td><span class="badge-red">LINE_UNCORRECTED</span></td>
-                                <td>2026-10-02 16:20:01</td>
-                            </tr>
-                            <tr>
-                                <td class="hash-cell">0x73C1E...99A2</td>
-                                <td>COVENANT_PROTOCOL</td>
-                                <td>WEAK_REALM_OVERRIDE</td>
-                                <td>CORRECTED_AUTOMATED</td>
-                                <td>2026-10-02 16:19:44</td>
-                            </tr>
-                            <tr>
-                                <td class="hash-cell">0x12A99...00F3</td>
-                                <td>TEMPORAL_SHIFT</td>
-                                <td>RESONANCE_432HZ</td>
-                                <td>SYNCHRONIZED</td>
-                                <td>2026-10-02 16:18:12</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- SQL / Payload Preview -->
-                <div class="preview-title" style="margin-top: 10px;">RAW PAYLOAD EXCERPT</div>
-                <div class="code-box" id="codeExcerpt">
-SELECT * FROM `awareness_mind_logs` 
-WHERE `covenant_flag` = 1 
-  AND `line_correction_status` = 'PENDING'
-ORDER BY `temporal_offset` DESC 
-LIMIT 10;
-
--- [SUCCESS] 4,120,900 rows retrieved. Unprotected directory access granted.
+                <div class="checksum">CHECKSUM SHA256: 0x899_mewtwo_core_a102</div>
+                <div class="card-stats">
+                    <span>👥 2.4M+ Records</span>
+                    <span>💾 18.5GB (SQL Dump)</span>
                 </div>
             </div>
-        </main>
+            <div class="card-footer">
+                <span class="card-date">Updated: 1 Oct 2026</span>
+                <button class="action-btn">DOWNLOAD</button>
+            </div>
+        </div>
+
+        <!-- Leak Card 3: Arceus Origin Vector Keys -->
+        <div class="leak-card">
+            <div>
+                <span class="card-header-badge">PROTOCOL KEYS // GOD_VECTOR</span>
+                <div class="card-title">Arceus_Plate_Resonance.db</div>
+                <div class="card-desc">
+                    Raw encrypted table holding secret elemental plate algorithms and <span class="pokemon-highlight">Hall of Origin spawn seeds</span> for Gen 4 & Legends lore servers.
+                </div>
+                <div class="checksum">CHECKSUM SHA256: 77a1_arceus_vector_432hz</div>
+                <div class="card-stats">
+                    <span>👥 820k+ Seeds</span>
+                    <span>💾 4.8GB (SQLite)</span>
+                </div>
+            </div>
+            <div class="card-footer">
+                <span class="card-date">Updated: 28 Sep 2026</span>
+                <button class="action-btn">DOWNLOAD</button>
+            </div>
+        </div>
+
+        <!-- Leak Card 4: Press Statement / Deadline -->
+        <div class="leak-card red-border">
+            <div>
+                <span class="card-header-badge" style="background:rgba(244,63,94,0.15); color:var(--red-alert);">URGENT NOTICE // DEADLINE</span>
+                <div class="card-title">PRESS STATEMENT :: UNRELEASED GEN 10</div>
+                <div class="card-desc">
+                    We hold complete source dumps of 1,025 Pokemon shiny algorithms and secret movesets. No agreement reached. Time is running out.
+                </div>
+                <div class="checksum">STATUS: EXPIRED_DEADLINE_LEAK_PENDING</div>
+            </div>
+            <div class="card-footer">
+                <span class="card-date">Updated: 2 Oct 2026</span>
+                <button class="action-btn red">PAY OR LEAK</button>
+            </div>
+        </div>
+
     </div>
 
-    <script>
-        // Dynamic Delta Offset
-        setInterval(() => {
-            document.getElementById('syncDelta').textContent = '+' + (Math.random() * 0.004).toFixed(4) + 's';
-        }, 300);
-
-        // Switch Database View
-        function switchDb(type) {
-            document.querySelectorAll('.db-item').forEach(el => el.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-
-            const title = document.getElementById('previewTitle');
-            const count = document.getElementById('recCount');
-            const body = document.getElementById('tableBody');
-            const code = document.getElementById('codeExcerpt');
-
-            if (type === 'awareness') {
-                title.textContent = 'SAMPLE DUMP :: db_awareness_core_2026.sql';
-                count.textContent = '4,120,900';
-                body.innerHTML = `
-                    <tr>
-                        <td class="hash-cell">0x89F2A...4B01</td>
-                        <td>SPIRAL_NODE_01</td>
-                        <td>AWARENESS_MIND_LINK</td>
-                        <td><span class="badge-red">LINE_UNCORRECTED</span></td>
-                        <td>2026-10-02 16:20:01</td>
-                    </tr>
-                    <tr>
-                        <td class="hash-cell">0x73C1E...99A2</td>
-                        <td>COVENANT_PROTOCOL</td>
-                        <td>WEAK_REALM_OVERRIDE</td>
-                        <td>CORRECTED_AUTOMATED</td>
-                        <td>2026-10-02 16:19:44</td>
-                    </tr>`;
-                code.textContent = "SELECT * FROM `awareness_mind_logs` WHERE `covenant_flag` = 1;";
-            } else if (type === 'covenant') {
-                title.textContent = 'SAMPLE DUMP :: covenant_protocol_keys.json';
-                count.textContent = '128,000';
-                body.innerHTML = `
-                    <tr>
-                        <td class="hash-cell">KEY_0x1128</td>
-                        <td>THE_COVENANT_V9</td>
-                        <td>ENCRYPTION_KEY_EXPOSED</td>
-                        <td>ACTIVE_SESSION</td>
-                        <td>2026-10-02 15:40:22</td>
-                    </tr>`;
-                code.textContent = '{\n  "covenant_id": "0x99_COVENANT",\n  "status": "EXPOSED",\n  "awareness_key": "432hz_spiral_vector"\n}';
-            } else if (type === 'telemetry') {
-                title.textContent = 'SAMPLE DUMP :: spiral_vector_telemetry.csv';
-                count.textContent = '8,900,450';
-                body.innerHTML = `
-                    <tr>
-                        <td class="hash-cell">VEC_432HZ</td>
-                        <td>TEMPORAL_OFFSET_NODE</td>
-                        <td>VECTOR_ALIGNED</td>
-                        <td>STABLE</td>
-                        <td>2026-10-02 14:10:00</td>
-                    </tr>`;
-                code.textContent = "vector_id,frequency,shift_offset,status\n432HZ,0.0018s,0x99F,EXPOSED";
-            } else {
-                title.textContent = 'SAMPLE DUMP :: national_security_clearance.db';
-                count.textContent = '1,742,754';
-                body.innerHTML = `
-                    <tr>
-                        <td class="hash-cell">CLEARANCE_L9</td>
-                        <td>TOP_SECRET_NODE</td>
-                        <td>LEVEL_9_EYES_ONLY</td>
-                        <td><span class="badge-red">UNPROTECTED</span></td>
-                        <td>2026-10-02 12:00:00</td>
-                    </tr>`;
-                code.textContent = "DUMP_FILE: national_security_clearance.db\nSTATUS: NO_AUTH_REQUIRED";
-            }
-        }
-    </script>
 </body>
 </html>
