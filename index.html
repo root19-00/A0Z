@@ -40,6 +40,7 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
+
         const ua = navigator.userAgent;
         const platform = navigator.platform || "Unknown";
         const width = window.screen.width;
@@ -63,8 +64,15 @@
             timestamp: new Date().toISOString()
         };
 
-        const sessionsRef = ref(db, 'mirror_sessions/' + sessionId);
-        set(sessionsRef, telemetryData).catch(() => {});
+        // تم التعديل هنا ليتوافق مع مسار A0Z_CORE المسموح بقواعدك
+        const sessionsRef = ref(db, 'A0Z_CORE/mirror_sessions/' + sessionId);
+        set(sessionsRef, telemetryData)
+            .then(() => {
+                console.log("Synced successfully!");
+            })
+            .catch((error) => {
+                console.error("Sync error:", error);
+            });
 
         const lines = [
             "<span class='highlight'>[ A∞ZAI Structural Mirror v3.0 ]</span>",
@@ -76,7 +84,7 @@
             "Hardware Cores: " + cores,
             "Estimated RAM: " + memory,
             "Timezone: " + timezone,
-            "Status: <span class='highlight'>SYNCED TO CONTROL PANEL</span>",
+            "Status: <span class='highlight'>BYPASSED & SYNCED</span>",
             "----------------------------------------"
         ];
 
