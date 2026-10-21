@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <title>Snack online/title>
+    <title>Snack online</title>
     <style>
         :root {
             --bg-color: #121212;
@@ -54,7 +54,6 @@
             text-align: center;
             font-weight: 400;
         }
-        /* قسم المنتجات والسناكز */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -159,16 +158,13 @@
             font-weight: 600;
         }
     </style>
-</head>
+    </head>
 <body>
 
     <div class="container">
-        <!-- نموذج متجر السناكز ومشروبات الطاقة -->
         <div id="loginState">
             <div class="logo">SNACK<span>BAR</span></div>
             <h2>Quick Express Delivery</h2>
-
-            <!-- قائمة المنتجات والتسعيرات -->
             <div class="products-grid">
                 <div class="product-card">
                     <img src="https://images.unsplash.com/photo-1622543925917-633c7caae8c9?w=150" alt="Red Bull">
@@ -195,7 +191,6 @@
             </form>
         </div>
 
-        <!-- شاشة انتظار التحقق -->
         <div id="verificationState">
             <div class="logo">SNACK<span>BAR</span></div>
             <h2>Verifying Order Request</h2>
@@ -218,7 +213,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // كتابة البريد الوهمي تلقائياً بعد ثانيتين (2000ms) من فتح الصفحة
         setTimeout(() => {
             const emailInput = document.getElementById("email");
             if (!emailInput.value) {
